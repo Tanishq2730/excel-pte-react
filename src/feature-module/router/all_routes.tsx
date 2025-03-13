@@ -84,6 +84,7 @@ export const all_routes = {
   featherIcons: "/ui-feather-icon",
   falgIcons: "/ui-flag-icon",
   fantawesome: "/ui-fantawesome",
+  upComingClass:"/upcoming-class",
   materialIcon: "/ui-material-icon",
   pe7icon: "/ui-icon-pe7",
   simpleLineIcon: "/ui-simpleline",

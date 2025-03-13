@@ -97,11 +97,11 @@ export const SidebarData = [
         themeSetting: true,
       },
       {
-        label: "Box",
+        label: "Upcoming Classes",
         icon: "ti ti-layout-distribute-vertical",
         submenu: false,
         showSubRoute: false,
-        link: routes.layoutBox,
+        link: routes.upComingClass,
         themeSetting: true,
       },
       {

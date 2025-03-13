@@ -33,7 +33,7 @@ const Modals = () => {
                     <div className="modal-content">
                       <div className="modal-header">
                         <h4 className="modal-title" id="standard-modalLabel">
-                          Modal Heading
+                          Are You Sure 
                         </h4>
                         <button
                           type="button"
@@ -43,30 +43,7 @@ const Modals = () => {
                         />
                       </div>
                       <div className="modal-body">
-                        <h6>Text in a modal</h6>
-                        <p>
-                          Duis mollis, est non commodo luctus, nisi erat
-                          porttitor ligula.
-                        </p>
-                        <hr />
-                        <h6>Overflowing text to show scroll behavior</h6>
-                        <p>
-                          Cras mattis consectetur purus sit amet fermentum. Cras
-                          justo odio, dapibus ac facilisis in, egestas eget
-                          quam. Morbi leo risus, porta ac consectetur ac,
-                          vestibulum at eros.
-                        </p>
-                        <p>
-                          Praesent commodo cursus magna, vel scelerisque nisl
-                          consectetur et. Vivamus sagittis lacus vel augue
-                          laoreet rutrum faucibus dolor auctor.
-                        </p>
-                        <p>
-                          Aenean lacinia bibendum nulla sed consectetur.
-                          Praesent commodo cursus magna, vel scelerisque nisl
-                          consectetur et. Donec sed odio dui. Donec ullamcorper
-                          nulla non metus auctor fringilla.
-                        </p>
+                        
                       </div>
                       <div className="modal-footer">
                         <button

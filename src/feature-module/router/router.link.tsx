@@ -250,6 +250,7 @@ import Videocall from "../application/call/videoCall";
 import Visitor from "../visitor/visitor";
 import DashBoardPop from "../dashboardpop/dashBoardpop";
 import ClassRecording from "../classrecording/classRecording";
+import UpComingClass from "../upcomingclass/upComingClass";
 
 const routes = all_routes;
 
@@ -278,6 +279,11 @@ export const publicRoutes = [
   {
     path: routes.classRecording,
     element: <ClassRecording />,
+    route: Route,
+  },
+  {
+    path: routes.upComingClass,
+    element: <UpComingClass />,
     route: Route,
   },
   {
