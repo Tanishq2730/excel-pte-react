@@ -66,13 +66,15 @@
 @import "pages/teacher-dashboard";
 @import "pages/themes";
 
-
 /******* Vendors ******/
 @import "vendors/select2";
 @import "vendors/datatables";
 @import "vendors/rangepicker-plugin";
 
-
-
-
-
+.usrebtn {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  text-align: end;
+  margin-left: auto;
+}

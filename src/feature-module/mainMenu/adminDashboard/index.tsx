@@ -387,7 +387,7 @@ const AdminDashboard = () => {
                 </div> */}
             </div>
             {/* /Page Header */}
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
                 <div className="alert-message">
                   <div
@@ -419,7 +419,6 @@ const AdminDashboard = () => {
                     </button>
                   </div>
                 </div>
-                {/* Dashboard Content */}
                 <div className="card bg-dark">
                   <div className="overlay-img">
                     <ImageWithBasePath
@@ -466,9 +465,8 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-                {/* /Dashboard Content */}
               </div>
-            </div>
+            </div> */}
             <div className="row">
               {/* Total Students */}
               <div className="col-xxl-3 col-sm-3 d-flex">

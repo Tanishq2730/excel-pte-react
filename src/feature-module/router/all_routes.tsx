@@ -83,8 +83,10 @@ export const all_routes = {
   chart: "/ui-chartjs",
   featherIcons: "/ui-feather-icon",
   falgIcons: "/ui-flag-icon",
+  user:'user',
   fantawesome: "/ui-fantawesome",
   upComingClass:"/upcoming-class",
+  loginBanner:'login-banner',
   materialIcon: "/ui-material-icon",
   pe7icon: "/ui-icon-pe7",
   simpleLineIcon: "/ui-simpleline",
@@ -246,7 +248,9 @@ export const all_routes = {
   transportRoutes:"/management/transport-routes",
 
 
-
+  manageVideo:'manage-video',
+  predictionFile:'prediction-file',
+  question:'question',
 
   //Academic module
   AcademicReason: "/academic/academic-reason",

@@ -142,12 +142,12 @@ const ClassRecording: React.FC = () => {
                 aria-label="Close"
               />
             </div>
-            <div className="modal-body" style={{textAlign:'center'}}>
+            <div className="modal-body py-5" style={{textAlign:'center'}}>
               <i
                 className="fa fa-trash"
                 data-bs-toggle="tooltip"
                 title="Delete"
-                style={{color:'red'}}
+                style={{color:'red',marginBottom:'1em'}}
               />
               <p>Are you sure you want to delete this recording?</p>
             </div>

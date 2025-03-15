@@ -251,6 +251,11 @@ import Visitor from "../visitor/visitor";
 import DashBoardPop from "../dashboardpop/dashBoardpop";
 import ClassRecording from "../classrecording/classRecording";
 import UpComingClass from "../upcomingclass/upComingClass";
+import LoginBanner from "../loginbanner/loginBanner";
+import User from "../user/user";
+import ManageVideo from "../managevideo/manageVideo";
+import PredictionFile from "../predictionfile/predictionFile";
+import Question from "../question/question";
 
 const routes = all_routes;
 
@@ -284,6 +289,16 @@ export const publicRoutes = [
   {
     path: routes.upComingClass,
     element: <UpComingClass />,
+    route: Route,
+  },
+  {
+    path: routes.loginBanner,
+    element: <LoginBanner />,
+    route: Route,
+  },
+  {
+    path: routes.user,
+    element: <User />,
     route: Route,
   },
   {
@@ -561,6 +576,21 @@ export const publicRoutes = [
   {
     path: routes.fileManager,
     element: <FileManager />,
+    route: Route,
+  },
+  {
+    path: routes.manageVideo,
+    element: <ManageVideo />,
+    route: Route,
+  },
+  {
+    path: routes.predictionFile,
+    element: <PredictionFile />,
+    route: Route,
+  },
+  {
+    path: routes.question,
+    element: <Question />,
     route: Route,
   },
   {
