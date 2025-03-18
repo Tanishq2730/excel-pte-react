@@ -256,16 +256,16 @@ import User from "../user/user";
 import ManageVideo from "../managevideo/manageVideo";
 import PredictionFile from "../predictionfile/predictionFile";
 import Question from "../question/question";
+import MockTest from "../mock/mockTest";
+import Template from "../template/template";
+import GrammerTemplate from "../grammertemplate/grammerTemplate";
+import ScoreCard from "../scorecard/scoreCard";
+import Review from "../review/review";
+import Notification from "../notification/notification";
 
 const routes = all_routes;
 
 export const publicRoutes = [
-  // {
-  //   path: "/",
-  //   name: "Root",
-  //   element: <Navigate to="/login" />,
-  //   route: Route,
-  // },
   {
     path: routes.adminDashboard,
     element: <AdminDashboard />,
@@ -277,8 +277,23 @@ export const publicRoutes = [
     route: Route,
   },
   {
+    path: routes.scoreCard,
+    element: <ScoreCard />,
+    route: Route,
+  },
+  {
     path: routes.visitor,
     element: <Visitor />,
+    route: Route,
+  },
+  {
+    path: routes.mockTest,
+    element: <MockTest />,
+    route: Route,
+  },
+  {
+    path: routes.review,
+    element: <Review />,
     route: Route,
   },
   {
@@ -287,8 +302,23 @@ export const publicRoutes = [
     route: Route,
   },
   {
+    path: routes.template,
+    element: <Template />,
+    route: Route,
+  },
+  {
+    path: routes.notification,
+    element: <Notification />,
+    route: Route,
+  },
+  {
     path: routes.upComingClass,
     element: <UpComingClass />,
+    route: Route,
+  },
+  {
+    path: routes.grammerTemplate,
+    element: <GrammerTemplate />,
     route: Route,
   },
   {

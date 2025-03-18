@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import dayjs from "dayjs"; // ✅ Import dayjs
+import { DatePicker } from "antd";
 import Table from "../../core/common/dataTable/index";
 
 interface TableData {
@@ -9,10 +9,10 @@ interface TableData {
 }
 
 const Visitor: React.FC = () => {
-  const [fromDate, setFromDate] = useState<Date | null>(null);
-  const [toDate, setToDate] = useState<Date | null>(null);
+  const [fromDate, setFromDate] = useState<dayjs.Dayjs | null>(null);
+  const [toDate, setToDate] = useState<dayjs.Dayjs | null>(null);
 
-  // Dummy data array
+  // ✅ Dummy data array
   const [data, setData] = useState<TableData[]>([
     { date: "01-03-2025", visitor: 10 },
     { date: "02-03-2025", visitor: 15 },
@@ -21,32 +21,27 @@ const Visitor: React.FC = () => {
     { date: "05-03-2025", visitor: 18 },
   ]);
 
+  // ✅ Filter data according to selected date range
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Filter data according to selected date range
     if (fromDate && toDate) {
       const filteredData = data.filter((item) => {
-        const itemDate = new Date(
-          item.date.split("-").reverse().join("-")
-        ).getTime();
-        return (
-          itemDate >= fromDate.getTime() && itemDate <= toDate.getTime()
-        );
+        const itemDate = dayjs(item.date, "DD-MM-YYYY").valueOf();
+        return itemDate >= fromDate.valueOf() && itemDate <= toDate.valueOf();
       });
       setData(filteredData);
     }
-
-    console.log({ fromDate, toDate });
   };
 
+  // ✅ Table Columns
   const columns = [
     {
       title: "Date",
       dataIndex: "date",
       sorter: (a: TableData, b: TableData) =>
-        new Date(a.date.split("-").reverse().join("-")).getTime() -
-        new Date(b.date.split("-").reverse().join("-")).getTime(),
+        dayjs(a.date, "DD-MM-YYYY").valueOf() -
+        dayjs(b.date, "DD-MM-YYYY").valueOf(),
     },
     {
       title: "Visitor",
@@ -63,22 +58,23 @@ const Visitor: React.FC = () => {
             <h2>Visitor</h2>
           </div>
           <div className="card p-4 shadow">
+            {/* ✅ Form Section */}
             <form onSubmit={handleSubmit}>
               <div className="row">
                 {/* From Date */}
                 <div className="col-md-3">
                   <div className="mb-3">
                     <label className="form-label fw-bold">From Date:</label>
-                    <div className="input-group">
+                    <div className="input-icon position-relative">
                       <DatePicker
-                        selected={fromDate}
-                        onChange={(date) => setFromDate(date)}
-                        dateFormat="dd-MM-yyyy"
                         className="form-control"
-                        placeholderText="dd-mm-yyyy"
+                        format="DD-MM-YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                        placeholder="Select From Date"
                       />
-                      <span className="input-group-text">
-                        <i className="bi bi-calendar"></i>
+                      <span className="input-icon-addon">
+                        <i className="ti ti-calendar" />
                       </span>
                     </div>
                   </div>
@@ -88,16 +84,16 @@ const Visitor: React.FC = () => {
                 <div className="col-md-3">
                   <div className="mb-3">
                     <label className="form-label fw-bold">To Date:</label>
-                    <div className="input-group">
+                    <div className="input-icon position-relative">
                       <DatePicker
-                        selected={toDate}
-                        onChange={(date) => setToDate(date)}
-                        dateFormat="dd-MM-yyyy"
                         className="form-control"
-                        placeholderText="dd-mm-yyyy"
+                        format="DD-MM-YYYY"
+                        value={toDate}
+                        onChange={(date) => setToDate(date)}
+                        placeholder="Select To Date"
                       />
-                      <span className="input-group-text">
-                        <i className="bi bi-calendar"></i>
+                      <span className="input-icon-addon">
+                        <i className="ti ti-calendar" />
                       </span>
                     </div>
                   </div>
@@ -112,7 +108,7 @@ const Visitor: React.FC = () => {
               </div>
             </form>
 
-            {/* Data Table */}
+            {/* ✅ Data Table */}
             <div className="row">
               <div className="col-sm-12">
                 <div className="card">
@@ -120,6 +116,7 @@ const Visitor: React.FC = () => {
                     <Table
                       dataSource={data}
                       columns={columns}
+                      // rowKey="date"
                       Selection={true}
                     />
                   </div>

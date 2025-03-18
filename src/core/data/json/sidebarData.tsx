@@ -171,7 +171,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.mockTest,
         themeSetting: true,
       },
       {
@@ -179,7 +179,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.template,
         themeSetting: true,
       },
       {
@@ -187,7 +187,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.grammerTemplate,
         themeSetting: true,
       },
       {
@@ -195,7 +195,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.scoreCard,
         themeSetting: true,
       },
       {
@@ -203,7 +203,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.review,
         themeSetting: true,
       },
       {
@@ -211,7 +211,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.notification,
         themeSetting: true,
       },
       {

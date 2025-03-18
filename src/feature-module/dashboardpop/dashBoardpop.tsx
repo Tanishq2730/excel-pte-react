@@ -1,8 +1,15 @@
 import React, { useState } from "react";
+import CommonSelect from "../../core/common/commonSelect";
 
 const DashBoardPop: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("web");
   const [image, setImage] = useState<string | null>(null);
+
+  // Static data for dropdown
+  const bannerUpdate = [
+    { label: "Web Banner", value: "web" },
+    { label: "Mobile Banner", value: "mobile" }
+  ];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -26,14 +33,12 @@ const DashBoardPop: React.FC = () => {
                 {/* Dropdown */}
                 <div className="mb-3">
                   <label className="form-label fw-bold">Select Type</label>
-                  <select
-                    className="form-select"
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                  >
-                    <option value="web">Web Banner</option>
-                    <option value="mobile">Mobile Banner</option>
-                  </select>
+                  <CommonSelect
+                    className="select"
+                    options={bannerUpdate}
+                    defaultValue={bannerUpdate[0]}
+                    // onChange={(selected) => setSelectedType(selected?.value)}
+                  />
                 </div>
 
                 {/* Image Upload */}
@@ -44,18 +49,6 @@ const DashBoardPop: React.FC = () => {
                     className="form-control"
                     onChange={handleImageChange}
                   />
-                  {/* {image && (
-                    <img
-                      src={image}
-                      alt="Banner Preview"
-                      className="mt-3"
-                      style={{
-                        width: "100%",
-                        height: "auto",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  )} */}
                 </div>
 
                 {/* Update Button */}
