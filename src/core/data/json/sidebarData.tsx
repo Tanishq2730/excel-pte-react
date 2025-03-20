@@ -135,9 +135,9 @@ export const SidebarData = [
         link: routes.dashBoardPop,
         themeSetting: true,
         submenuItems: [
-          { label: "Agent", link: routes.user },
+          { label: "Agent", link: routes.agent },
           { label: "Course Master", link: routes.teacherDashboard },
-          { label: "Bookings", link: routes.studentDashboard },
+          { label: "Bookings", link: routes.booking },
           { label: "Discount Coupon", link: routes.studentDashboard },
         ],
       },
@@ -219,7 +219,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.studyPlan,
         themeSetting: true,
       },
       {
@@ -227,7 +227,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.exceptionalWords,
         themeSetting: true,
       },
       {
@@ -235,7 +235,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.timeTable,
         themeSetting: true,
       },
       {
@@ -248,15 +248,14 @@ export const SidebarData = [
         submenuItems: [
           {
             label: "Category Master",
-            link: routes.user,
+            link: routes.quizeCategory,
           },
           {
             label: "Quize Management",
             link: routes.user,
             submenu: true,
             submenuItems: [
-              { label: "List Quizzes", link: routes.user },
-              { label: "Create Quiz", link: routes.user },
+              { label: "Quizzes", link: routes.quize },
             ],
           },
         ],
@@ -266,7 +265,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.institute,
         themeSetting: true,
       },
       {
@@ -274,7 +273,7 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.dashBoardPop,
+        link: routes.institutePlan,
         themeSetting: true,
       },
     ],

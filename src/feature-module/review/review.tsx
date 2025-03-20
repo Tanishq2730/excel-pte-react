@@ -279,6 +279,11 @@ const Review: React.FC = () => {
                 />
               </div>
             </div>
+            <div>
+              <button type="submit" className="btn btn-primary">
+               Submit
+              </button>
+            </div>
           </form>
 
           {/* ✅ Table */}

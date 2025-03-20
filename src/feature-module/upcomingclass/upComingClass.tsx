@@ -88,7 +88,7 @@ const UpComingClass: React.FC = () => {
             className="btn btn-warning btn-sm me-2"
             onClick={() => handleEdit(row.id)}
           >
-            Edit
+            <i className="fa fa-pencil"></i>
           </button>
           <button
             className="btn btn-danger btn-sm"
@@ -96,7 +96,7 @@ const UpComingClass: React.FC = () => {
             data-bs-target="#deleteModal"
             onClick={() => handleDelete(row.id)}
           >
-            Delete
+            <i className="fa fa-trash"></i>
           </button>
         </div>
       ),

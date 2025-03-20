@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import CommonSelect from "../../core/common/commonSelect";
-import Table from "../../core/common/dataTable/index";
 
 // Define Types
 interface MockDropOption {
   label: string;
   value: string;
-}
-
-interface QuestionData {
-  id: number;
-  category: string;
-  subCategory: string;
-  question: string;
 }
 
 // Dummy Data
@@ -28,66 +20,9 @@ const MockTest: React.FC = () => {
   const [type, setType] = useState<string>("All");
   const [mockName, setMockName] = useState<string>("");
 
-  // Dummy Table Data
-  const [data, setData] = useState<QuestionData[]>([
-    {
-      id: 1,
-      category: "Speaking",
-      subCategory: "Part 1",
-      question: "Introduce yourself.",
-    },
-    {
-      id: 2,
-      category: "Writing",
-      subCategory: "Task 1",
-      question: "Describe the chart.",
-    },
-    {
-      id: 3,
-      category: "Listening",
-      subCategory: "Section 1",
-      question: "Fill in the blanks.",
-    },
-  ]);
-
-  // Define Table Columns
-  const columns = [
-    {
-      name: "Category",
-      selector: (row: QuestionData) => row.category,
-      sortable: true,
-    },
-    {
-      name: "Sub Category",
-      selector: (row: QuestionData) => row.subCategory,
-      sortable: true,
-    },
-    {
-      name: "Question",
-      selector: (row: QuestionData) => row.question,
-      sortable: true,
-    },
-    {
-      name: "Actions",
-      cell: (row: QuestionData) => (
-        <button
-          className="btn btn-danger btn-sm"
-          onClick={() => handleDelete(row.id)}
-        >
-          Delete
-        </button>
-      ),
-    },
-  ];
-
   // Handle Save
   const handleSave = () => {
     console.log({ type, mockName });
-  };
-
-  // Handle Delete
-  const handleDelete = (id: number) => {
-    setData((prev) => prev.filter((item) => item.id !== id));
   };
 
   return (
@@ -197,16 +132,6 @@ const MockTest: React.FC = () => {
                       className="select"
                       options={mockdrop}
                       defaultValue={mockdrop[0]}
-                    />
-                  </div>
-
-                  {/* Table */}
-                  <div className="mt-4">
-                    <Table
-                      dataSource={data}
-                      columns={columns}
-                      // rowKey="id"
-                      Selection={true}
                     />
                   </div>
                 </div>

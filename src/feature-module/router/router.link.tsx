@@ -1,4 +1,4 @@
-import {  Route } from "react-router";
+import { Route } from "react-router";
 import { all_routes } from "./all_routes";
 import Countries from "../content/location/countries";
 import BlankPage from "../pages/blankPage";
@@ -262,6 +262,15 @@ import GrammerTemplate from "../grammertemplate/grammerTemplate";
 import ScoreCard from "../scorecard/scoreCard";
 import Review from "../review/review";
 import Notification from "../notification/notification";
+import StudyPlan from "../studyplan/studyPlan";
+import ExceptionalWords from "../exceptionalwords/exceptionalWords";
+import TimeTable from "../timetable/timeTable";
+import QuizeCategory from "../quizecategory/quizeCategory";
+import Quize from "../quizecategory/quize";
+import Institute from "../institute/institute";
+import InstitutePlan from "../instituteplan/institutePlan";
+import Agent from "../bookingmaster/agent";
+import Booking from "../bookingmaster/booking";
 
 const routes = all_routes;
 
@@ -284,6 +293,11 @@ export const publicRoutes = [
   {
     path: routes.visitor,
     element: <Visitor />,
+    route: Route,
+  },
+  {
+    path: routes.studyPlan,
+    element: <StudyPlan />,
     route: Route,
   },
   {
@@ -312,13 +326,53 @@ export const publicRoutes = [
     route: Route,
   },
   {
+    path: routes.exceptionalWords,
+    element: <ExceptionalWords />,
+    route: Route,
+  },
+  {
     path: routes.upComingClass,
     element: <UpComingClass />,
     route: Route,
   },
   {
+    path: routes.timeTable,
+    element: <TimeTable />,
+    route: Route,
+  },
+  {
+    path: routes.quizeCategory,
+    element: <QuizeCategory />,
+    route: Route,
+  },
+  {
+    path: routes.booking,
+    element: <Booking />,
+    route: Route,
+  },
+  {
     path: routes.grammerTemplate,
     element: <GrammerTemplate />,
+    route: Route,
+  },
+  {
+    path: routes.quize,
+    element: <Quize />,
+    route: Route,
+  },
+  {
+    path: routes.institute,
+    element: <Institute />,
+    route: Route,
+  },
+  {
+    path: routes.institutePlan,
+    element: <InstitutePlan />,
+    route: Route,
+  },
+  {
+    path: routes.agent,
+    element: <Agent />,
     route: Route,
   },
   {
