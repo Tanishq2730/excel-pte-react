@@ -1,36 +1,64 @@
-import React, { useState } from "react";
-import dayjs from "dayjs"; // ✅ Import dayjs
-import { DatePicker } from "antd";
+import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
+import { DatePicker, Spin, Alert } from "antd";
 import Table from "../../core/common/dataTable/index";
+import { fetchVisitors } from "../../api/visitorAPI";
 
 interface TableData {
-  date: string;
-  visitor: number;
+  createdAt: string; // Matches API field
+  count: number; // Matches API field
 }
-
 const Visitor: React.FC = () => {
   const [fromDate, setFromDate] = useState<dayjs.Dayjs | null>(null);
   const [toDate, setToDate] = useState<dayjs.Dayjs | null>(null);
+  const [data, setData] = useState<TableData[]>([]);
+  const [filteredData, setFilteredData] = useState<TableData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // ✅ Dummy data array
-  const [data, setData] = useState<TableData[]>([
-    { date: "01-03-2025", visitor: 10 },
-    { date: "02-03-2025", visitor: 15 },
-    { date: "03-03-2025", visitor: 20 },
-    { date: "04-03-2025", visitor: 12 },
-    { date: "05-03-2025", visitor: 18 },
-  ]);
+  // ✅ Fetch data from API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+  
+      const response = await fetchVisitors();
+  
+      if (response.success) {
+      console.log(response);
+      
+        // Ensure the response is in an array format
+        const visitorData = Array.isArray(response.data)
+          ? response.data
+          : [response.data]; // Wrap in an array if it's a single object
+  
+        setData(visitorData);
+        setFilteredData(visitorData);
+      } else {
+        setError(response.error);
+      }
+  
+      setLoading(false);
+    };
+  
+    fetchData();
+  }, []);
+console.log(data);
+console.log(filteredData);
+
 
   // ✅ Filter data according to selected date range
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (fromDate && toDate) {
-      const filteredData = data.filter((item) => {
-        const itemDate = dayjs(item.date, "DD-MM-YYYY").valueOf();
+      const filtered = data.filter((item) => {
+        const itemDate = dayjs(item.createdAt, "DD-MM-YYYY").valueOf();
         return itemDate >= fromDate.valueOf() && itemDate <= toDate.valueOf();
       });
-      setData(filteredData);
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(data);
     }
   };
 
@@ -38,15 +66,15 @@ const Visitor: React.FC = () => {
   const columns = [
     {
       title: "Date",
-      dataIndex: "date",
+      dataIndex: "createdAt",
       sorter: (a: TableData, b: TableData) =>
-        dayjs(a.date, "DD-MM-YYYY").valueOf() -
-        dayjs(b.date, "DD-MM-YYYY").valueOf(),
+        dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
+      render: (text: string) => dayjs(text).format("DD-MM-YYYY"), // Format date
     },
     {
-      title: "Visitor",
-      dataIndex: "visitor",
-      sorter: (a: TableData, b: TableData) => a.visitor - b.visitor,
+      title: "Visitor Count",
+      dataIndex: "count",
+      sorter: (a: TableData, b: TableData) => a.count - b.count,
     },
   ];
 
@@ -58,6 +86,10 @@ const Visitor: React.FC = () => {
             <h2>Visitor</h2>
           </div>
           <div className="card p-4 shadow">
+            {/* ✅ Loading and Error Handling */}
+            {loading && <Spin size="large" />}
+            {error && <Alert message={error} type="error" showIcon />}
+
             {/* ✅ Form Section */}
             <form onSubmit={handleSubmit}>
               <div className="row">
@@ -69,8 +101,8 @@ const Visitor: React.FC = () => {
                       <DatePicker
                         className="form-control"
                         format="DD-MM-YYYY"
-                        value={toDate}
-                        onChange={(date) => setToDate(date)}
+                        value={fromDate}
+                        onChange={(date) => setFromDate(date)}
                         placeholder="Select From Date"
                       />
                       <span className="input-icon-addon">
@@ -114,9 +146,8 @@ const Visitor: React.FC = () => {
                 <div className="card">
                   <div className="card-body">
                     <Table
-                      dataSource={data}
+                      dataSource={filteredData}
                       columns={columns}
-                      // rowKey="date"
                       Selection={true}
                     />
                   </div>

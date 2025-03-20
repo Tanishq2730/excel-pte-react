@@ -274,7 +274,7 @@ import Booking from "../bookingmaster/booking";
 
 const routes = all_routes;
 
-export const publicRoutes = [
+export const adminRoutes = [
   {
     path: routes.adminDashboard,
     element: <AdminDashboard />,

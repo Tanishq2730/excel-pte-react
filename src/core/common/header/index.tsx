@@ -12,6 +12,9 @@ import {
 } from "../../data/redux/sidebarSlice";
 import { useState } from "react";
 import { all_routes } from "../../../feature-module/router/all_routes";
+import { logout } from "../../data/redux/authSlice";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
   const routes = all_routes;
   const dispatch = useDispatch();
@@ -74,6 +77,14 @@ const Header = () => {
       }
     }
   };
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout()); // Clear token from Redux & storage
+    navigate("/"); // Redirect to login page
+  };
+
 
   return (
     <>
@@ -366,13 +377,11 @@ const Header = () => {
                       Settings
                     </Link>
                     <hr className="m-0" />
-                    <Link
-                      className="dropdown-item d-inline-flex align-items-center p-2"
-                      to={routes.login}
-                    >
-                      <i className="ti ti-login me-2" />
-                      Logout
-                    </Link>
+                    
+                    <button onClick={handleLogout} className="dropdown-item d-inline-flex align-items-center p-2">
+                    <i className="ti ti-login me-2" />
+                    Logout
+                    </button>
                   </div>
                 </div>
               </div>

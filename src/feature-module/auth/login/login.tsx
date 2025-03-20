@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../../core/data/redux/authSlice';
+import { AppDispatch, RootState } from '../../../core/data/redux/store';
 
 const Login = () => {
   const routes = all_routes;
@@ -15,6 +18,16 @@ const Login = () => {
   }, []);
   const date = () => {
     return new Date().getFullYear();
+  };
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -35,8 +48,7 @@ const Login = () => {
           </div>
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap ">
-              <div className="col-md-10 mx-auto p-4">
-                <form>
+              <div className="col-md-10 mx-auto p-4">               
                   <div>
                     <div className=" mx-auto mb-3 text-center">
                       <ImageWithBasePath
@@ -46,6 +58,7 @@ const Login = () => {
                       />
                     </div>
                     <div className="card">
+                    <form onSubmit={handleSubmit}>
                       <div className="card-body pb-3">
                         <div className=" mb-4">
                           <h2 className="mb-2">Welcome</h2>
@@ -96,6 +109,7 @@ const Login = () => {
                         <div className="login-or">
                           <span className="span-or">Or</span>
                         </div>
+                        <p style={{color:"red",textAlign:"center"}}>{error ? error : ""}</p>
                         <div className="mb-3 ">
                           <label className="form-label">Email Address</label>
                           <div className="input-icon mb-3 position-relative">
@@ -103,15 +117,22 @@ const Login = () => {
                               <i className="ti ti-mail" />
                             </span>
                             <input
-                              type="text"
-                              defaultValue=""
+                              type="email"
+                              placeholder="Email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              required
                               className="form-control"
                             />
                           </div>
                           <label className="form-label">Password</label>
-                          <div className="pass-group">
+                          <div className="pass-group">                            
                             <input
                               type={isPasswordVisible ? "text" : "password"}
+                              placeholder="Password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              required
                               className="pass-input form-control"
                             />
                             <span
@@ -123,14 +144,7 @@ const Login = () => {
                           </div>
                         </div>
                         <div className="form-wrap form-wrap-checkbox">
-                          <div className="d-flex align-items-center">
-                            <div className="form-check form-check-md mb-0">
-                              <input
-                                className="form-check-input mt-0"
-                                type="checkbox"
-                              />
-                            </div>
-                            <p className="ms-1 mb-0 ">Remember Me</p>
+                          <div className="d-flex align-items-center">                           
                           </div>
                           <div className="text-end ">
                             <Link
@@ -144,12 +158,15 @@ const Login = () => {
                       </div>
                       <div className="p-4 pt-0">
                         <div className="mb-3">
-                          <Link
+                          {/* <Link
                             to={routes.adminDashboard}
                             className="btn btn-primary w-100"
                           >
                             Sign In
-                          </Link>
+                          </Link> */}
+                          <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+                            {isLoading ? 'Logging in...' : 'Login'}
+                          </button>                          
                         </div>
                         <div className="text-center">
                           <h6 className="fw-normal text-dark mb-0">
@@ -161,14 +178,14 @@ const Login = () => {
                           </h6>
                         </div>
                       </div>
+                      </form>
                     </div>
                     <div className="mt-5 text-center">
                       <p className="mb-0 ">
                         Copyright © {date()} - AZSM Enterprises
                       </p>
                     </div>
-                  </div>
-                </form>
+                  </div>               
               </div>
             </div>
           </div>
