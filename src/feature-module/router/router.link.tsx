@@ -271,6 +271,8 @@ import Institute from "../institute/institute";
 import InstitutePlan from "../instituteplan/institutePlan";
 import Agent from "../bookingmaster/agent";
 import Booking from "../bookingmaster/booking";
+import CourseMaster from "../bookingmaster/courseMaster";
+import DiscountCoupon from "../bookingmaster/discountCoupon";
 
 const routes = all_routes;
 
@@ -336,8 +338,18 @@ export const adminRoutes = [
     route: Route,
   },
   {
+    path: routes.discountCoupon,
+    element: <DiscountCoupon />,
+    route: Route,
+  },
+  {
     path: routes.timeTable,
     element: <TimeTable />,
+    route: Route,
+  },
+  {
+    path: routes.courseMaster,
+    element: <CourseMaster />,
     route: Route,
   },
   {

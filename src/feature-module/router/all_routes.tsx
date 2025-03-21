@@ -153,11 +153,13 @@ export const all_routes = {
 
   schoolSettings : "/academic-settings/school-settings",
   religion : "/academic-settings/religion",
+  courseMaster : "/course-master",
 
   connectedApps: "/general-settings/connected-apps",
   notificationssettings: "/general-settings/notifications-settings",
   profilesettings: "/general-settings/profile-settings",
   securitysettings: "/general-settings/security-settings",
+  discountCoupon: "/discount-coupon",
 
   banIpAddress: "/other-settings/ban-ip-address",
   storage: "/other-settings/storage",

@@ -122,9 +122,9 @@ export const SidebarData = [
         link: routes.visitor,
         themeSetting: true,
         submenuItems: [
-          { label: "Users", link: routes.user },
-          { label: "Roles", link: routes.teacherDashboard },
-          { label: "Permissions", link: routes.studentDashboard },
+          { label: "Users", link: routes.manageusers },
+          { label: "Roles & Permissions", link: routes.rolesPermissions },
+          // { label: "Permissions", link: routes.studentDashboard },
         ],
       },
       {
@@ -136,9 +136,9 @@ export const SidebarData = [
         themeSetting: true,
         submenuItems: [
           { label: "Agent", link: routes.agent },
-          { label: "Course Master", link: routes.teacherDashboard },
+          { label: "Course Master", link: routes.courseMaster },
           { label: "Bookings", link: routes.booking },
-          { label: "Discount Coupon", link: routes.studentDashboard },
+          { label: "Discount Coupon", link: routes.discountCoupon },
         ],
       },
       {
