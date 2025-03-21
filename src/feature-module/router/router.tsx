@@ -18,18 +18,29 @@ const ALLRoutes: React.FC = () => {
       <Route path="/" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
       
       {/* Protect Public Routes */}
-      <Route element={<ProtectedRoute><Feature /></ProtectedRoute>}>
+      <Route element={<Feature />}>
+          {adminRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
+
+      {/* <Route element={<ProtectedRoute><Feature /></ProtectedRoute>}>
         {adminRoutes.map((route, idx) => (
           <Route path={route.path} element={route.element} key={idx} />
         ))}
-      </Route>
+      </Route> */}
 
       {/* Protect Auth Routes */}
-      <Route element={<ProtectedRoute><AuthFeature /></ProtectedRoute>}>
+      <Route element={<AuthFeature />}>
+          {authRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
+      {/* <Route element={<ProtectedRoute><AuthFeature /></ProtectedRoute>}>
         {authRoutes.map((route, idx) => (
           <Route path={route.path} element={route.element} key={idx} />
         ))}
-      </Route>
+      </Route> */}
     </Routes>
   );
 };

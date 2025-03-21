@@ -28,7 +28,6 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginPayload>(
         return rejectWithValue('You are not authorized to access this system.');
       }
 
-      // Save token if authorized
       localStorage.setItem('token', response.data.token);
       return response.data;
     } catch (error: any) {
