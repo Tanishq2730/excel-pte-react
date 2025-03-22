@@ -12,7 +12,8 @@ export const Studentlist = [
       status: "Active",
       DateofJoin: "25 Mar 2024",
       DOB: "10 Jan 2015",
-      imgSrc: "assets/img/students/student-01.jpg"
+      imgSrc: "assets/img/students/student-01.jpg",
+      email:'asadf@gmail.com'
     },
     {
       key: "2",
