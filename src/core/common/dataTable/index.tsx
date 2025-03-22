@@ -60,7 +60,7 @@ const Datatable: React.FC<DatatableProps> = ({ columns, dataSource , Selection }
     /> : 
     <Table
         className="table datanew dataTable no-footer"
-        rowSelection={rowSelection}
+        // rowSelection={rowSelection}
         columns={columns}
         rowHoverable={false}
         dataSource={filteredDataSource}

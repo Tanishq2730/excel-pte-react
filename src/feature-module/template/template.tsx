@@ -1,11 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "../../core/common/dataTable/index";
+import AlertComponent from "../../core/common/AlertComponent"; // ✅ Import Alert Component
+import DefaultEditor from "react-simple-wysiwyg";
+import {
+  fetchAllTemplates,
+  createTemplate,
+  updateTemplate,
+  deleteTemplate,
+  fetchAllTypes
+} from "../../api/masterAPI";
+import { image_url } from "../../environment";
 
-interface RecordingData {
+// ✅ Template Data Interface
+interface TemplateData {
   id: number;
-  type: string;
+  typeId: string;
   title: string;
   content: string;
+  image_pdf: string | null;
 }
 
 const Template: React.FC = () => {
@@ -13,127 +25,177 @@ const Template: React.FC = () => {
   const [templateTitle, setTemplateTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [templates, setTemplates] = useState<TemplateData[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null); // ✅ State for Delete ID
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [types, setTypes] = useState([]);
+  // ✅ Fetch All Templates on Component Mount
+  useEffect(() => {
+    loadTemplates();
+    getTypes();
+  }, []);
 
-  // Sample data
-  const [recordings, setRecordings] = useState<RecordingData[]>([
-    {
-      id: 1,
-      type: "Speaking",
-      title: "6. Answer Short Question",
-      content: 'Use the sentence "The answer is..." along with your response.',
-    },
-  ]);
+  const getTypes = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchAllTypes();
+      if (response.success) {
+        setTypes(response.data);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      showAlert("danger", "Failed to load templates");
+    }
+    setLoading(false);
+  };
 
-  // ✅ Handle file change
+  const loadTemplates = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchAllTemplates();
+      if (response.success) {
+        setTemplates(response.data);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      showAlert("danger", "Failed to load templates");
+    }
+    setLoading(false);
+  };
+
+  // ✅ Handle File Change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setFile(e.target.files[0]);
     }
   };
 
-  // ✅ Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ Handle Form Submission (Create or Update)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
-    if (editId !== null) {
-      // ✅ Update existing row
-      setRecordings((prev) =>
-        prev.map((rec) =>
-          rec.id === editId
-            ? {
-                ...rec,
-                type,
-                title: templateTitle,
-                content,
-              }
-            : rec
-        )
-      );
-      setEditId(null);
-    } else {
-      // ✅ Add new row
-      const newRecord: RecordingData = {
-        id: recordings.length + 1,
-        type,
-        title: templateTitle,
-        content,
-      };
-      setRecordings((prev) => [...prev, newRecord]);
+    try {
+      if (!templateTitle || !content) throw new Error("All fields are required.");
+
+      const formData = new FormData();
+      formData.append("typeId", type);
+      formData.append("title", templateTitle);
+      formData.append("content", content);
+      if (file) formData.append("image_pdf", file);
+
+      let response;
+      if (editId) {
+        response = await updateTemplate(editId, formData);
+      } else {
+        response = await createTemplate(formData);
+      }
+
+      if (response.success) {
+        showAlert("success", editId ? "Template updated successfully!" : "Template added successfully!");
+        loadTemplates();
+        handleReset();
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      showAlert("danger", "Error saving template.");
     }
 
-    // ✅ Reset form
+    setLoading(false);
+  };
+
+  // ✅ Handle Edit Template
+  const handleEdit = (template: TemplateData) => {
+    setType(template.typeId);
+    setTemplateTitle(template.title);
+    setContent(template.content);
+    setEditId(template.id);
+  };
+
+  // ✅ Handle Reset Form
+  const handleReset = () => {
     setType("Reading");
     setTemplateTitle("");
     setContent("");
     setFile(null);
+    setEditId(null);
   };
 
-  // ✅ Handle delete row
-  const handleDelete = () => {
-    if (deleteId !== null) {
-      setRecordings((prev) => prev.filter((record) => record.id !== deleteId));
-      setDeleteId(null); // ✅ Reset deleteId after delete
+  // ✅ Handle Delete
+  const handleDeleteConfirm = async () => {
+    if (deleteId === null) return;
+    setLoading(true);
+    try {
+      const response = await deleteTemplate(deleteId);
+      if (response.success) {
+        showAlert("success", "Template deleted successfully!");
+        setTemplates((prev) => prev.filter((t) => t.id !== deleteId));
+        setDeleteId(null);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      showAlert("danger", "Failed to delete template");
     }
+    setLoading(false);
   };
 
-  // ✅ Handle edit row
-  const handleEdit = (id: number) => {
-    const record = recordings.find((rec) => rec.id === id);
-    if (record) {
-      setType(record.type);
-      setTemplateTitle(record.title);
-      setContent(record.content);
-      setEditId(id);
-    }
+  // ✅ Function to Show Alert
+  const showAlert = (type: "success" | "danger", message: string) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert(null), 3000);
   };
 
-  // ✅ Table columns
+  // ✅ Table Columns
   const columns = [
     {
-      title: "#",
-      dataIndex: "id",
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
       title: "Type",
-      dataIndex: "type",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.type.localeCompare(b.type),
+      dataIndex: "typeId",
+      key: "typeId",
     },
     {
       title: "Title",
       dataIndex: "title",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.title.localeCompare(b.title),
+      key: "title",
     },
     {
       title: "Content",
       dataIndex: "content",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.content.localeCompare(b.content),
+      key: "content",
     },
     {
-      title: "Action",
-      render: (row: RecordingData) => (
+      title: "File",
+      dataIndex: "image_pdf",
+      key: "image_pdf",
+      render: (file: string | null) =>
+        file ? (
+          <a href={`${image_url}${file}`} target="_blank" rel="noopener noreferrer">
+            View File
+          </a>
+        ) : (
+          "No File"
+        ),
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (_: any, row: TemplateData) => (
         <div>
-          {/* ✅ Edit Button */}
-          <button
-            className="btn btn-info btn-sm me-2"
-            onClick={() => handleEdit(row.id)}
-          >
-            <i className="fa fa-pencil"></i>
+          <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(row)}>
+            Edit
           </button>
-
-          {/* ✅ Delete Button */}
           <button
             className="btn btn-danger btn-sm"
             data-bs-toggle="modal"
             data-bs-target="#deleteModal"
-            onClick={() => setDeleteId(row.id)} // ✅ Set deleteId
+            onClick={() => setDeleteId(row.id)}
           >
-            <i className="fa fa-trash"></i>
+            Delete
           </button>
         </div>
       ),
@@ -143,15 +205,14 @@ const Template: React.FC = () => {
   return (
     <div className="page-wrapper">
       <div className="content">
+
         <div className="heading mb-4">
-          <h2>
-            {editId !== null ? "Edit Template" : "Add Template"}
-          </h2>
+          <h2>{editId ? "Edit Template" : "Add Template"}</h2>
         </div>
         <div className="card p-4">
-          {/* ✅ Form */}
+          {/* Form */}
+          {alert && <AlertComponent type={alert.type} message={alert.message} />}
           <form onSubmit={handleSubmit}>
-            {/* Type */}
             <div className="mb-3">
               <label className="form-label">Type</label>
               <select
@@ -160,120 +221,39 @@ const Template: React.FC = () => {
                 onChange={(e) => setType(e.target.value)}
                 required
               >
-                <option value="Reading">Reading</option>
-                <option value="Writing">Writing</option>
-                <option value="Listening">Listening</option>
-                <option value="Speaking">Speaking</option>
+                <option value="">Select Type</option>
+                {types.map((t: any) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
               </select>
             </div>
 
-            {/* Template Title */}
             <div className="mb-3">
               <label className="form-label">Template Title</label>
-              <input
-                type="text"
-                className="form-control"
-                value={templateTitle}
-                onChange={(e) => setTemplateTitle(e.target.value)}
-                required
-              />
+              <input type="text" className="form-control" value={templateTitle} onChange={(e) => setTemplateTitle(e.target.value)} required />
             </div>
 
-            {/* Content */}
             <div className="mb-3">
               <label className="form-label">Content</label>
-              <textarea
-                className="form-control"
-                rows={4}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              />
+              {/* <textarea className="form-control" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required /> */}
+              <DefaultEditor value={content}  onChange={(e) => setContent(e.target.value)} />
             </div>
+
             <div className="mb-3">
               <label className="form-label">Image / PDF</label>
-              <input
-                type="file"
-                className="form-control"
-                // onChange={handleFileChange}
-                accept="image/*"
-              />
-              {/* {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="mt-2"
-                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                />
-              )} */}
+              <input type="file" className="form-control" accept="image/*,.pdf" onChange={handleFileChange} />
             </div>
 
-            {/* ✅ Save Button */}
-            <div>
-              <button type="submit" className="btn btn-danger">
-                {editId !== null ? "UPDATE" : "SAVE"}
-              </button>
-            </div>
+            <button type="submit" className="btn btn-danger" disabled={loading}>
+              {loading ? "Saving..." : editId ? "UPDATE" : "SAVE"}
+            </button>
           </form>
 
-          {/* ✅ Table */}
+          {/* Table Component */}
           <div className="mt-4">
-            <Table
-              key={recordings.map((r) => r.id).join(",")}
-              dataSource={recordings}
-              columns={columns}
-              Selection={true}
-            />
-          </div>
-        </div>
-
-        {/* ✅ Delete Modal */}
-        <div
-          id="deleteModal"
-          className="modal fade"
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                ></button>
-              </div>
-              <div className="modal-body py-5 text-center">
-                <i
-                  className="fa fa-trash"
-                  style={{
-                    color: "red",
-                    fontSize: "2rem",
-                    marginBottom: "1em",
-                  }}
-                />
-                <p>Are you sure you want to delete this recording?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary mr-3"
-                  data-bs-dismiss="modal"
-                  style={{ marginRight: "1em" }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={handleDelete}
-                  data-bs-dismiss="modal"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
+            <Table key={templates.length} dataSource={templates} columns={columns} Selection={true} />
           </div>
         </div>
       </div>

@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import Table from "../../core/common/dataTable/index"; // ✅ Using the referenced table
+import React, { useState, useEffect } from "react";
+import Table from "../../core/common/dataTable/index";
+import {
+  fetchAllPredictions,
+  createPrediction,
+  updatePrediction,
+  deletePrediction,
+} from "../../api/masterAPI";
+import { image_url } from "../../environment";
+import AlertComponent from "../../core/common/AlertComponent";
 
+// ✅ Prediction Data Interface
 interface PredictionData {
   id: number;
   title: string;
-  coverFile: File | null;
-  predictionFile: File | null;
+  cover_file: string;
+  prediction_file: string;
   status: string;
 }
 
@@ -14,111 +23,150 @@ const PredictionFile: React.FC = () => {
   const [coverFile, setCoverFile] = useState<File | null>(null);
   const [predictionFile, setPredictionFile] = useState<File | null>(null);
   const [status, setStatus] = useState<string>("Active");
-  const [recordings, setRecordings] = useState<PredictionData[]>([]);
+  const [predictions, setPredictions] = useState<PredictionData[]>([]);
+  const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
 
-  const handleCoverFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // ✅ Fetch All Predictions on Component Mount
+  useEffect(() => {
+    loadPredictions();
+  }, []);
+
+  const loadPredictions = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchAllPredictions();
+      if (response.success) {
+        setPredictions(response.data);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      setAlert({ type: "danger", message: "Failed to load predictions" });
+    }
+    setLoading(false);
+  };
+
+  // ✅ Handle File Selection with Validation
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fileType: "cover" | "prediction") => {
     if (e.target.files && e.target.files[0]) {
-      setCoverFile(e.target.files[0]);
+      const file = e.target.files[0];
+
+      if (fileType === "cover") {
+        if (!file.type.startsWith("image/")) {
+          setAlert({ type: "danger", message: "Only image files are allowed for cover!" });
+          return;
+        }
+        setCoverFile(file);
+      } else {
+        const validExtensions = [".pdf", ".doc", ".docx", ".xlsx"];
+        const fileExt = file.name.slice(file.name.lastIndexOf("."));
+        if (!validExtensions.includes(fileExt)) {
+          setAlert({ type: "danger", message: "Allowed file types: PDF, DOC, DOCX, XLSX" });
+          return;
+        }
+        setPredictionFile(file);
+      }
     }
   };
 
-  const handlePredictionFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (e.target.files && e.target.files[0]) {
-      setPredictionFile(e.target.files[0]);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ Handle Form Submission (Create or Update Prediction)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (title && coverFile && predictionFile) {
-      const newPrediction: PredictionData = {
-        id: recordings.length + 1,
-        title,
-        coverFile,
-        predictionFile,
-        status,
-      };
-      setRecordings([...recordings, newPrediction]);
-      setTitle("");
-      setCoverFile(null);
-      setPredictionFile(null);
-      setStatus("Active");
+    setLoading(true);
+
+    try {
+      if (!title) throw new Error("Title is required.");
+      if (!editId && (!coverFile || !predictionFile)) throw new Error("Both files are required for a new prediction.");
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("status", status);
+      if (coverFile) formData.append("cover_file", coverFile);
+      if (predictionFile) formData.append("prediction_file", predictionFile);
+
+      let response;
+      if (editId) {
+        response = await updatePrediction(editId, formData);
+      } else {
+        response = await createPrediction(formData);
+      }
+
+      if (response.success) {
+        setAlert({ type: "success", message: editId ? "Prediction updated successfully!" : "Prediction added successfully!" });
+        loadPredictions();
+        handleReset();
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      setAlert({ type: "danger", message: "Prediction not save" });
     }
+
+    setLoading(false);
   };
 
-  const handleDelete = (id: number) => {
-    setRecordings(recordings.filter((record) => record.id !== id));
-    setDeleteId(null); // Clear after delete
+  // ✅ Handle Edit Prediction
+  const handleEdit = (prediction: PredictionData) => {
+    setTitle(prediction.title);
+    setStatus(prediction.status);
+    setEditId(prediction.id);
   };
 
+  // ✅ Handle Reset Form
+  const handleReset = () => {
+    setTitle("");
+    setCoverFile(null);
+    setPredictionFile(null);
+    setStatus("Active");
+    setEditId(null);
+  };
+
+  // ✅ Handle Delete
+  const handleDeleteConfirm = async () => {
+    if (deleteId === null) return;
+    setLoading(true);
+    try {
+      const response = await deletePrediction(deleteId);
+      if (response.success) {
+        setAlert({ type: "success", message: "Prediction deleted successfully!" });
+        setPredictions((prev) => prev.filter((p) => p.id !== deleteId));
+        setDeleteId(null);
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (err) {
+      setAlert({ type: "danger", message: "Failed to delete prediction" });
+    }
+    setLoading(false);
+  };
+
+  // ✅ Table Columns
   const columns = [
-    {
-      title: "Prediction Title",
-      dataIndex: "title",
-      key: "title",
-    },
+    { title: "Prediction Title", dataIndex: "title", key: "title" },
     {
       title: "Prediction Cover",
-      dataIndex: "coverFile",
-      key: "coverFile",
-      render: (coverFile: File | null) =>
-        coverFile ? (
-          <img
-            src={URL.createObjectURL(coverFile)}
-            alt="Cover"
-            style={{
-              width: "40px",
-              height: "40px",
-              objectFit: "cover",
-              borderRadius: "4px",
-            }}
-          />
-        ) : (
-          "No File"
-        ),
+      dataIndex: "cover_file",
+      key: "cover_file",
+      render: (coverFile: string) => (coverFile ? <img src={`${image_url}${coverFile}`} alt="Cover" style={{ width: "50px", height: "50px", objectFit: "cover" }} /> : "No File"),
     },
     {
       title: "Prediction File",
-      dataIndex: "predictionFile",
-      key: "predictionFile",
-      render: (predictionFile: File | null) =>
-        predictionFile ? (
-          <a
-            href={URL.createObjectURL(predictionFile)} // ✅ Create a Blob URL
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: "#007bff",
-              textDecoration: "underline",
-              cursor: "pointer",
-            }}
-          >
-            {predictionFile.name}
-          </a>
-        ) : (
-          "No File"
-        ),
+      dataIndex: "prediction_file",
+      key: "prediction_file",
+      render: (predictionFile: string) => (predictionFile ? <a href={`${image_url}${predictionFile}`} target="_blank" rel="noopener noreferrer">Download File</a> : "No File"),
     },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-    },
+    { title: "Status", dataIndex: "status", key: "status" },
     {
       title: "Action",
       key: "action",
       render: (_: any, row: PredictionData) => (
-        <button
-          className="btn btn-danger btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#deleteModal"
-          onClick={() => setDeleteId(row.id)} // ✅ Set delete ID
-        >
-          Delete
-        </button>
+        <div>
+          <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(row)}>Edit</button>
+          <button className="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => setDeleteId(row.id)}>Delete</button>
+        </div>
       ),
     },
   ];
@@ -127,125 +175,36 @@ const PredictionFile: React.FC = () => {
     <div className="page-wrapper">
       <div className="content">
         <div className="heading mb-4">
-          <h2>Add Prediction File</h2>
+          <h2>{editId ? "Edit Prediction File" : "Add Prediction File"}</h2>
         </div>
+
+        {/* ✅ Alert Component */}
+        {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+
         <div className="card p-4">
-          {/* Form */}
           <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label className="form-label">Prediction Title</label>
+              <input type="text" className="form-control" placeholder="Prediction Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            </div>
+
             <div className="row">
-              <div className="mb-3">
-                <label className="form-label">Prediction Title</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Prediction Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
+              <div className="col-md-6">
+                <label className="form-label">Cover File (image/*)</label>
+                <input type="file" className="form-control" accept="image/*" onChange={(e) => handleFileChange(e, "cover")} />
               </div>
               <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">Cover File (image/*)</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    accept="image/*"
-                    onChange={handleCoverFileChange}
-                  />
-                </div>
-              </div>
-              <div className="col-md-6">
-                <div className="mb-3">
-                  <label className="form-label">
-                    Prediction File (pdf/doc/docx/xlsx)
-                  </label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    accept=".pdf,.doc,.docx,.xlsx"
-                    onChange={handlePredictionFileChange}
-                  />
-                </div>
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Status</label>
-                <select
-                  className="form-select"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                </select>
-              </div>
-              <div className="col-md-3">
-                <button type="submit" className="btn btn-danger w-100">
-                  SAVE
-                </button>
+                <label className="form-label">Prediction File (pdf/doc/docx/xlsx)</label>
+                <input type="file" className="form-control" accept=".pdf,.doc,.docx,.xlsx" onChange={(e) => handleFileChange(e, "prediction")} />
               </div>
             </div>
+
+            <button type="submit" className="btn btn-info" disabled={loading}>{loading ? "Saving..." : editId ? "UPDATE" : "SAVE"}</button>
           </form>
 
           {/* ✅ Table Component */}
           <div className="mt-4">
-            <Table
-              key={recordings.length}
-              dataSource={recordings}
-              columns={columns}
-              Selection={true}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ✅ Delete Modal */}
-      <div
-        id="deleteModal"
-        className="modal fade"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title" id="deleteModalLabel">
-                Confirm Delete
-              </h4>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body py-5 text-center">
-              <i
-                className="fa fa-trash"
-                style={{ color: "red", fontSize: "2rem", marginBottom: "1em" }}
-              />
-              <p>Are you sure you want to delete this recording?</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                style={{ marginRight: "1em" }}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-                onClick={() => deleteId && handleDelete(deleteId)}
-              >
-                Delete
-              </button>
-            </div>
+            <Table key={predictions.length} dataSource={predictions} columns={columns} Selection={true} />
           </div>
         </div>
       </div>

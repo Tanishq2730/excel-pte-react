@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { DatePicker, Spin, Alert } from "antd";
+import { DatePicker, Spin, Alert, Input, Button } from "antd"; // ✅ Import Button
 import Table from "../../core/common/dataTable/index";
-import { fetchVisitors } from "../../api/visitorAPI";
+import { fetchVisitors } from "../../api/masterAPI";
 
 interface TableData {
-  createdAt: string; // Matches API field
-  count: number; // Matches API field
+  id: number;
+  createdAt: string;
+  count: number;
 }
+
 const Visitor: React.FC = () => {
   const [fromDate, setFromDate] = useState<dayjs.Dayjs | null>(null);
   const [toDate, setToDate] = useState<dayjs.Dayjs | null>(null);
@@ -16,50 +18,58 @@ const Visitor: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  // ✅ Fetch data from API when the component mounts
+  // ✅ Fetch data from API
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       setError(null);
-  
+
       const response = await fetchVisitors();
-  
+
       if (response.success) {
-      console.log(response);
-      
-        // Ensure the response is in an array format
         const visitorData = Array.isArray(response.data)
-          ? response.data
-          : [response.data]; // Wrap in an array if it's a single object
-  
+          ? response.data.map((item: any) => ({
+              ...item,
+              key: item.id, // ✅ Ensure unique key for table
+            }))
+          : [];
+
         setData(visitorData);
         setFilteredData(visitorData);
       } else {
         setError(response.error);
       }
-  
+
       setLoading(false);
     };
-  
+
     fetchData();
   }, []);
-console.log(data);
-console.log(filteredData);
 
-
-  // ✅ Filter data according to selected date range
+  // ✅ Filter data by date range
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (fromDate && toDate) {
+      const start = fromDate.startOf("day").valueOf();
+      const end = toDate.endOf("day").valueOf();
+
       const filtered = data.filter((item) => {
-        const itemDate = dayjs(item.createdAt, "DD-MM-YYYY").valueOf();
-        return itemDate >= fromDate.valueOf() && itemDate <= toDate.valueOf();
+        const itemDate = dayjs(item.createdAt).startOf("day").valueOf();
+        return itemDate >= start && itemDate <= end;
       });
+
       setFilteredData(filtered);
     } else {
       setFilteredData(data);
     }
+  };
+
+  // ✅ Reset Button Handler
+  const handleReset = () => {
+    setFromDate(null);
+    setToDate(null);
+    setFilteredData(data); // ✅ Reset table data
   };
 
   // ✅ Table Columns
@@ -67,13 +77,15 @@ console.log(filteredData);
     {
       title: "Date",
       dataIndex: "createdAt",
+      key: "createdAt",
       sorter: (a: TableData, b: TableData) =>
         dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
-      render: (text: string) => dayjs(text).format("DD-MM-YYYY"), // Format date
+      render: (text: string) => dayjs(text).isValid() ? dayjs(text).format("DD-MM-YYYY") : "Invalid Date",
     },
     {
       title: "Visitor Count",
       dataIndex: "count",
+      key: "count",
       sorter: (a: TableData, b: TableData) => a.count - b.count,
     },
   ];
@@ -97,18 +109,13 @@ console.log(filteredData);
                 <div className="col-md-3">
                   <div className="mb-3">
                     <label className="form-label fw-bold">From Date:</label>
-                    <div className="input-icon position-relative">
-                      <DatePicker
-                        className="form-control"
-                        format="DD-MM-YYYY"
-                        value={fromDate}
-                        onChange={(date) => setFromDate(date)}
-                        placeholder="Select From Date"
-                      />
-                      <span className="input-icon-addon">
-                        <i className="ti ti-calendar" />
-                      </span>
-                    </div>
+                    <DatePicker
+                      format="DD-MM-YYYY"
+                      value={fromDate}
+                      onChange={(date) => setFromDate(date)}
+                      placeholder="Select From Date"
+                      className="w-100"
+                    />
                   </div>
                 </div>
 
@@ -116,26 +123,28 @@ console.log(filteredData);
                 <div className="col-md-3">
                   <div className="mb-3">
                     <label className="form-label fw-bold">To Date:</label>
-                    <div className="input-icon position-relative">
-                      <DatePicker
-                        className="form-control"
-                        format="DD-MM-YYYY"
-                        value={toDate}
-                        onChange={(date) => setToDate(date)}
-                        placeholder="Select To Date"
-                      />
-                      <span className="input-icon-addon">
-                        <i className="ti ti-calendar" />
-                      </span>
-                    </div>
+                    <DatePicker
+                      format="DD-MM-YYYY"
+                      value={toDate}
+                      onChange={(date) => setToDate(date)}
+                      placeholder="Select To Date"
+                      className="w-100"
+                    />
                   </div>
                 </div>
 
                 {/* Submit Button */}
                 <div className="col-md-3 mt-auto mb-3">
-                  <button type="submit" className="btn btn-info text-white">
+                  <Button type="primary" htmlType="submit" className="w-100">
                     SUBMIT
-                  </button>
+                  </Button>
+                </div>
+
+                {/* Reset Button */}
+                <div className="col-md-3 mt-auto mb-3">
+                  <Button type="default" onClick={handleReset} className="w-100">
+                    RESET
+                  </Button>
                 </div>
               </div>
             </form>
@@ -146,6 +155,7 @@ console.log(filteredData);
                 <div className="card">
                   <div className="card-body">
                     <Table
+                      key={filteredData.length} // Forces re-render when data updates
                       dataSource={filteredData}
                       columns={columns}
                       Selection={true}

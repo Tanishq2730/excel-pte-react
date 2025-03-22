@@ -1,5 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Table from "../../core/common/dataTable/index"; // Custom Table component
+import {
+  fetchAllClasses,
+  createClass,
+  updateClass,
+  deleteClass,
+} from "../../api/masterAPI";
+import AlertComponent from "../../core/common/AlertComponent";
 
 interface ClassData {
   id: number;
@@ -20,56 +27,93 @@ const UpComingClass: React.FC = () => {
     link: "",
   });
 
-  const [recordings, setRecordings] = useState<ClassData[]>([]);
+  const [classes, setClasses] = useState<ClassData[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  // Handle input changes
+  // ✅ Fetch Classes on Mount
+  useEffect(() => {
+    loadClasses();
+  }, []);
+
+  const loadClasses = async () => {
+    try {
+      const response = await fetchAllClasses();
+      if (response.success) {
+        setClasses(response.data);
+      } else {
+        setError("Failed to fetch classes.");
+      }
+    } catch (error) {
+      setError("Error fetching classes.");
+    }
+  };
+
+  // ✅ Handle Input Changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ Handle Form Submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (editId !== null) {
-      // Edit existing record
-      setRecordings((prev) =>
-        prev.map((item) =>
-          item.id === editId ? { ...formData, id: editId } : item
-        )
-      );
-      setEditId(null);
-    } else {
-      // Add new record
-      const newData = { ...formData, id: recordings.length + 1 };
-      setRecordings([...recordings, newData]);
+    if (!formData.title || !formData.date || !formData.time || !formData.type || !formData.link) {
+      setError("All fields are required!");
+      return;
     }
 
-    // Reset form
-    setFormData({ id: 0, title: "", date: "", time: "", type: "", link: "" });
+    try {
+      let response;
+      if (editId !== null) {
+        response = await updateClass(editId, formData);
+      } else {
+        response = await createClass(formData);
+      }
+
+      if (response.success) {
+        setSuccess(editId !== null ? "Class updated successfully!" : "Class added successfully!");
+        loadClasses(); // Refresh data
+        setFormData({ id: 0, title: "", date: "", time: "", type: "", link: "" });
+        setEditId(null);
+      } else {
+        setError("Failed to save class.");
+      }
+    } catch (error) {
+      setError("Error saving class.");
+    }
   };
 
-  // Handle edit
+  // ✅ Handle Edit
   const handleEdit = (id: number) => {
-    const record = recordings.find((item) => item.id === id);
-    if (record) {
-      setFormData(record);
+    const classItem = classes.find((item) => item.id === id);
+    if (classItem) {
+      setFormData(classItem);
       setEditId(id);
     }
   };
 
-  // Handle delete
+  // ✅ Handle Delete
   const handleDelete = (id: number) => {
     setDeleteId(id);
   };
 
-  // Confirm delete from modal
-  const handleDeleteConfirm = () => {
+  // ✅ Confirm Delete
+  const handleDeleteConfirm = async () => {
     if (deleteId !== null) {
-      setRecordings((prev) => prev.filter((item) => item.id !== deleteId));
+      try {
+        const response = await deleteClass(deleteId);
+        if (response.success) {
+          setSuccess("Class deleted successfully!");
+          loadClasses(); // Refresh data
+        } else {
+          setError("Failed to delete class.");
+        }
+      } catch (error) {
+        setError("Error deleting class.");
+      }
       setDeleteId(null);
     }
   };
@@ -84,18 +128,10 @@ const UpComingClass: React.FC = () => {
       title: "Actions",
       render: (row: ClassData) => (
         <div>
-          <button
-            className="btn btn-warning btn-sm me-2"
-            onClick={() => handleEdit(row.id)}
-          >
+          <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(row.id)}>
             <i className="fa fa-pencil"></i>
           </button>
-          <button
-            className="btn btn-danger btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
-            onClick={() => handleDelete(row.id)}
-          >
+          <button className="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => handleDelete(row.id)}>
             <i className="fa fa-trash"></i>
           </button>
         </div>
@@ -105,149 +141,68 @@ const UpComingClass: React.FC = () => {
 
   return (
     <>
-      {/* Modal */}
-      <div
-        id="deleteModal"
-        className="modal fade"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
+
+      {/* ✅ Delete Modal */}
+      <div id="deleteModal" className="modal fade" tabIndex={-1} aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title" id="deleteModalLabel">
-                Confirm Delete
-              </h4>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
+              <h4 className="modal-title" id="deleteModalLabel">Confirm Delete</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body py-5 text-center">
-              <i
-                className="fa fa-trash"
-                style={{ color: "red", fontSize: "2rem", marginBottom: "1em" }}
-              />
-              <p>Are you sure you want to delete this recording?</p>
+              <i className="fa fa-trash text-danger" style={{ fontSize: "2rem", marginBottom: "1em" }} />
+              <p>Are you sure you want to delete this class?</p>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary mr-5"
-                data-bs-dismiss="modal"
-                style={{marginRight:'1em'}}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-                onClick={handleDeleteConfirm}
-              >
-                Delete
-              </button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleDeleteConfirm}>Delete</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Form and Table */}
+      {/* ✅ Form and Table */}
       <div className="page-wrapper">
         <div className="content">
           <div className="heading mb-4">
             <h2>Add Upcoming Classes</h2>
           </div>
           <div className="card p-4 mt-4">
+            {/* ✅ Alerts */}
+            {error && <AlertComponent type="danger" message={error} onClose={() => setError(null)} />}
+            {success && <AlertComponent type="success" message={success} onClose={() => setSuccess(null)} />}
             <form onSubmit={handleSubmit}>
               <div className="row mb-3">
-                {/* Title */}
                 <div className="col-md-6">
                   <label className="form-label">Title</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="title"
-                    placeholder="Enter title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="text" className="form-control" name="title" value={formData.title} onChange={handleChange} required />
                 </div>
-
-                {/* Date */}
                 <div className="col-md-6">
                   <label className="form-label">Date</label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="date"
-                    value={formData.date}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="date" className="form-control" name="date" value={formData.date} onChange={handleChange} required />
                 </div>
               </div>
-
               <div className="row mb-3">
-                {/* Time */}
                 <div className="col-md-6">
                   <label className="form-label">Time</label>
-                  <input
-                    type="time"
-                    className="form-control"
-                    name="time"
-                    value={formData.time}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="time" className="form-control" name="time" value={formData.time} onChange={handleChange} required />
                 </div>
-
-                {/* Type */}
                 <div className="col-md-6">
                   <label className="form-label">Type</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    required
-                  />
+                  <input type="text" className="form-control" name="type" value={formData.type} onChange={handleChange} required />
                 </div>
               </div>
-
-              {/* Link */}
               <div className="mb-3">
                 <label className="form-label">Link</label>
-                <input
-                  type="url"
-                  className="form-control"
-                  name="link"
-                  value={formData.link}
-                  onChange={handleChange}
-                  required
-                />
+                <input type="url" className="form-control" name="link" value={formData.link} onChange={handleChange} required />
               </div>
-
-              {/* Submit Button */}
-              <button type="submit" className="btn btn-info text-white">
-                {editId !== null ? "Update" : "Submit"}
-              </button>
+              <button type="submit" className="btn btn-info text-white">{editId !== null ? "Update" : "Submit"}</button>
             </form>
 
-            {/* Table */}
+            {/* ✅ Table */}
             <div className="mt-4">
-              <Table
-                key={recordings.length}
-                dataSource={recordings}
-                columns={columns}
-                Selection={true}
-              />
+              <Table key={classes.length} dataSource={classes} columns={columns} Selection={true} />
             </div>
           </div>
         </div>

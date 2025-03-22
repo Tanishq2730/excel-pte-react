@@ -1,120 +1,169 @@
-import React, { useState } from "react";
-import Table from "../../core/common/dataTable/index"; // Custom Table component
+import React, { useState, useEffect } from "react";
+import Table from "../../core/common/dataTable/index";
+import {
+  fetchAllVideos,
+  createVideo,
+  updateVideo,
+  deleteVideo,
+} from "../../api/masterAPI";
+import { image_url } from "../../environment";
+import AlertComponent from "../../core/common/AlertComponent";
 
 interface VideoData {
   id: number;
   title: string;
   link: string;
-  type: string;
-  platform: string;
-  image: string;
+  thumbnail: string | null;
 }
 
 const ManageVideo: React.FC = () => {
-  const [title, setTitle] = useState<string>("");
-  const [link, setLink] = useState<string>("");
-  const [type, setType] = useState<string>("CN");
-  const [platform, setPlatform] = useState<string>("YouTube");
-  const [image, setImage] = useState<File | null>(null);
-  const [recordings, setRecordings] = useState<VideoData[]>([]);
-  const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null); // ✅ New state for deleteId
+  const [formData, setFormData] = useState({
+    title: "",
+    link: "",
+    thumbnail: null as File | null,
+  });
 
-  // ✅ Handle image change
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+  const [videos, setVideos] = useState<VideoData[]>([]);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  // ✅ Fetch Videos on Mount
+  useEffect(() => {
+    loadVideos();
+  }, []);
+
+  const loadVideos = async () => {
+    try {
+      const response = await fetchAllVideos();
+      if (response.success) {
+        setVideos(response.data);
+      } else {
+        setError("Failed to fetch videos.");
+      }
+    } catch (error) {
+      setError("Error fetching videos.");
     }
   };
 
-  // ✅ Handle form submission (Save or Update)
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // ✅ Handle Input Changes
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 
-    if (!title || !link) {
-      alert("Please fill out all fields");
-      return;
-    }
+  // ✅ Handle Thumbnail Change
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-    if (editId !== null) {
-      // ✅ Update existing record
-      setRecordings((prev) =>
-        prev.map((record) =>
-          record.id === editId
-            ? {
-                ...record,
-                title,
-                link,
-                type,
-                platform,
-                image: image ? URL.createObjectURL(image) : record.image,
-              }
-            : record
-        )
-      );
-      setEditId(null);
-    } else {
-      if (!image) {
-        alert("Please upload an image");
+      if (!validTypes.includes(file.type)) {
+        setError("Only JPG, JPEG, and PNG files are allowed.");
         return;
       }
 
-      // ✅ Create new record
-      const newRecord: VideoData = {
-        id: recordings.length + 1,
-        title,
-        link,
-        type,
-        platform,
-        image: URL.createObjectURL(image),
-      };
-      setRecordings((prev) => [...prev, newRecord]);
-    }
-
-    // ✅ Reset state after submit
-    setTitle("");
-    setLink("");
-    setType("CN");
-    setPlatform("YouTube");
-    setImage(null);
-  };
-
-  // ✅ Handle delete
-  const handleDelete = () => {
-    if (deleteId !== null) {
-      setRecordings((prev) => prev.filter((rec) => rec.id !== deleteId));
-      setDeleteId(null);
+      setError(null);
+      setFormData((prev) => ({ ...prev, thumbnail: file }));
+      setPreviewImage(URL.createObjectURL(file));
     }
   };
 
-  // ✅ Handle edit
+  // ✅ Handle Form Submission (Create or Update)
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.title || !formData.link) {
+      setError("Title and link are required!");
+      return;
+    }
+
+    setError(null);
+    setSuccess(null);
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("title", formData.title);
+      formDataToSend.append("link", formData.link);
+      if (formData.thumbnail) {
+        formDataToSend.append("image", formData.thumbnail);
+      }
+
+      let response;
+      if (editId !== null) {
+        response = await updateVideo(editId, formDataToSend);
+      } else {
+        response = await createVideo(formDataToSend);
+      }
+
+      if (response.success) {
+        setSuccess(editId !== null ? "Video updated successfully!" : "Video added successfully!");
+        loadVideos();
+        setFormData({ title: "", link: "", thumbnail: null });
+        setEditId(null);
+        setPreviewImage(null);
+      } else {
+        setError("Failed to save video.");
+      }
+    } catch (error) {
+      setError("Error saving video.");
+    }
+  };
+
+  // ✅ Handle Edit
   const handleEdit = (id: number) => {
-    const record = recordings.find((rec) => rec.id === id);
-    if (record) {
-      setTitle(record.title);
-      setLink(record.link);
-      setType(record.type);
-      setPlatform(record.platform);
+    const video = videos.find((item) => item.id === id);
+    if (video) {
+      setFormData({
+        title: video.title,
+        link: video.link,
+        thumbnail: null,
+      });
+      setPreviewImage(video.thumbnail ? `${image_url}${video.thumbnail}` : null);
       setEditId(id);
     }
   };
 
-  // ✅ Table columns
+  // ✅ Handle Delete
+  const handleDelete = (id: number) => {
+    setDeleteId(id);
+  };
+
+  // ✅ Confirm Delete
+  const handleDeleteConfirm = async () => {
+    if (deleteId !== null) {
+      try {
+        const response = await deleteVideo(deleteId);
+        if (response.success) {
+          setSuccess("Video deleted successfully!");
+          loadVideos();
+        } else {
+          setError("Failed to delete video.");
+        }
+      } catch (error) {
+        setError("Error deleting video.");
+      }
+      setDeleteId(null);
+    }
+  };
+
   const columns = [
+    { title: "Title", dataIndex: "title" },
     {
-      title: "S.No.",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Video Title",
-      dataIndex: "title",
-      key: "title",
+      title: "Thumbnail",
+      dataIndex: "thumbnail",
+      render: (thumbnail: string) =>
+        thumbnail ? (
+          <img src={`${image_url}${thumbnail}`} alt="Thumbnail" style={{ width: "70px", height: "70px", objectFit: "cover" }} />
+        ) : (
+          "No Image"
+        ),
     },
     {
       title: "Video Link",
       dataIndex: "link",
-      key: "link",
       render: (text: string) => (
         <a href={text} target="_blank" rel="noopener noreferrer">
           {text}
@@ -122,46 +171,14 @@ const ManageVideo: React.FC = () => {
       ),
     },
     {
-      title: "Video Image",
-      dataIndex: "image",
-      key: "image",
-      render: (image: string) => (
-        <img
-          src={image}
-          alt="thumbnail"
-          style={{ width: "70px", height: "70px", objectFit: "cover" }}
-        />
-      ),
-    },
-    {
-      title: "Video Type",
-      dataIndex: "type",
-      key: "type",
-    },
-    {
-      title: "Platform Type",
-      dataIndex: "platform",
-      key: "platform",
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (_: any, record: VideoData) => (
+      title: "Actions",
+      render: (row: VideoData) => (
         <div>
-          <button
-            className="btn btn-primary btn-sm me-2"
-            onClick={() => handleEdit(record.id)}
-          >
-            EDIT
+          <button className="btn btn-warning btn-sm me-2" onClick={() => handleEdit(row.id)}>
+            <i className="fa fa-pencil"></i>
           </button>
-          {/* ✅ Store deleteId when opening modal */}
-          <button
-            className="btn btn-danger btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
-            onClick={() => setDeleteId(record.id)}
-          >
-            DELETE
+          <button className="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" onClick={() => handleDelete(row.id)}>
+            <i className="fa fa-trash"></i>
           </button>
         </div>
       ),
@@ -169,146 +186,53 @@ const ManageVideo: React.FC = () => {
   ];
 
   return (
-    <div className="page-wrapper">
-      <div className="content">
-        <div className="heading mb-4">
-          <h2>{editId !== null ? "Edit Video" : "Add Video"}</h2>
-        </div>
-        <div className="card p-4">
-          <form onSubmit={handleSubmit}>
-            {/* Video Title */}
-            <div className="mb-3">
-              <label className="form-label">Video Title</label>
-              <input
-                type="text"
-                className="form-control"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </div>
+    <>
 
-            {/* Thumbnail Image */}
-            <div className="mb-3">
-              <label className="form-label">Thumbnail Image</label>
-              <input
-                type="file"
-                className="form-control"
-                onChange={handleImageChange}
-                required={editId === null}
-              />
-            </div>
-
-            {/* Video Link */}
-            <div className="mb-3">
-              <label className="form-label">Video Link</label>
-              <input
-                type="text"
-                className="form-control"
-                value={link}
-                onChange={(e) => setLink(e.target.value)}
-                required
-              />
-            </div>
-
-            {/* Video Type */}
-            <div className="mb-3">
-              <label className="form-label">Video Type</label>
-              <select
-                className="form-select"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                required
-              >
-                <option value="CN">CN</option>
-                <option value="AN">AN</option>
-                <option value="EN">EN</option>
-              </select>
-            </div>
-
-            {/* Platform Type */}
-            <div className="mb-3">
-              <label className="form-label">Platform Type</label>
-              <select
-                className="form-select"
-                value={platform}
-                onChange={(e) => setPlatform(e.target.value)}
-                required
-              >
-                <option value="YouTube">YouTube</option>
-                <option value="Vimeo">Vimeo</option>
-                <option value="Dailymotion">Dailymotion</option>
-              </select>
-            </div>
-
-            {/* Save Button */}
-            <button type="submit" className="btn btn-danger">
-              {editId !== null ? "UPDATE" : "SAVE"}
-            </button>
-          </form>
-
-          {/* ✅ Table update in real-time */}
-          <div className="mt-4">
-            <Table
-              key={editId || recordings.length}
-              dataSource={recordings}
-              columns={columns}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* ✅ Modal */}
-      <div
-        id="deleteModal"
-        className="modal fade"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
+      {/* ✅ Delete Modal */}
+      <div id="deleteModal" className="modal fade" tabIndex={-1} aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <h4 className="modal-title" id="deleteModalLabel">
-                Confirm Delete
-              </h4>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
+              <h4 className="modal-title" id="deleteModalLabel">Confirm Delete</h4>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
             </div>
             <div className="modal-body py-5 text-center">
-              <i
-                className="fa fa-trash"
-                style={{ color: "red", fontSize: "2rem", marginBottom: "1em" }}
-              />
-              <p>Are you sure you want to delete this recording?</p>
+              <i className="fa fa-trash text-danger" style={{ fontSize: "2rem", marginBottom: "1em" }} />
+              <p>Are you sure you want to delete this video?</p>
             </div>
             <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary mr-3"
-                data-bs-dismiss="modal"
-                style={{marginRight:'1em'}}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-                onClick={handleDelete}
-              >
-                Delete
-              </button>
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" className="btn btn-danger" data-bs-dismiss="modal" onClick={handleDeleteConfirm}>Delete</button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* ✅ Form and Table */}
+      <div className="page-wrapper">
+        <div className="content">
+          <div className="heading mb-4">
+            <h2>{editId !== null ? "Edit Video" : "Add Video"}</h2>
+          </div>
+          <div className="card p-4">
+            {/* ✅ Alerts */}
+            {error && <AlertComponent type="danger" message={error} onClose={() => setError(null)} />}
+            {success && <AlertComponent type="success" message={success} onClose={() => setSuccess(null)} />}
+
+            <form onSubmit={handleSubmit}>
+              <input type="text" className="form-control mb-3" name="title" placeholder="Title" value={formData.title} onChange={handleChange} required />
+              <input type="text" className="form-control mb-3" name="link" placeholder="Video Link" value={formData.link} onChange={handleChange} required />
+              <input type="file" className="form-control mb-3" onChange={handleImageChange} />
+              {previewImage && <img src={previewImage} alt="Preview" style={{ width: "100px", height: "auto" }} />}
+              <button type="submit" className="btn btn-info">{editId !== null ? "Update" : "Submit"}</button>
+            </form>
+
+            {/* ✅ Table */}
+            <Table key={videos.length} dataSource={videos} columns={columns} Selection={true} />
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 

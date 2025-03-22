@@ -11,39 +11,30 @@ export interface SelectProps {
   defaultValue?: Option;
   className?: string;
   styles?: any; 
+  onChange?: (option: Option | null) => void; // ✅ Add this line
 }
 
-const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className }) => {
+const CommonSelect: React.FC<SelectProps> = ({ options, defaultValue, className, onChange }) => {
   const [selectedOption, setSelectedOption] = useState<Option | undefined>(defaultValue);
-
-  // const customStyles = {
-  //   option: (base: any, state: any) => ({
-  //     ...base,
-  //     color: "#6A7287",
-  //     backgroundColor: state.isSelected ? "#ddd" : "white",
-  //     cursor: "pointer",
-  //     "&:hover": {
-  //       backgroundColor: state.isFocused ? "#3D5EE1" : "blue",
-  //       color: state.isFocused ? "#fff" : "#6A7287",
-  //     },
-  //   }),
-  // };
 
   const handleChange = (option: Option | null) => {
     setSelectedOption(option || undefined);
+    if (onChange) {
+      onChange(option); // ✅ Trigger parent `onChange`
+    }
   };
+
   useEffect(() => {
     setSelectedOption(defaultValue || undefined);
-  }, [defaultValue])
-  
+  }, [defaultValue]);
+
   return (
     <Select
-     classNamePrefix="react-select"
+      classNamePrefix="react-select"
       className={className}
-      // styles={customStyles}
       options={options}
       value={selectedOption}
-      onChange={handleChange}
+      onChange={handleChange} // ✅ Now this will work
       placeholder="Select"
     />
   );
