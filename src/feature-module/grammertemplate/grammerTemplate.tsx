@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
+import Swal from "sweetalert2";
+import AlertComponent from "../../core/common/AlertComponent";
+import {
+  fetchAllGrammars,
+  createGrammar,
+  updateGrammar,
+  deleteGrammar,
+  fetchGrammarById,
+} from "../../api/masterAPI";
+import { image_url } from "../../environment";
 
-interface RecordingData {
+interface GrammarData {
   id: number;
   type: string;
   title: string;
   content: string;
+  image_pdf?: string | null;
 }
 
 const GrammerTemplate: React.FC = () => {
@@ -13,129 +24,151 @@ const GrammerTemplate: React.FC = () => {
   const [templateTitle, setTemplateTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
+  const [grammars, setGrammars] = useState<GrammarData[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null); // ✅ State for Delete ID
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  // Sample data
-  const [recordings, setRecordings] = useState<RecordingData[]>([
-    {
-      id: 1,
-      type: "Speaking",
-      title: "6. Answer Short Question",
-      content: 'Use the sentence "The answer is..." along with your response.',
-    },
-  ]);
+  const [alert, setAlert] = useState<{ type?: "success" | "danger"; message: string }>({
+    type: undefined,
+    message: "",
+  });
 
-  // ✅ Handle file change
+  // ✅ Fetch grammar list
+  const loadGrammars = async () => {
+    try {
+      const response = await fetchAllGrammars();
+      if (response.success) {
+        setGrammars(response.data);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch grammar entries" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching grammar entries" });
+    }
+  };
+
+  useEffect(() => {
+    loadGrammars();
+  }, []);
+
+  // ✅ Handle File Change
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
+    if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
     }
   };
 
-  // ✅ Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ Handle Form Submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (editId !== null) {
-      // ✅ Update existing row
-      setRecordings((prev) =>
-        prev.map((rec) =>
-          rec.id === editId
-            ? {
-                ...rec,
-                type,
-                title: templateTitle,
-                content,
-              }
-            : rec
-        )
-      );
-      setEditId(null);
-    } else {
-      // ✅ Add new row
-      const newRecord: RecordingData = {
-        id: recordings.length + 1,
-        type,
-        title: templateTitle,
-        content,
-      };
-      setRecordings((prev) => [...prev, newRecord]);
+    if (!templateTitle || !content) {
+      setAlert({ type: "danger", message: "Title and Content are required" });
+      return;
     }
 
-    // ✅ Reset form
+    const formData = new FormData();
+    formData.append("type", type);
+    formData.append("title", templateTitle);
+    formData.append("content", content);
+    if (file) formData.append("image_pdf", file);
+
+    try {
+      if (editId !== null) {
+        await updateGrammar(editId, formData);
+        setAlert({ type: "success", message: "Grammar updated successfully!" });
+      } else {
+        await createGrammar(formData);
+        setAlert({ type: "success", message: "Grammar created successfully!" });
+      }
+      await loadGrammars();
+      resetForm();
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error submitting grammar" });
+    }
+  };
+
+  // ✅ Handle Edit
+  const handleEdit = async (id: number) => {
+    try {
+      const response = await fetchGrammarById(id);
+      if (response.success) {
+        const grammar = response.data;
+        setType(grammar.type);
+        setTemplateTitle(grammar.title);
+        setContent(grammar.content);
+        setEditId(id);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch grammar details" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching grammar details" });
+    }
+  };
+
+  // ✅ Handle Delete
+  const handleDelete = async (id: number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteGrammar(id);
+          Swal.fire("Deleted!", "Grammar entry has been deleted.", "success");
+          await loadGrammars();
+        } catch (error) {
+          Swal.fire("Error!", "Error deleting grammar entry.", "error");
+        }
+      }
+    });
+  };
+
+  // ✅ Reset Form
+  const resetForm = () => {
     setType("Reading");
     setTemplateTitle("");
     setContent("");
     setFile(null);
+    setEditId(null);
   };
 
-  // ✅ Handle delete row
-  const handleDelete = () => {
-    if (deleteId !== null) {
-      setRecordings((prev) => prev.filter((record) => record.id !== deleteId));
-      setDeleteId(null); // ✅ Reset deleteId after delete
-    }
-  };
-
-  // ✅ Handle edit row
-  const handleEdit = (id: number) => {
-    const record = recordings.find((rec) => rec.id === id);
-    if (record) {
-      setType(record.type);
-      setTemplateTitle(record.title);
-      setContent(record.content);
-      setEditId(id);
-    }
-  };
-
-  // ✅ Table columns
+  // ✅ Table Columns
   const columns = [
+    { title: "ID", dataIndex: "id" },
+    { title: "Type", dataIndex: "type" },
+    { title: "Title", dataIndex: "title" },
+    { title: "Content", dataIndex: "content" },
     {
-      title: "#",
-      dataIndex: "id",
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.type.localeCompare(b.type),
-    },
-    {
-      title: "Title",
-      dataIndex: "title",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.title.localeCompare(b.title),
-    },
-    {
-      title: "Content",
-      dataIndex: "content",
-      sorter: (a: RecordingData, b: RecordingData) =>
-        a.content.localeCompare(b.content),
+      title: "File",
+      dataIndex: "image_pdf",
+      render: (file: string | null) =>
+        file ? (
+          <a href={`${image_url}${file}`} target="_blank" rel="noopener noreferrer">
+            View File
+          </a>
+        ) : (
+          "No File"
+        ),
     },
     {
       title: "Action",
-      render: (row: RecordingData) => (
-        <div>
-          {/* ✅ Edit Button */}
-          <button
-            className="btn btn-info btn-sm me-2"
-            onClick={() => handleEdit(row.id)}
-          >
+      render: (row: GrammarData) => (
+        <>
+          <button className="btn btn-info btn-sm me-2" onClick={() => handleEdit(row.id)}>
             <i className="fa fa-pencil"></i>
           </button>
-
-          {/* ✅ Delete Button */}
           <button
             className="btn btn-danger btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
-            onClick={() => setDeleteId(row.id)} 
+            onClick={() => handleDelete(row.id)}
           >
             <i className="fa fa-trash"></i>
           </button>
-        </div>
+        </>
       ),
     },
   ];
@@ -143,133 +176,43 @@ const GrammerTemplate: React.FC = () => {
   return (
     <div className="page-wrapper">
       <div className="content">
+        {alert.message && <AlertComponent type={alert.type ?? "primary"} message={alert.message} onClose={() => setAlert({ type: undefined, message: "" })} />}
+
         <div className="heading mb-4">
-          <h2>
-            {editId !== null ? "Edit Grammer Template" : "Add Grammer Template"}
-          </h2>
+          <h2>{editId !== null ? "Edit Grammar Template" : "Add Grammar Template"}</h2>
         </div>
+
         <div className="card p-4">
           {/* ✅ Form */}
           <form onSubmit={handleSubmit}>
-            {/* Type */}
             <div className="mb-3">
               <label className="form-label">Type</label>
-              <input
-                type="text"
-                className="form-control"
-                value={templateTitle}
-                onChange={(e) => setTemplateTitle(e.target.value)}
-                required
-              />
+              <input type="text" className="form-control" value={type} onChange={(e) => setType(e.target.value)} required />
             </div>
 
-            {/* Template Title */}
             <div className="mb-3">
-              <label className="form-label">Template Title</label>
-              <input
-                type="text"
-                className="form-control"
-                value={templateTitle}
-                onChange={(e) => setTemplateTitle(e.target.value)}
-                required
-              />
+              <label className="form-label">Title</label>
+              <input type="text" className="form-control" value={templateTitle} onChange={(e) => setTemplateTitle(e.target.value)} required />
             </div>
 
-            {/* Content */}
             <div className="mb-3">
               <label className="form-label">Content</label>
-              <textarea
-                className="form-control"
-                rows={4}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label className="form-label">Image / PDF</label>
-              <input
-                type="file"
-                className="form-control"
-                // onChange={handleFileChange}
-                accept="image/*"
-              />
-              {/* {preview && (
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="mt-2"
-                  style={{ width: "80px", height: "80px", objectFit: "cover" }}
-                />
-              )} */}
+              <textarea className="form-control" rows={4} value={content} onChange={(e) => setContent(e.target.value)} required />
             </div>
 
-            {/* ✅ Save Button */}
-            <div>
-              <button type="submit" className="btn btn-primary">
-                {editId !== null ? "UPDATE" : "SAVE"}
-              </button>
+            <div className="mb-3">
+              <label className="form-label">Upload File (Image/PDF)</label>
+              <input type="file" className="form-control" onChange={handleFileChange} accept="image/*,application/pdf" />
             </div>
+
+            <button type="submit" className="btn btn-primary">
+              {editId !== null ? "UPDATE" : "SAVE"}
+            </button>
           </form>
 
           {/* ✅ Table */}
           <div className="mt-4">
-            <Table
-              key={recordings.map((r) => r.id).join(",")}
-              dataSource={recordings}
-              columns={columns}
-              Selection={true}
-            />
-          </div>
-        </div>
-
-        {/* ✅ Delete Modal */}
-        <div
-          id="deleteModal"
-          className="modal fade"
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                ></button>
-              </div>
-              <div className="modal-body py-5 text-center">
-                <i
-                  className="fa fa-trash"
-                  style={{
-                    color: "red",
-                    fontSize: "2rem",
-                    marginBottom: "1em",
-                  }}
-                />
-                <p>Are you sure you want to delete this recording?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary mr-3"
-                  data-bs-dismiss="modal"
-                  style={{ marginRight: "1em" }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={handleDelete}
-                  data-bs-dismiss="modal"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
+            <Table  key={grammars.length} dataSource={grammars} columns={columns} />
           </div>
         </div>
       </div>

@@ -35,7 +35,7 @@ export const SidebarData = [
           { label: "Login Banner", link: routes.loginBanner },
           { label: "Review", link: routes.review },
           { label: "Manage Video", link: routes.manageVideo },
-          { label: "sore card", link: routes.scoreCard },
+          { label: "Scorecard", link: routes.scoreCard },
         ],
       },
     ],
@@ -131,7 +131,7 @@ export const SidebarData = [
             icon: "ti ti-layout-align-left",
             submenu: true,
             showSubRoute: false,
-            link: routes.dashBoardPop,
+            // link: routes.dashBoardPop,
             themeSetting: true,
             submenuItems: [
               {

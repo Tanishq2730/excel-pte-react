@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
+import AlertComponent from "../../core/common/AlertComponent";
+import {
+  fetchExceptionalWords,
+  addExceptionalWord,
+} from "../../api/textGearAPI"; // Import API functions
 
 interface WordData {
   id: number;
@@ -8,59 +13,84 @@ interface WordData {
   language: string;
 }
 
-const DUMMY_DATA: WordData[] = [
-  { id: 1, word: "Magdalenian", type: 2, language: "en-GB" },
-  { id: 2, word: "San", type: 2, language: "en-GB" },
-  { id: 3, word: "Strife", type: 2, language: "en-GB" },
-];
-
 const ExceptionalWords: React.FC = () => {
-  const [data, setData] = useState<WordData[]>(DUMMY_DATA);
+  const [data, setData] = useState<WordData[]>([]);
   const [word, setWord] = useState<string>("");
+  const [alert, setAlert] = useState<{ type?: "success" | "danger"; message: string }>({
+    type: undefined,
+    message: "",
+  });
+
+  // ✅ Fetch exceptional words from API
+  const loadWords = async () => {
+    try {
+      const response = await fetchExceptionalWords();
+     
+      if (response.success && response.data) {
+        setData(
+          response.data.map((wordData: { id: number; text: string; type: number; lang: string }) => ({
+            id: wordData.id,
+            word: wordData.text, // ✅ Use `text` correctly
+            type: wordData.type, // ✅ Use `type`
+            language: wordData.lang, // ✅ Use `lang`
+          }))
+        );
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch words from API" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching words" });
+    }
+  };
+
+  useEffect(() => {
+    loadWords();
+  }, []);
+console.log(data,'data');
 
   // ✅ Handle Form Submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (word.trim()) {
-      // ✅ Add new word to the table
-      const newWord: WordData = {
-        id: data.length + 1,
-        word,
-        type: 2, // ✅ Default type value
-        language: "en-GB", // ✅ Default language value
-      };
+    if (!word.trim()) {
+      setAlert({ type: "danger", message: "Please enter a word!" });
+      return;
+    }
 
-      setData((prev) => [...prev, newWord]);
-
-      // ✅ Reset form
-      setWord("");
+    try {
+      const response = await addExceptionalWord({ text: word, type: 2, lang: "en-GB" });
+      if (response.success) {
+        setAlert({ type: "success", message: "Word added successfully!" });
+        loadWords(); // Refresh list
+        setWord(""); // Reset form
+      } else {
+        setAlert({ type: "danger", message: "Failed to add word!" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error adding word" });
     }
   };
 
   // ✅ Table Columns
   const columns = [
-    {
-      title: "#",
-      dataIndex: "id",
-    },
-    {
-      title: "Word",
-      dataIndex: "word",
-    },
-    {
-      title: "Type",
-      dataIndex: "type",
-    },
-    {
-      title: "Language",
-      dataIndex: "language",
-    },
+    { title: "#", dataIndex: "id" },
+    { title: "Word", dataIndex: "word" },
+    { title: "Type", dataIndex: "type" },
+    { title: "Language", dataIndex: "language" },
   ];
 
   return (
     <div className="page-wrapper">
       <div className="content">
+        {/* ✅ Alert Component */}
+        {alert.message && (
+          <AlertComponent
+            type={alert.type ?? "primary"}
+            message={alert.message}
+            onClose={() => setAlert({ type: undefined, message: "" })}
+          />
+        )}
+
         <div className="heading mb-4">
           <h2>Exceptional Words</h2>
         </div>
@@ -68,7 +98,6 @@ const ExceptionalWords: React.FC = () => {
           {/* ✅ Form */}
           <form onSubmit={handleSubmit}>
             <div className="row">
-              {/* Word */}
               <div className="col-md-4 mb-3">
                 <label className="form-label">Word</label>
                 <input
@@ -82,16 +111,13 @@ const ExceptionalWords: React.FC = () => {
             </div>
 
             {/* ✅ Submit Button */}
-            <div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </div>
+            <button type="submit" className="btn btn-primary">
+              Add Word
+            </button>
           </form>
 
           {/* ✅ Data Table */}
           <div className="mt-4">
-            {/* ✅ `key` ke saath table ko forcefully refresh kar rahe hain */}
             <Table key={data.length} dataSource={data} columns={columns} />
           </div>
         </div>

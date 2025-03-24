@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
+import Swal from "sweetalert2";
+import AlertComponent from "../../core/common/AlertComponent";
+import {
+  fetchAllScorecards,
+  createScorecard,
+  updateScorecard,
+  deleteScorecard,
+  fetchScorecardById,
+} from "../../api/masterAPI";
 
-interface MockDropOption {
-  label: string;
-  value: string;
-}
-
-interface RecordingData {
+interface ScorecardData {
   id: number;
   name: string;
   image: string;
   pdf: string;
-  status: string;
-  addon: string;
+  status: boolean;
+  home_show: boolean;
 }
 
 const ScoreCard: React.FC = () => {
@@ -21,23 +25,37 @@ const ScoreCard: React.FC = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [pdf, setPdf] = useState<File | null>(null);
   const [pdfPreview, setPdfPreview] = useState<string | null>(null);
-  const [status, setStatus] = useState<string>("Active");
-
-  const [recordings, setRecordings] = useState<RecordingData[]>([
-    {
-      id: 1,
-      name: "Tabbu Kandangwa",
-      image: "https://picsum.photos/200/300",
-      pdf: "#",
-      status: "Active",
-      addon: "19/05/2023",
-    },
-  ]);
-
+  const [status, setStatus] = useState<boolean>(true);
+  const [homeShow, setHomeShow] = useState<boolean>(false);
+  const [scorecards, setScorecards] = useState<ScorecardData[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  // ✅ Handle image change
+  const [alert, setAlert] = useState<{ type?: "success" | "danger"; message: string }>({
+    type: undefined,
+    message: "",
+  });
+
+  // ✅ Fetch all scorecards
+  const loadScorecards = async () => {
+    try {
+      const response = await fetchAllScorecards();
+      console.log(response,'response');
+      
+      if (response.success) {
+        setScorecards(response.data);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch scorecards" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching scorecards" });
+    }
+  };
+
+  useEffect(() => {
+    loadScorecards();
+  }, []);
+
+  // ✅ Handle Image Change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -46,214 +64,143 @@ const ScoreCard: React.FC = () => {
     }
   };
 
-  // ✅ Handle PDF change
+  // ✅ Handle PDF Change
   const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type === "application/pdf") {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.type !== "application/pdf") {
+        setAlert({ type: "danger", message: "Only PDF files are allowed" });
+        return;
+      }
       setPdf(file);
       setPdfPreview(URL.createObjectURL(file));
-    } else {
-      alert("Please select a valid PDF file");
     }
   };
 
-  // ✅ Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // ✅ Handle Form Submission (Create or Update)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (editId !== null) {
-      // ✅ Update existing row
-      setRecordings((prev) =>
-        prev.map((rec) =>
-          rec.id === editId
-            ? {
-                ...rec,
-                name,
-                image: imagePreview || rec.image,
-                pdf: pdfPreview || rec.pdf,
-                status,
-                addon: new Date().toLocaleDateString(),
-              }
-            : rec
-        )
-      );
-      setEditId(null);
-    } else {
-      // ✅ Add new record
-      const newRecord: RecordingData = {
-        id: recordings.length + 1,
-        name,
-        image: imagePreview || "",
-        pdf: pdfPreview || "#",
-        status,
-        addon: new Date().toLocaleDateString(),
-      };
-      setRecordings((prev) => [...prev, newRecord]);
+    if (!name) {
+      setAlert({ type: "danger", message: "Name is required" });
+      return;
     }
 
-    // ✅ Reset fields
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("status", status.toString());
+    formData.append("home_show", homeShow.toString());
+    if (image) formData.append("image", image);
+    if (pdf) formData.append("pdf", pdf);
+
+    try {
+      if (editId !== null) {
+        await updateScorecard(editId, formData);
+        setAlert({ type: "success", message: "Scorecard updated successfully!" });
+      } else {
+        await createScorecard(formData);
+        setAlert({ type: "success", message: "Scorecard created successfully!" });
+      }
+      await loadScorecards();
+      resetForm();
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error submitting scorecard" });
+    }
+  };
+
+  // ✅ Handle Edit
+  const handleEdit = async (id: number) => {
+    try {
+      const response = await fetchScorecardById(id);
+      if (response.success) {
+        const scorecard = response.data;
+        setName(scorecard.name);
+        setStatus(scorecard.status);
+        setHomeShow(scorecard.home_show);
+        setImagePreview(scorecard.image);
+        setPdfPreview(scorecard.pdf);
+        setEditId(id);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch scorecard details" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching scorecard details" });
+    }
+  };
+
+  // ✅ Handle Delete with SweetAlert
+  const handleDelete = async (id: number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to recover this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteScorecard(id);
+          Swal.fire("Deleted!", "Scorecard has been deleted.", "success");
+          await loadScorecards();
+        } catch (error) {
+          Swal.fire("Error!", "Error deleting scorecard.", "error");
+        }
+      }
+    });
+  };
+
+  // ✅ Reset Form
+  const resetForm = () => {
     setName("");
     setImage(null);
     setPdf(null);
     setImagePreview(null);
     setPdfPreview(null);
-    setStatus("Active");
+    setStatus(true);
+    setHomeShow(false);
+    setEditId(null);
   };
-
-  // ✅ Handle edit row
-  const handleEdit = (id: number) => {
-    const record = recordings.find((rec) => rec.id === id);
-    if (record) {
-      setName(record.name);
-      setImagePreview(record.image);
-      setPdfPreview(record.pdf !== "#" ? record.pdf : null);
-      setStatus(record.status);
-      setEditId(id);
-    }
-  };
-
-  // ✅ Handle delete row
-  const handleDelete = () => {
-    if (deleteId !== null) {
-      setRecordings((prev) => prev.filter((record) => record.id !== deleteId));
-      setDeleteId(null);
-    }
-  };
-
-  const mockdrop: MockDropOption[] = [
-    { label: "Active", value: "Active" },
-    { label: "Disabled", value: "Disabled" },
-  ];
-
-  // ✅ Table columns
-  const columns = [
-    {
-      title: "S.No.",
-      dataIndex: "id",
-      render: (_: any, __: any, index: number) => index + 1,
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Image",
-      dataIndex: "image",
-      render: (img: string) =>
-        img ? (
-          <img
-            src={img}
-            alt="Preview"
-            style={{ width: "80px", height: "80px", objectFit: "cover" }}
-          />
-        ) : (
-          "No Image"
-        ),
-    },
-    {
-      title: "PDF",
-      dataIndex: "pdf",
-      render: (pdf: string) =>
-        pdf !== "#" ? (
-          <a
-            href={pdf}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "blue" }}
-          >
-            View PDF
-          </a>
-        ) : (
-          "No PDF"
-        ),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-    },
-    {
-      title: "Addon",
-      dataIndex: "addon",
-    },
-    {
-      title: "Action",
-      render: (row: RecordingData) => (
-        <div>
-          <button
-            className="btn btn-info btn-sm me-2"
-            onClick={() => handleEdit(row.id)}
-          >
-            <i className="fa fa-pencil"></i>
-          </button>
-          <button
-            className="btn btn-danger btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
-            onClick={() => setDeleteId(row.id)}
-          >
-            <i className="fa fa-trash"></i>
-          </button>
-        </div>
-      ),
-    },
-  ];
 
   return (
     <div className="page-wrapper">
       <div className="content">
-        <div className="heading mb-4">
-          <h2>Score Card</h2>
-        </div>
+        {alert.message && <AlertComponent type={alert.type ?? "primary"} message={alert.message} onClose={() => setAlert({ type: undefined, message: "" })} />}
+
+        <div className="heading mb-4"><h2>Score Card</h2></div>
+
         <div className="card p-4">
+          {/* ✅ Maintain Existing Form Design */}
           <form onSubmit={handleSubmit}>
             <div className="row">
               {/* ✅ Name */}
               <div className="col-md-6 mb-3">
                 <label>Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
+                <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
 
               {/* ✅ Image */}
               <div className="col-md-6 mb-3">
                 <label>Image</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  onChange={handleImageChange}
-                />
+                <input type="file" className="form-control" onChange={handleImageChange} />
               </div>
 
               {/* ✅ PDF */}
               <div className="col-md-6 mb-3">
                 <label>PDF</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  accept="application/pdf"
-                  onChange={handlePdfChange}
-                />
+                <input type="file" className="form-control" accept="application/pdf" onChange={handlePdfChange} />
               </div>
 
               {/* ✅ Status */}
               <div className="col-md-6 mb-3">
                 <label>Status</label>
-                <select
-                  className="form-select"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                >
-                  {mockdrop.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                <input type="checkbox" checked={status} onChange={() => setStatus(!status)} />
+              </div>
+
+              {/* ✅ Home Show */}
+              <div className="col-md-6 mb-3">
+                <label>Home Show</label>
+                <input type="checkbox" checked={homeShow} onChange={() => setHomeShow(!homeShow)} />
               </div>
             </div>
 
@@ -262,60 +209,44 @@ const ScoreCard: React.FC = () => {
             </button>
           </form>
 
-          {/* ✅ Table */}
           <div className="mt-4">
-            <Table dataSource={recordings} columns={columns} />
+          <Table
+            key={scorecards.length}
+            dataSource={scorecards}
+            columns={[
+              { title: "Name", dataIndex: "name" },
+              {
+                title: "Status",
+                dataIndex: "status",
+                render: (status: boolean) => (status ? "Active" : "Disabled"), // ✅ Explicit Type
+              },
+              {
+                title: "Home Show",
+                dataIndex: "home_show",
+                render: (home_show: boolean) => (home_show ? "Enabled" : "Disabled"), // ✅ Explicit Type
+              },
+              {
+                title: "Action",
+                render: (row: ScorecardData) => (
+                  <>
+                    {/* ✅ Edit Button */}
+                    <button className="btn btn-info btn-sm me-2" onClick={() => handleEdit(row.id)}>
+                      <i className="fa fa-pencil"></i>
+                    </button>
+              
+                    {/* ✅ Delete Button - Removed Bootstrap Modal Trigger */}
+                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(row.id)}>
+                      <i className="fa fa-trash"></i>
+                    </button>
+                  </>
+                ),
+              }
+            ]}
+          />
+
           </div>
         </div>
       </div>
-      <div
-          id="deleteModal"
-          className="modal fade"
-          tabIndex={-1}
-          aria-hidden="true"
-        >
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Confirm Delete</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="modal"
-                ></button>
-              </div>
-              <div className="modal-body py-5 text-center">
-                <i
-                  className="fa fa-trash"
-                  style={{
-                    color: "red",
-                    fontSize: "2rem",
-                    marginBottom: "1em",
-                  }}
-                />
-                <p>Are you sure you want to delete this recording?</p>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary mr-3"
-                  data-bs-dismiss="modal"
-                  style={{ marginRight: "1em" }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={handleDelete}
-                  data-bs-dismiss="modal"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
     </div>
   );
 };

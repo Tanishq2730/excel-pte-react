@@ -1,96 +1,121 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
+import AlertComponent from "../../core/common/AlertComponent";
+import Swal from "sweetalert2";
+
+import {
+  fetchAllQuizCategories,
+  createQuizCategory,
+  updateQuizCategory,
+  deleteQuizCategory,
+} from "../../api/masterAPI";
 
 interface CategoryData {
   id: number;
-  name: string;
+  category_name: string;
 }
-
-const DUMMY_DATA: CategoryData[] = [{ id: 1, name: "Preposition Place" }];
 
 const QuizeCategory: React.FC = () => {
   const [categoryName, setCategoryName] = useState<string>("");
-  const [categories, setCategories] = useState<CategoryData[]>(DUMMY_DATA);
+  const [categories, setCategories] = useState<CategoryData[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [alert, setAlert] = useState<{ type?: "success" | "danger"; message: string }>({
+    type: undefined,
+    message: "",
+  });
+
+  // ✅ Fetch categories from API
+  const loadCategories = async () => {
+    try {
+      const response = await fetchAllQuizCategories();
+      if (response.success) {
+        console.log(response.data);
+
+        setCategories(response.data);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch categories" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching categories" });
+    }
+  };
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
 
   // ✅ Handle Form Submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!categoryName.trim()) {
+      setAlert({ type: "danger", message: "Category name is required" });
+      return;
+    }
 
-    if (categoryName.trim()) {
+    try {
       if (editId !== null) {
-        // ✅ Update Existing Category
-        setCategories((prev) =>
-          prev.map((category) =>
-            category.id === editId ? { ...category, name: categoryName } : category
-          )
-        );
-        setEditId(null);
+        // ✅ Update existing category
+        await updateQuizCategory(editId, { category_name: categoryName });
+        setAlert({ type: "success", message: "Category updated successfully!" });
       } else {
-        // ✅ Add New Category
-        const newCategory: CategoryData = {
-          id: categories.length + 1,
-          name: categoryName,
-        };
-
-        setCategories((prev) => [...prev, newCategory]);
+        // ✅ Create new category
+        await createQuizCategory({ category_name: categoryName });
+        setAlert({ type: "success", message: "Category created successfully!" });
       }
 
-      setCategoryName(""); // ✅ Reset input after submit
+      await loadCategories();
+      setCategoryName("");
+      setEditId(null);
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error saving category" });
     }
   };
 
   // ✅ Handle Edit
   const handleEdit = (record: CategoryData) => {
-    setCategoryName(record.name);
+    setCategoryName(record.category_name);
     setEditId(record.id);
   };
 
   // ✅ Handle Delete
   const handleDelete = (id: number) => {
-    setDeleteId(id);
-  };
-
-  // ✅ Confirm Delete from Modal
-  const handleDeleteConfirm = () => {
-    if (deleteId !== null) {
-      setCategories((prev) => prev.filter((category) => category.id !== deleteId));
-      setDeleteId(null);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to recover this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteQuizCategory(id);
+          setAlert({ type: "success", message: "Category deleted successfully!" });
+          await loadCategories();
+        } catch (error) {
+          setAlert({ type: "danger", message: "Error deleting category" });
+        }
+      }
+    });
   };
 
   // ✅ Table Columns
   const columns = [
-    {
-      title: "#",
-      dataIndex: "id",
-      width: 50,
-    },
-    {
-      title: "Category Name",
-      dataIndex: "name",
-    },
+    { title: "#", dataIndex: "id", width: 50 },
+    { title: "Category Name", dataIndex: "category_name" },
     {
       title: "Actions",
       render: (_: any, record: CategoryData) => (
         <>
-          {/* ✅ Edit Button with Icon */}
-          <button
-            className="btn btn-outline-secondary me-2"
-            onClick={() => handleEdit(record)}
-          >
-            <i className="bi bi-pencil"></i> Edit
+          {/* ✅ Edit Button */}
+          <button className="btn btn-info btn-sm me-2" onClick={() => handleEdit(record)}>
+            <i className="fa fa-pencil"></i>
           </button>
 
-          {/* ✅ Delete Button with Icon */}
-          <button
-            className="btn btn-danger"
-            data-bs-toggle="modal"
-            data-bs-target="#deleteModal"
-            onClick={() => handleDelete(record.id)}
-          >
-            <i className="bi bi-trash"></i> Delete
+          {/* ✅ Delete Button */}
+          <button className="btn btn-danger btn-sm me-2" onClick={() => handleDelete(record.id)}>
+            <i className="fa fa-trash"></i>
           </button>
         </>
       ),
@@ -99,56 +124,6 @@ const QuizeCategory: React.FC = () => {
 
   return (
     <>
-      {/* ✅ Delete Confirmation Modal */}
-      <div
-        id="deleteModal"
-        className="modal fade"
-        tabIndex={-1}
-        role="dialog"
-        aria-labelledby="deleteModalLabel"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title" id="deleteModalLabel">
-                Confirm Delete
-              </h4>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              />
-            </div>
-            <div className="modal-body py-5 text-center">
-              <i
-                className="fa fa-trash"
-                style={{ color: "red", fontSize: "2rem", marginBottom: "1em" }}
-              />
-              <p>Are you sure you want to delete this category?</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-                style={{marginRight:'1em'}}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-danger"
-                data-bs-dismiss="modal"
-                onClick={handleDeleteConfirm}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* ✅ Page Content */}
       <div className="page-wrapper">
@@ -159,6 +134,13 @@ const QuizeCategory: React.FC = () => {
 
           {/* ✅ Form Section */}
           <div className="card p-4">
+            {alert.message && (
+              <AlertComponent
+                type={alert.type ?? "primary"}
+                message={alert.message}
+                onClose={() => setAlert({ type: undefined, message: "" })}
+              />
+            )}
             <form onSubmit={handleSubmit} className="mb-3">
               <div className="row">
                 {/* Input Field */}
@@ -184,12 +166,7 @@ const QuizeCategory: React.FC = () => {
 
             {/* ✅ Data Table */}
             <div className="mt-4">
-              <Table
-                key={categories.length}
-                dataSource={categories}
-                columns={columns}
-                Selection={true}
-              />
+              <Table key={categories.length} dataSource={categories} columns={columns} Selection={true} />
             </div>
           </div>
         </div>
