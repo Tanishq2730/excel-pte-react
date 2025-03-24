@@ -55,7 +55,8 @@ export const SidebarData = [
         link: routes.visitor,
         themeSetting: true,
         submenuItems: [
-          { label: "Users", link: routes.studentList },
+          { label: "Users", link: routes.userManage },
+          { label: "Student List", link: routes.studentList },
           { label: "Roles & Permissions", link: routes.rolesPermissions },
         ],
       },
@@ -132,7 +133,7 @@ export const SidebarData = [
             submenu: true,
             showSubRoute: false,
             // link: routes.dashBoardPop,
-            themeSetting: true,
+            // themeSetting: true,
             submenuItems: [
               {
                 label: "Category Master",
@@ -142,7 +143,10 @@ export const SidebarData = [
                 label: "Quize Management",
                 link: routes.quize,
                 submenu: true,
-                submenuItems: [{ label: "Quizzes", link: routes.quize }],
+                submenuItems: [
+                  { label: "Quizzes", link: routes.quize },
+                  { label: "Quizzes", link: routes.quize },
+                ],
               },
             ],
           },

@@ -63,15 +63,13 @@ const Header = () => {
   const toggleFullscreen = () => {
     if (!isFullscreen) {
       if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch((err) => {
-        });
+        document.documentElement.requestFullscreen().catch((err) => {});
         setIsFullscreen(true);
       }
     } else {
       if (document.exitFullscreen) {
         if (document.fullscreenElement) {
-          document.exitFullscreen().catch((err) => {
-          });
+          document.exitFullscreen().catch((err) => {});
         }
         setIsFullscreen(false);
       }
@@ -84,7 +82,6 @@ const Header = () => {
     dispatch(logout()); // Clear token from Redux & storage
     navigate("/"); // Redirect to login page
   };
-
 
   return (
     <>
@@ -144,6 +141,198 @@ const Header = () => {
             </div>
             {/* /Search */}
             <div className="d-flex align-items-center">
+              {/* <div className="dropdown me-2">
+                <Link
+                  to="#"
+                  className="btn btn-outline-light fw-normal bg-white d-flex align-items-center p-2"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i className="ti ti-calendar-due me-1" />
+                  Academic Year : 2024 / 2025
+                </Link>
+                <div className="dropdown-menu dropdown-menu-right">
+                  <Link
+                    to="#"
+                    className="dropdown-item d-flex align-items-center"
+                  >
+                    Academic Year : 2023 / 2024
+                  </Link>
+                  <Link
+                    to="#"
+                    className="dropdown-item d-flex align-items-center"
+                  >
+                    Academic Year : 2022 / 2023
+                  </Link>
+                  <Link
+                    to="#"
+                    className="dropdown-item d-flex align-items-center"
+                  >
+                    Academic Year : 2021 / 2022
+                  </Link>
+                </div>
+              </div> */}
+              <div className="pe-1 ms-1">
+                <div className="dropdown">
+                  <Link
+                    to="#"
+                    className="btn btn-outline-light bg-white btn-icon d-flex align-items-center me-1 p-2"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <ImageWithBasePath
+                      src="assets/img/flags/us.png"
+                      alt="Language"
+                      className="img-fluid rounded-pill"
+                    />
+                  </Link>
+                  <div className="dropdown-menu dropdown-menu-right">
+                    <Link
+                      to="#"
+                      className="dropdown-item active d-flex align-items-center"
+                    >
+                      <ImageWithBasePath
+                        className="me-2 rounded-pill"
+                        src="assets/img/flags/us.png"
+                        alt="Img"
+                        height={22}
+                        width={22}
+                      />{" "}
+                      English
+                    </Link>
+                    <Link
+                      to="#"
+                      className="dropdown-item d-flex align-items-center"
+                    >
+                      <ImageWithBasePath
+                        className="me-2 rounded-pill"
+                        src="assets/img/flags/fr.png"
+                        alt="Img"
+                        height={22}
+                        width={22}
+                      />{" "}
+                      French
+                    </Link>
+                    <Link
+                      to="#"
+                      className="dropdown-item d-flex align-items-center"
+                    >
+                      <ImageWithBasePath
+                        className="me-2 rounded-pill"
+                        src="assets/img/flags/es.png"
+                        alt="Img"
+                        height={22}
+                        width={22}
+                      />{" "}
+                      Spanish
+                    </Link>
+                    <Link
+                      to="#"
+                      className="dropdown-item d-flex align-items-center"
+                    >
+                      <ImageWithBasePath
+                        className="me-2 rounded-pill"
+                        src="assets/img/flags/de.png"
+                        alt="Img"
+                        height={22}
+                        width={22}
+                      />{" "}
+                      German
+                    </Link>
+                  </div>
+                </div>
+              </div>
+              <div className="pe-1">
+                <div className="dropdown">
+                  <Link
+                    to="#"
+                    className="btn btn-outline-light bg-white btn-icon me-1"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <i className="ti ti-square-rounded-plus" />
+                  </Link>
+                  <div className="dropdown-menu dropdown-menu-right border shadow-sm dropdown-md">
+                    <div className="p-3 border-bottom">
+                      <h5>Add New</h5>
+                    </div>
+                    <div className="p-3 pb-0">
+                      <div className="row gx-2">
+                        <div className="col-6">
+                          <Link
+                            to={routes.addStudent}
+                            className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
+                          >
+                            <div className="avatar avatar-lg mb-2">
+                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
+                                <i className="ti ti-school" />
+                              </span>
+                            </div>
+                            <p className="text-dark">Students</p>
+                          </Link>
+                        </div>
+                        <div className="col-6">
+                          <Link
+                            to={routes.addTeacher}
+                            className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
+                          >
+                            <div className="avatar avatar-lg mb-2">
+                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
+                                <i className="ti ti-users" />
+                              </span>
+                            </div>
+                            <p className="text-dark">Teachers</p>
+                          </Link>
+                        </div>
+                        <div className="col-6">
+                          <Link
+                            to={routes.addStaff}
+                            className="d-block bg-warning-transparent ronded p-2 text-center mb-3 class-hover"
+                          >
+                            <div className="avatar avatar-lg rounded-circle mb-2">
+                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">
+                                <i className="ti ti-users-group" />
+                              </span>
+                            </div>
+                            <p className="text-dark">Staffs</p>
+                          </Link>
+                        </div>
+                        <div className="col-6">
+                          <Link
+                            to={routes.addInvoice}
+                            className="d-block bg-info-transparent ronded p-2 text-center mb-3 class-hover"
+                          >
+                            <div className="avatar avatar-lg mb-2">
+                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-info rounded-circle">
+                                <i className="ti ti-license" />
+                              </span>
+                            </div>
+                            <p className="text-dark">Invoice</p>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pe-1">
+                {!location.pathname.includes("layout-dark") && (
+                  <Link
+                    onClick={handleToggleClick}
+                    to="#"
+                    id="dark-mode-toggle"
+                    className="dark-mode-toggle activate btn btn-outline-light bg-white btn-icon me-1"
+                  >
+                    <i
+                      className={
+                        dataTheme === "default_data_theme"
+                          ? "ti ti-moon"
+                          : "ti ti-brightness-up"
+                      }
+                    />
+                  </Link>
+                )}
+              </div>
               <div
                 className={`pe-1 ${
                   notificationVisible ? "notification-item-show" : ""
@@ -210,7 +399,7 @@ const Header = () => {
                               <p className="mb-1">
                                 <span className="text-dark fw-semibold">
                                   Shawn
-                                </span>{' '}
+                                </span>{" "}
                                 performance in Math is below the threshold.
                               </p>
                               <span>Just Now</span>
@@ -300,7 +489,10 @@ const Header = () => {
                     <Link to="#" className="btn btn-light w-100 me-2">
                       Cancel
                     </Link>
-                    <Link to={routes.activity} className="btn btn-primary w-100">
+                    <Link
+                      to={routes.activity}
+                      className="btn btn-primary w-100"
+                    >
                       View All
                     </Link>
                   </div>
@@ -314,8 +506,8 @@ const Header = () => {
                   <i className="ti ti-brand-hipchat" />
                   <span className="chat-status-dot" />
                 </Link>
-              </div>
-              <div className="pe-1">
+              </div> */}
+              {/* <div className="pe-1">
                 <Link
                   to="#"
                   className="btn btn-outline-light bg-white btn-icon me-1"
@@ -323,7 +515,7 @@ const Header = () => {
                   <i className="ti ti-chart-bar" />
                 </Link>
               </div> */}
-              {/* <div className="pe-1">
+              <div className="pe-1">
                 <Link
                   onClick={toggleFullscreen}
                   to="#"
@@ -332,7 +524,7 @@ const Header = () => {
                 >
                   <i className="ti ti-maximize" />
                 </Link>
-              </div> */}
+              </div>
               <div className="dropdown ms-1">
                 <Link
                   to="#"
@@ -377,11 +569,13 @@ const Header = () => {
                       Settings
                     </Link>
                     <hr className="m-0" />
-                    
-                    <button onClick={handleLogout} className="dropdown-item d-inline-flex align-items-center p-2">
-                    <i className="ti ti-login me-2" />
-                    Logout
-                    </button>
+                    <Link
+                      className="dropdown-item d-inline-flex align-items-center p-2"
+                      to={routes.login}
+                    >
+                      <i className="ti ti-login me-2" />
+                      Logout
+                    </Link>
                   </div>
                 </div>
               </div>

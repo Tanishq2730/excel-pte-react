@@ -225,8 +225,10 @@ export const all_routes = {
   studentFees: "/student/student-fees",
   studentResult: "/student/student-result",
   studentLibrary: "/student/student-library",
-  studentList: "/student/student-list",
+  studentList: "/student-list",
+  // studentList: "/student/student-list",
   addStudent: "/student/add-student",
+  addUser: "/add-user",
   editStudent: "/student/edit-student",
   teacherDetails: "/teacher/teacher-details",
   teacherGrid: "/teacher/teacher-grid",
@@ -264,9 +266,10 @@ export const all_routes = {
   transportRoutes:"/management/transport-routes",
 
 
-  manageVideo:'manage-video',
-  predictionFile:'prediction-file',
-  question:'question',
+  manageVideo:'/manage-video',
+  predictionFile:'/prediction-file',
+  question:'/question',
+  userManage:'/user-manage',
 
   //Academic module
   AcademicReason: "/academic/academic-reason",

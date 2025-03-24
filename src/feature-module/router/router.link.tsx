@@ -98,7 +98,8 @@ import StudentDasboard from "../mainMenu/studentDashboard";
 import ParentDashboard from "../mainMenu/parentDashboard";
 import StudentGrid from "../peoples/students/student-grid";
 import AddStudent from "../peoples/students/add-student";
-import StudentList from "../peoples/students/student-list";
+// import StudentList from "../peoples/students/student-list";
+import StudentList from "../user/studentList";
 import StudentLibrary from "../peoples/students/student-details/studentLibrary";
 import StudentDetails from "../peoples/students/student-details/studentDetails";
 import StudentFees from "../peoples/students/student-details/studentFees";
@@ -252,7 +253,7 @@ import DashBoardPop from "../dashboardpop/dashBoardpop";
 import ClassRecording from "../classrecording/classRecording";
 import UpComingClass from "../upcomingclass/upComingClass";
 import LoginBanner from "../loginbanner/loginBanner";
-import User from "../user/user";
+import User from "../user/studentList";
 import ManageVideo from "../managevideo/manageVideo";
 import PredictionFile from "../predictionfile/predictionFile";
 import Question from "../question/question";
@@ -273,6 +274,8 @@ import Agent from "../bookingmaster/agent";
 import Booking from "../bookingmaster/booking";
 import CourseMaster from "../bookingmaster/courseMaster";
 import DiscountCoupon from "../bookingmaster/discountCoupon";
+import UserManage from "../user/userManage";
+import AddUser from "../user/addUser";
 
 const routes = all_routes;
 
@@ -690,6 +693,11 @@ export const adminRoutes = [
     route: Route,
   },
   {
+    path: routes.userManage,
+    element: <UserManage />,
+    route: Route,
+  },
+  {
     path: routes.faq,
     element: <Faq />,
     route: Route,
@@ -924,6 +932,10 @@ export const adminRoutes = [
   {
     path: routes.addStudent,
     element: <AddStudent />,
+  },
+  {
+    path: routes.addUser,
+    element: <AddUser />,
   },
   {
     path: routes.editStudent,
