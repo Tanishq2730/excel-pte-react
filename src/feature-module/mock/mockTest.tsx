@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import CommonSelect from "../../core/common/commonSelect";
+import { Link } from "react-router-dom";
+import { all_routes } from "../router/all_routes";
 
 // Define Types
 interface MockDropOption {
@@ -17,6 +19,7 @@ const mockdrop: MockDropOption[] = [
 ];
 
 const MockTest: React.FC = () => {
+  const routes = all_routes;
   const [type, setType] = useState<string>("All");
   const [mockName, setMockName] = useState<string>("");
 
@@ -37,7 +40,7 @@ const MockTest: React.FC = () => {
               </div>
             </div>
             <div className="col-md-6 d-flex justify-content-end align-items-center">
-              <button className="btn btn-primary">View Mocktest List</button>
+              <Link to={routes.mockList} className="btn btn-primary">View Mocktest List</Link>
             </div>
           </div>
 

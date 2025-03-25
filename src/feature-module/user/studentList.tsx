@@ -235,7 +235,34 @@ const StudentList: React.FC = () => {
                     to="student-details"
                   >
                     <i className="ti ti-menu me-2" />
+                    Assign Course
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="dropdown-item rounded-1"
+                    to="student-details"
+                  >
+                    <i className="ti ti-menu me-2" />
                     View Student
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="dropdown-item rounded-1"
+                    to="student-details"
+                  >
+                    <i className="ti ti-menu me-2" />
+                    Mock Activity
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    className="dropdown-item rounded-1"
+                    to="student-details"
+                  >
+                    <i className="ti ti-menu me-2" />
+                    Activity
                   </Link>
                 </li>
                 <li>
@@ -247,7 +274,7 @@ const StudentList: React.FC = () => {
                     Edit
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link
                     className="dropdown-item rounded-1"
                     to="#"
@@ -257,14 +284,14 @@ const StudentList: React.FC = () => {
                     <i className="ti ti-lock me-2" />
                     Login Details
                   </Link>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <Link className="dropdown-item rounded-1" to="#">
                     <i className="ti ti-toggle-right me-2" />
                     Disable
                   </Link>
-                </li>
-                <li>
+                </li> */}
+                {/* <li>
                   <Link
                     className="dropdown-item rounded-1"
                     to="student-promotion"
@@ -272,7 +299,7 @@ const StudentList: React.FC = () => {
                     <i className="ti ti-arrow-ramp-right-2 me-2" />
                     Promote Student
                   </Link>
-                </li>
+                </li> */}
                 <li>
                   <Link
                     className="dropdown-item rounded-1"
@@ -316,7 +343,7 @@ const StudentList: React.FC = () => {
 
               <div className="mb-2">
                 <Link
-                  to={routes.addStudent}
+                  to={routes.addStudents}
                   className="btn btn-primary d-flex align-items-center"
                 >
                   <i className="ti ti-square-rounded-plus me-2" />
@@ -364,36 +391,6 @@ const StudentList: React.FC = () => {
                               />
                             </div>
                           </div>
-                          {/* <div className="col-md-6">
-                            <div className="mb-3">
-                              <label className="form-label">Status</label>
-                              <CommonSelect
-                                className="select"
-                                options={allSection}
-                                defaultValue={allSection[0]}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-12">
-                            <div className="mb-3">
-                              <label className="form-label">Name</label>
-                              <CommonSelect
-                                className="select"
-                                options={names}
-                                defaultValue={names[0]}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-md-6">
-                            <div className="mb-3">
-                              <label className="form-label">Gender</label>
-                              <CommonSelect
-                                className="select"
-                                options={gender}
-                                defaultValue={gender[0]}
-                              />
-                            </div>
-                          </div> */}
                           <div className="col-md-6">
                             <div className="mb-3">
                               <label className="form-label">Status</label>
@@ -470,15 +467,11 @@ const StudentList: React.FC = () => {
               </div>
             </div>
             <div className="card-body p-0 py-3">
-              {/* Student List */}
               <Table dataSource={data} columns={columns} Selection={true} />
-              {/* /Student List */}
             </div>
           </div>
-          {/* /Students List */}
         </div>
       </div>
-      {/* /Page Wrapper */}
       <StudentModals />
     </>
   );

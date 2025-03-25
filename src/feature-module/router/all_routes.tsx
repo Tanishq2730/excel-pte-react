@@ -6,13 +6,16 @@ export const all_routes = {
   parentDashboard: "/parent-dashboard",
   studentDashboard: "/student-dashboard",
   teacherDashboard: "/teacher-dashboard",
-
+  addStudents:"/add-student",
+  quizeList:"/quize-list",
   blankPage: "/blank-page",
   calendar: "/calendar",
   dataTables: "/data-tables",
   tablesBasic: "/tables-basic",
   notes: "/notes",
   comingSoon: "/coming-soon",
+  editQuize: "/edit-quize",
+  mockList: "/mock-list",
 
   // auth routes routes
   login: "/login",

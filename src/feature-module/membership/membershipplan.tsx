@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import CommonSelect from "../../core/common/commonSelect";
 import { membershipplan } from "../../core/common/selectoption/selectoption";
@@ -7,6 +7,15 @@ import TooltipOption from "../../core/common/tooltipOption";
 
 const Membershipplan = () => {
   const routes = all_routes;
+  const [extraDetails, setExtraDetails] = useState<string[]>([""]);
+
+  const addExtraDetail = () => {
+    setExtraDetails([...extraDetails, ""]);
+  };
+
+  const removeExtraDetail = (index: number) => {
+    setExtraDetails(extraDetails.filter((_, i) => i !== index));
+  };
   return (
     <div>
       <>
@@ -30,7 +39,7 @@ const Membershipplan = () => {
                 </nav>
               </div>
               <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
+                <TooltipOption />
                 <div className="mb-2">
                   <Link
                     to="#"
@@ -360,191 +369,123 @@ const Membershipplan = () => {
                   <i className="ti ti-x" />
                 </button>
               </div>
-              <form >
+              <form>
                 <div className="modal-body mb-2">
                   <div className="row">
-                    <div className="col-lg-4 col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">Plan Name</label>
-                        <input type="text" className="form-control" />
-                      </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">Type</label>
-                        <CommonSelect
-                          className="select"
-                          options={membershipplan}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-lg-4 col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">Plan Price</label>
-                        <input type="text" className="form-control" />
-                      </div>
-                    </div>
-                    <div className="col-md-12">
-                      <h5 className="mb-3">Plan Settings</h5>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">
-                          Students &amp; Teachers
-                        </label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan"
-                              className="check"
-                            />
-                            <label htmlFor="plan" className="checktoggle">
-                              {" "}
-                            </label>
+                    <form>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <label>Plan Name*</label>
+                          <input type="text" className="form-control" />
+                        </div>
+                        <div className="col-md-6">
+                          <label>Course Type*</label>
+                          <div className="d-flex">
+                            <select className="form-control">
+                              <option>Select Course Type</option>
+                            </select>
+                            <button
+                              type="button"
+                              className="btn btn-success ms-2"
+                              data-bs-toggle="modal"
+                              data-bs-target="#standard-modal"
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
                       </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">
-                          Classes &amp; Sections
-                        </label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan1"
-                              className="check"
-                            />
-                            <label htmlFor="plan1" className="checktoggle">
-                              {" "}
-                            </label>
-                          </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-6">
+                          <label>Duration Type*</label>
+                          <select className="form-control">
+                            <option>Select Duration Type</option>
+                          </select>
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">
-                          Subjects &amp; Exams
-                        </label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan2"
-                              className="check"
-                            />
-                            <label htmlFor="plan2" className="checktoggle">
-                              {" "}
-                            </label>
-                          </div>
+                        <div className="col-md-6">
+                          <label>Total Student</label>
+                          <input type="text" className="form-control" />
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
                       </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">Departments</label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan3"
-                              className="check"
-                            />
-                            <label htmlFor="plan3" className="checktoggle">
-                              {" "}
-                            </label>
-                          </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-6">
+                          <label>Total Mock</label>
+                          <input type="text" className="form-control" />
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">Designations</label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan4"
-                              className="check"
-                            />
-                            <label htmlFor="plan4" className="checktoggle">
-                              {" "}
-                            </label>
-                          </div>
+                        <div className="col-md-6">
+                          <label>Duration</label>
+                          <input type="text" className="form-control" />
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
                       </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <label className="form-label">
-                          Library &amp; Transport
-                        </label>
-                        <div className=" d-flex align-items-center mb-3">
-                          <div className="w-100 me-3">
-                            <input type="text" className="form-control" />
-                          </div>
-                          <div className="status-toggle modal-status">
-                            <input
-                              type="checkbox"
-                              id="plan5"
-                              className="check"
-                            />
-                            <label htmlFor="plan5" className="checktoggle">
-                              {" "}
-                            </label>
-                          </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-6">
+                          <label>Price</label>
+                          <input type="text" className="form-control" />
                         </div>
-                        <label className="checkboxs">
-                          <input type="checkbox" />
-                          <span className="checkmarks" />
-                          Unlimited
-                        </label>
+                        <div className="col-md-6">
+                          <label>Status</label>
+                          <select className="form-control">
+                            <option>Select Duration Type</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-6">
+                          <label>Offer</label>
+                          <input type="text" className="form-control" />
+                        </div>
+                        <div className="col-md-6">
+                          <label>3 Days Free Trial</label>
+                          <select className="form-control">
+                            <option>Select Duration Type</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-12">
+                          <label>Image</label>
+                          <input type="file" className="form-control" />
+                        </div>
+                      </div>
+
+                      <div className="row mt-3">
+                        <div className="col-md-12">
+                          <label>Extra Details</label>
+                          <button
+                            type="button"
+                            className="btn btn-success ms-2"
+                            onClick={addExtraDetail}
+                          >
+                            +
+                          </button>
+                          {extraDetails.map((_, index) => (
+                            <div key={index} className="d-flex mt-2">
+                              <input type="text" className="form-control" />
+                              <button
+                                type="button"
+                                className="btn btn-danger ms-2"
+                                onClick={() => removeExtraDetail(index)}
+                              >
+                                x
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button type="submit" className="btn btn-primary mt-3">
+                        CREATE
+                      </button>
+                    </form>
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -555,7 +496,11 @@ const Membershipplan = () => {
                   >
                     Cancel
                   </Link>
-                  <Link to="#" className="btn btn-primary" data-bs-dismiss="modal">
+                  <Link
+                    to="#"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
                     Add Plan
                   </Link>
                 </div>

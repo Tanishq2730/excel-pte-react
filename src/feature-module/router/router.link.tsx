@@ -15,6 +15,7 @@ import StudentDasboard from "../mainMenu/studentDashboard";
 import ParentDashboard from "../mainMenu/parentDashboard";
 import StudentGrid from "../peoples/students/student-grid";
 import AddStudent from "../peoples/students/add-student";
+import AddStudents from "../user/addStudent";
 import StudentList from "../user/studentList";
 import Login2 from "../auth/login/login-2";
 import Login3 from "../auth/login/login-3";
@@ -60,6 +61,10 @@ import CourseMaster from "../bookingmaster/courseMaster";
 import DiscountCoupon from "../bookingmaster/discountCoupon";
 import UserManage from "../user/userManage";
 import AddUser from "../user/addUser";
+import QuizeList from "../quizecategory/quizeList";
+import EditQuize from "../quizecategory/editQuize";
+import MockList from "../mock/mockList";
+import StudentAttendance from "../hrm/attendance/student-attendance";
 
 const routes = all_routes;
 
@@ -77,6 +82,26 @@ export const adminRoutes = [
   {
     path: routes.scoreCard,
     element: <ScoreCard />,
+    route: Route,
+  },
+  {
+    path: routes.mockList,
+    element: <MockList />,
+    route: Route,
+  },
+  {
+    path: routes.studentAttendance,
+    element: <StudentAttendance />,
+    route: Route,
+  },
+  {
+    path: routes.editQuize,
+    element: <EditQuize />,
+    route: Route,
+  },
+  {
+    path: routes.addStudents,
+    element: <AddStudents />,
     route: Route,
   },
   {
@@ -112,6 +137,11 @@ export const adminRoutes = [
   {
     path: routes.notification,
     element: <Notification />,
+    route: Route,
+  },
+  {
+    path: routes.quizeList,
+    element: <QuizeList />,
     route: Route,
   },
   {

@@ -274,7 +274,7 @@ export const SidebarData = [
             submenu: true,
             submenuItems: [
               { label: "Add Quizzes", link: routes.quize },
-              { label: "List Quizzes", link: routes.quize },
+              { label: "List Quizzes", link: routes.quizeList },
             ],
           },
         ],

@@ -32,7 +32,7 @@ const DUMMY_DATA: QuizData[] = [
   },
 ];
 
-const Quize: React.FC = () => {
+const EditQuize: React.FC = () => {
   const [quizName, setQuizName] = useState<string>("");
   const [definition, setDefinition] = useState<string>("");
   const [category, setCategory] = useState<string>("Adjectives");
@@ -123,7 +123,7 @@ const Quize: React.FC = () => {
       <div className="page-wrapper">
         <div className="content">
           <div className="heading mb-4">
-            <h2>Create Quiz</h2>
+            <h2>Edit Quiz</h2>
           </div>
           <div className="card p-4">
             <form onSubmit={handleSubmit}>
@@ -274,4 +274,4 @@ const Quize: React.FC = () => {
   );
 };
 
-export default Quize;
+export default EditQuize;

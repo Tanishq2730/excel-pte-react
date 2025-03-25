@@ -264,7 +264,7 @@ const DiscountCoupon: React.FC = () => {
 
           {/* DataTable */}
           <div className="mt-4">
-            <Table key={coupons.length} dataSource={coupons} columns={columns} />
+            <Table key={coupons.length} dataSource={coupons} columns={columns} Selection={true}/>
           </div>
         </div>
       </div>
