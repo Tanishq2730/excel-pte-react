@@ -288,6 +288,8 @@ export interface TableData {
   madeofYear:string;
   vehicleModel:string;
   key:string;
+  mobileNo:string;
+  instituteId:string
 
 }
 export interface status {

@@ -6,10 +6,10 @@ import {
   fetchAllTemplates,
   createTemplate,
   updateTemplate,
-  deleteTemplate,
-  fetchAllTypes
+  deleteTemplate  
 } from "../../api/masterAPI";
 import { image_url } from "../../environment";
+import { fetchAllTypes } from "../../api/commonAPI";
 
 // ✅ Template Data Interface
 interface TemplateData {

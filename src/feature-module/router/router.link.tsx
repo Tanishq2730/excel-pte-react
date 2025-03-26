@@ -10,12 +10,14 @@ import FileManager from "../application/fileManager";
 import MembershipTransaction from "../membership/membershiptrasaction";
 import TextEditor from "../uiInterface/advanced-ui/texteditor";
 import AdminDashboard from "../mainMenu/adminDashboard";
+import WelcomeDashboard from "../mainMenu/welcomeDashboard";
 import TeacherDashboard from "../mainMenu/teacherDashboard";
 import StudentDasboard from "../mainMenu/studentDashboard";
 import ParentDashboard from "../mainMenu/parentDashboard";
 import StudentGrid from "../peoples/students/student-grid";
-import AddStudent from "../peoples/students/add-student";
 import AddStudents from "../user/addStudent";
+// import AddStudent from "../peoples/students/add-student";
+import AddStudent from "../user/addStudent";
 import StudentList from "../user/studentList";
 import Login2 from "../auth/login/login-2";
 import Login3 from "../auth/login/login-3";
@@ -73,16 +75,25 @@ export const adminRoutes = [
     path: routes.adminDashboard,
     element: <AdminDashboard />,
     route: Route,
+    permission: "VIEW_DASHBOARD",
+  },
+  {
+    path: routes.welcomeDashboard,
+    element: <WelcomeDashboard />,
+    route: Route,
+    permission: "VIEW_WELCOME_DASHBOARD",
   },
   {
     path: routes.dashBoardPop,
     element: <DashBoardPop />,
     route: Route,
+    permission: "LIST_ADS",
   },
   {
     path: routes.scoreCard,
     element: <ScoreCard />,
     route: Route,
+    permission: "LIST_SCORECARDS",
   },
   {
     path: routes.mockList,
@@ -108,36 +119,43 @@ export const adminRoutes = [
     path: routes.visitor,
     element: <Visitor />,
     route: Route,
+    permission: "LIST_VISITOR",
   },
   {
     path: routes.studyPlan,
     element: <StudyPlan />,
     route: Route,
+    permission: "LIST_STUDY_PLANS",
   },
   {
     path: routes.mockTest,
     element: <MockTest />,
     route: Route,
+    permission: "LIST_MOCKTEST",
   },
   {
     path: routes.review,
     element: <Review />,
     route: Route,
+    permission: "LIST_REVIEWS",
   },
   {
     path: routes.classRecording,
     element: <ClassRecording />,
     route: Route,
+    permission: "LIST_RECORDINGS",
   },
   {
     path: routes.template,
     element: <Template />,
     route: Route,
+    permission: "LIST_TEMPLATES",
   },
   {
     path: routes.notification,
     element: <Notification />,
     route: Route,
+    permission: "LIST_NOTIFICATIONS",
   },
   {
     path: routes.quizeList,
@@ -148,176 +166,158 @@ export const adminRoutes = [
     path: routes.exceptionalWords,
     element: <ExceptionalWords />,
     route: Route,
+    permission: "LIST_EXCEPTIONAL_WORDS",
   },
   {
     path: routes.upComingClass,
     element: <UpComingClass />,
     route: Route,
+    permission: "LIST_UPCOMING_CLASSES",
   },
   {
     path: routes.discountCoupon,
     element: <DiscountCoupon />,
     route: Route,
+    permission: "LIST_COUPON",
   },
   {
     path: routes.timeTable,
     element: <TimeTable />,
     route: Route,
+    permission: "LIST_TIMETABLES",
   },
   {
     path: routes.courseMaster,
     element: <CourseMaster />,
     route: Route,
+    permission: "LIST_PLAN",
   },
   {
     path: routes.quizeCategory,
     element: <QuizeCategory />,
     route: Route,
+    permission: "LIST_QUIZ_CATEGORIES",
   },
   {
     path: routes.booking,
     element: <Booking />,
     route: Route,
+    permission: "LIST_BOOKING",
   },
   {
     path: routes.grammerTemplate,
     element: <GrammerTemplate />,
     route: Route,
+    permission: "LIST_GRAMMARS",
   },
   {
     path: routes.quize,
     element: <Quize />,
     route: Route,
+    permission: "LIST_QUIZZES",
   },
   {
     path: routes.institute,
     element: <Institute />,
     route: Route,
+    permission: "LIST_INSTITUTE",
   },
   {
     path: routes.institutePlan,
     element: <InstitutePlan />,
     route: Route,
+    permission: "LIST_INSTITUTE_PLAN",
   },
-  // {
-  //   path: routes.agent,
-  //   element: <Agent />,
-  //   route: Route,
-  // },
   {
     path: routes.loginBanner,
     element: <LoginBanner />,
     route: Route,
+    permission: "MANAGE_BANNER",
   },
   {
     path: routes.user,
     element: <User />,
     route: Route,
+    permission: "LIST_USERS",
   },
   {
     path: routes.teacherDashboard,
     element: <TeacherDashboard />,
     route: Route,
+    permission: "TEACHER_DASHBOARD",
   },
   {
     path: routes.studentDashboard,
     element: <StudentDasboard />,
     route: Route,
+    permission: "STUDENT_DASHBOARD",
   },
   {
     path: routes.parentDashboard,
     element: <ParentDashboard />,
     route: Route,
+    permission: "PARENT_DASHBOARD",
   },
 
   {
     path: routes.membershipplan,
     element: <Membershipplan />,
+    permission: "LIST_PLAN",
   },
   {
     path: routes.membershipAddon,
     element: <MembershipAddon />,
+    permission: "LIST_PLAN",
   },
   {
     path: routes.membershipTransaction,
     element: <MembershipTransaction />,
+    permission: "LIST_PLAN",
   },
-  // {
-  //   path: routes.video,
-  //   element: <Video />,
-  //   route: Route,
-  // },
 
-  {
-    path: routes.fileManager,
-    element: <FileManager />,
-    route: Route,
-  },
   {
     path: routes.manageVideo,
     element: <ManageVideo />,
     route: Route,
+    permission: "LIST_VIDEOS",
   },
   {
     path: routes.predictionFile,
     element: <PredictionFile />,
     route: Route,
+    permission: "LIST_PREDICTIONS",
   },
   {
     path: routes.question,
     element: <Question />,
     route: Route,
+    permission: "LIST_QUESTIONS",
   },
   {
     path: routes.userManage,
     element: <UserManage />,
     route: Route,
-  },
-  {
-    path: routes.textEditor,
-    element: <TextEditor />,
-    route: Route,
-  },
-  {
-    path: routes.studentGrid,
-    element: <StudentGrid />,
+    permission: "LIST_USERS",
   },
   {
     path: routes.studentList,
     element: <StudentList />,
+    permission: "LIST_USERS",
   },
   {
     path: routes.addStudent,
     element: <AddStudent />,
+    permission: "CREATE_USER",
   },
   {
     path: routes.addUser,
     element: <AddUser />,
+    permission: "CREATE_USER",
   },
   {
     path: routes.editStudent,
     element: <AddStudent />,
-  },
-
-  {
-    path: routes.layoutDefault,
-    element: <AdminDashboard />,
-  },
-  {
-    path: routes.layoutMini,
-    element: <AdminDashboard />,
-  },
-  {
-    path: routes.layoutRtl,
-    element: <AdminDashboard />,
-  },
-  {
-    path: routes.layoutBox,
-    element: <AdminDashboard />,
-  },
-  {
-    path: routes.layoutDark,
-    element: <AdminDashboard />,
+    permission: "EDIT_USER",
   },
 
   {
@@ -347,14 +347,17 @@ export const adminRoutes = [
   {
     path: routes.rolesPermissions,
     element: <RolesPermissions />,
+    permission: "LIST_ROLES",
   },
   {
     path: routes.permissions,
     element: <Permission />,
+    permission: "LIST_ROLES",
   },
   {
     path: routes.manageusers,
     element: <Manageusers />,
+    permission: "LIST_USERS",
   },
   {
     path: routes.allBlogs,

@@ -5,6 +5,7 @@ export interface ApiResponse<T = any> {
     data?: T;
     message?: string;
     error?: any;
+    errors?: any;
   }
   
   // Function to get token from localStorage
@@ -34,9 +35,14 @@ export interface ApiResponse<T = any> {
   
       const result = await response.json();
   
-      if (!response.ok) {
-        throw new Error(result.message || 'Something went wrong');
+      if (result.status === false) {
+        if (result.errors && Array.isArray(result.errors)) {
+          // ✅ Format validation errors into a single string
+          return { success: false, errors: result.errors };
+        }
+        throw new Error(result.message || "Something went wrong");
       }
+ 
   
       return { success: true, data: result.data };
     } catch (error: unknown) {

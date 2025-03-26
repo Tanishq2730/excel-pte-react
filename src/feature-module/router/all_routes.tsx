@@ -3,6 +3,7 @@
 export const all_routes = {
   // dashboard routes
   adminDashboard: "/dashboard",
+  welcomeDashboard: "/welcome-dashboard",
   parentDashboard: "/parent-dashboard",
   studentDashboard: "/student-dashboard",
   teacherDashboard: "/teacher-dashboard",

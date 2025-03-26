@@ -154,36 +154,6 @@ export const deleteTemplate = async (id: number) => {
   return await apiHandler(`${api_url}master-templates/${id}`, "DELETE");
 };
 
-// ✅ Fetch All Topics
-export const fetchAllTopics = async () => {
-  return await apiHandler(`${api_url}common/topics`, "GET");
-};
-
-// ✅ Fetch All Question Types
-export const fetchAllQuestionTypes = async () => {
-  return await apiHandler(`${api_url}common/question-types`, "GET");
-};
-
-// ✅ Fetch All Types with Subtypes
-export const fetchAllTypes = async () => {
-  return await apiHandler(`${api_url}common/types`, "GET");
-};
-
-// ✅ Fetch Subtypes by Type ID
-export const fetchSubtypesByType = async (typeId: number) => {
-  return await apiHandler(`${api_url}common/types/${typeId}/subtypes`, "GET");
-};
-
-// ✅ Fetch All Image Type Categories
-export const fetchAllImageTypes = async () => {
-  return await apiHandler(`${api_url}common/image-types`, "GET");
-};
-
-// ✅ Fetch States by Country Code
-export const fetchStatesByCountryCode = async (countryCode: string) => {
-  return await apiHandler(`${api_url}common/states/${countryCode}`, "GET");
-};
-
 // ✅ Fetch All Reviews
 export const fetchAllReviews = async () => {
   return await apiHandler(`${api_url}master-reviews`, "GET");
@@ -297,6 +267,7 @@ export const updateGrammar = async (id: number, data: FormData) => {
 export const deleteGrammar = async (id: number) => {
   return await apiHandler(`${api_url}master-grammars/${id}`, "DELETE");
 };
+
 // ✅ Fetch all quiz categories
 export const fetchAllQuizCategories = async () => {
   return await apiHandler(`${api_url}quiz-categories`, "GET");
@@ -320,4 +291,59 @@ export const updateQuizCategory = async (id: number, data: { category_name: stri
 // ✅ Delete quiz category
 export const deleteQuizCategory = async (id: number) => {
   return await apiHandler(`${api_url}quiz-categories/${id}`, "DELETE");
+};
+
+
+// ✅ Fetch all USers
+export const fetchAllUsers = async () => {
+  return await apiHandler(`${api_url}users`, "GET");
+};
+
+// ✅ Fetch USers by ID
+export const fetchUsersById = async (id: number) => {
+  return await apiHandler(`${api_url}users/${id}`, "GET");
+};
+
+// ✅ Create new USers
+export const createUsers = async (formData: any) => {
+  return await apiHandler(`${api_url}users`, "POST", formData);
+};
+// ✅ Update USers
+export const updateUsers = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}users/${id}`, "PUT", formData);
+};
+
+// ✅ Delete USers
+export const deleteUsers = async (id: number) => {
+  return await apiHandler(`${api_url}users/${id}`, "DELETE");
+};
+
+
+export const fetchAllRoles = async () => {
+  return await apiHandler(`${api_url}roles`, "GET");
+};
+
+export const createRoles = async (formData: any) => {
+  return await apiHandler(`${api_url}roles`, "POST", formData);
+};
+// ✅ Update USers
+export const updateRoles = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}roles/${id}`, "PUT", formData);
+};
+
+// ✅ Delete USers
+export const deleteRoles = async (id: number) => {
+  return await apiHandler(`${api_url}roles/${id}`, "DELETE");
+};
+
+export const fetchAllPermissions = async () => {
+  return await apiHandler(`${api_url}permissions`, "GET");
+};
+
+export const fetchPermissionRoles = async (roleId: number) => {
+  return await apiHandler(`${api_url}roles/${roleId}/permissions`, "GET");
+};
+
+export const assignPermissionsToRole = async (roleId: number, permissionIds: number[]) => {
+  return await apiHandler(`${api_url}roles/${roleId}/permissions`, "POST", { permissionIds });
 };
