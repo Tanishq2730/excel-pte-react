@@ -60,6 +60,7 @@ const StudentAttendance = () => {
       render: (text: string, record: any) => (
         <div className="d-flex align-items-center">
           <Link to="#" className="avatar avatar-md">
+          
             <ImageWithBasePath
               src={record.img}
               className="img-fluid rounded-circle"
