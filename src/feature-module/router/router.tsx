@@ -37,8 +37,6 @@ const ALLRoutes: React.FC = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>; // Show loading while fetching permissions
-
   // ✅ Function to check if user has permission
   const hasPermission = (routePermission: string) => userPermissions.includes(routePermission);
 
@@ -51,7 +49,7 @@ const ALLRoutes: React.FC = () => {
   return (
     <Routes>
       {/* Redirect logged-in users to the dashboard */}
-      <Route path="/" element={token ? <Navigate to="/dashboard" replace /> : <Login />} />
+      <Route path="/" element={token ? <Navigate to="/welcome-dashboard" replace /> : <Login />} />
 
       {/* Protect Public Routes */}
       <Route element={<ProtectedRoute><Feature /></ProtectedRoute>}>

@@ -14,7 +14,7 @@ const Login = () => {
     setPasswordVisible((prevState) => !prevState);
   };
   useEffect(() => {
-    localStorage.setItem("menuOpened", "Dashboard");
+    localStorage.setItem("menuOpened", "Welcome Dashboard");
   }, []);
   const date = () => {
     return new Date().getFullYear();
