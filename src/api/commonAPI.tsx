@@ -19,7 +19,7 @@ export const fetchAllTypes = async () => {
 
 // ✅ Fetch Subtypes by Type ID
 export const fetchSubtypesByType = async (typeId: number) => {
-  return await apiHandler(`${api_url}common/types/${typeId}/subtypes`, "GET");
+  return await apiHandler(`${api_url}common/subtypes/${typeId}`, "GET");
 };
 
 // ✅ Fetch All Image Type Categories
@@ -42,4 +42,8 @@ export const getUserPermissions = async () => {
 
 export const getStudentRoles = async () => {
   return await apiHandler(`${api_url}common/student-roles`, "GET");
+};
+
+export const getCourseTypes = async () => {
+  return await apiHandler(`${api_url}common/course-types`, "GET");
 };

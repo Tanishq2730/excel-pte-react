@@ -28,9 +28,7 @@ const QuizeCategory: React.FC = () => {
   const loadCategories = async () => {
     try {
       const response = await fetchAllQuizCategories();
-      if (response.success) {
-        console.log(response.data);
-
+      if (response.success) {       
         setCategories(response.data);
       } else {
         setAlert({ type: "danger", message: "Failed to fetch categories" });

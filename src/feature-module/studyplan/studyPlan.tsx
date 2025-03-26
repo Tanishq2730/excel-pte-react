@@ -1,41 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchAllTypes } from "../../api/commonAPI";
+import { createStudyPlans } from "../../api/masterAPI";
+import AlertComponent from "../../core/common/AlertComponent";
 
 interface StudyData {
-  id: number;
+  id?: number;
   category: string;
   subCategory: string;
   questionNumbers: number;
+  typeId: number;
 }
 
-const dummyData: StudyData[] = [
-  { id: 1, category: "Speaking", subCategory: "Read Aloud", questionNumbers: 10 },
-  { id: 2, category: "Speaking", subCategory: "Respond to Situation", questionNumbers: 10 },
-  { id: 3, category: "Speaking", subCategory: "Answer Short Question", questionNumbers: 10 },
-  { id: 4, category: "Speaking", subCategory: "Re-tell Lecture", questionNumbers: 10 },
-  { id: 5, category: "Speaking", subCategory: "Describe Image", questionNumbers: 10 },
-  { id: 6, category: "Speaking", subCategory: "Repeat Sentence", questionNumbers: 10 },
-  { id: 7, category: "Writing", subCategory: "Write Essay", questionNumbers: 10 },
-  { id: 8, category: "Writing", subCategory: "Write Email", questionNumbers: 10 },
-  { id: 9, category: "Writing", subCategory: "Summarize Written Text", questionNumbers: 10 },
-  { id: 10, category: "Reading", subCategory: "MC, Choose Single Answer", questionNumbers: 10 },
-  { id: 11, category: "Reading", subCategory: "Reading and Writing Fill in the Blanks", questionNumbers: 10 },
-  { id: 12, category: "Reading", subCategory: "Reading Fill in the Blanks", questionNumbers: 10 },
-  { id: 13, category: "Reading", subCategory: "Re-order Paragraphs", questionNumbers: 10 },
-  { id: 14, category: "Reading", subCategory: "MC, Choose Multiple Answer", questionNumbers: 10 },
-  { id: 15, category: "Listening", subCategory: "Highlight Correct Summary", questionNumbers: 10 },
-  { id: 16, category: "Listening", subCategory: "MC, Choose Single Answer", questionNumbers: 10 },
-  { id: 17, category: "Listening", subCategory: "Fill in the Blanks", questionNumbers: 10 },
-  { id: 18, category: "Listening", subCategory: "Select Missing Word", questionNumbers: 10 },
-  { id: 19, category: "Listening", subCategory: "Highlight Incorrect Words", questionNumbers: 10 },
-  { id: 20, category: "Listening", subCategory: "Write from Dictation", questionNumbers: 10 },
-  { id: 21, category: "Listening", subCategory: "MC, Choose Multiple Answer", questionNumbers: 10 },
-  { id: 22, category: "Listening", subCategory: "Summarize Spoken Text", questionNumbers: 10 },
-];
-
 const StudyPlan: React.FC = () => {
-  const [data, setData] = useState<StudyData[]>(dummyData);
+  const [data, setData] = useState<StudyData[]>([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [alert, setAlert] = useState<{ type: "primary" | "secondary" | "warning" | "danger" | "success"; message: string } | null>(null);
 
-  // Handle Change in Question Numbers
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const response = await fetchAllTypes();
+        if (response.success) {
+          const transformedData: StudyData[] = response.data.flatMap((category: any) =>
+            category.Subtypes.map((sub: any) => ({
+              id: sub.id,
+              typeId: category.id, // Required for submission
+              category: category.name,
+              subCategory: sub.sub_name,
+              questionNumbers: 10, // Default value
+            }))
+          );
+          setData(transformedData);
+        }
+      } catch (error) {
+        setAlert({ type: "danger", message: "Error fetching study data." });
+        console.error("Error fetching study data:", error);
+      }
+    };
+
+    loadData();
+  }, []);
+
   const handleQuestionNumberChange = (id: number, value: number) => {
     setData((prev) =>
       prev.map((item) =>
@@ -44,33 +50,77 @@ const StudyPlan: React.FC = () => {
     );
   };
 
+  const handleSubmit = async () => {
+    if (!fromDate || !toDate) {
+      setAlert({ type: "warning", message: "Please select a valid From Date and To Date before submitting." });
+      return;
+    }
+
+    const studyPlans = data.map((item) => ({
+      id: item.id || undefined,
+      typeId: item.typeId,
+      sub_type_id: item.id,
+      question_numbers: item.questionNumbers,
+    }));
+
+    const payload = { global_date_from: fromDate, global_date_to: toDate, study_plans: studyPlans }
+    try {
+      const response = await createStudyPlans(payload);
+
+      if (response.success) {
+        setAlert({ type: "success", message: "Study plans saved successfully!" });
+      } else {
+        setAlert({ type: "danger", message: "Failed to save study plan." });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error submitting study plan." });
+      console.error("Error submitting study plan:", error);
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <div className="content">
         <div className="heading mb-4">
           <h2>Study Plan</h2>
         </div>
+
+        {/* Alert Component */}
+        {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+
         <div className="card p-4">
-          {/* Date Filters */}
           <div className="row mb-3">
             <div className="col-md-4">
-              <label className="form-label fw-bold">Select Date:</label>
-              <input type="date" className="form-control" />
-            </div>
-            <div className="col-md-4">
               <label className="form-label fw-bold">From Date:</label>
-              <input type="date" className="form-control" />
+              <input
+                type="date"
+                className="form-control"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
             </div>
             <div className="col-md-4">
               <label className="form-label fw-bold">To Date:</label>
-              <input type="date" className="form-control" />
+              <input
+                type="date"
+                className="form-control"
+                value={toDate}
+                onChange={(e) => setToDate(e.target.value)}
+              />
             </div>
           </div>
+
           <div className="mb-3 text-start">
-            <button className="btn btn-dark">FILTER</button>
+            <button className="btn btn-dark mt-3">FILTER</button>
+            <button
+              type="button"
+              className="btn btn-primary mt-3"
+              onClick={handleSubmit}
+            >
+              Save Changes
+            </button>
           </div>
 
-          {/* Table */}
           <div className="mt-4">
             <table className="table table-bordered">
               <thead>
@@ -109,15 +159,14 @@ const StudyPlan: React.FC = () => {
                         className="form-control"
                         value={item.questionNumbers}
                         onChange={(e) =>
-                          handleQuestionNumberChange(item.id, Number(e.target.value))
+                          handleQuestionNumberChange(item.id ?? 0, Number(e.target.value))
                         }
                       />
                     </td>
                   </tr>
                 ))}
               </tbody>
-              <button type="button" className="btn btn-primary mt-3">Save Changes</button>
-            </table>
+            </table>           
           </div>
         </div>
       </div>

@@ -45,6 +45,8 @@ import User from "../user/studentList";
 import ManageVideo from "../managevideo/manageVideo";
 import PredictionFile from "../predictionfile/predictionFile";
 import Question from "../question/question";
+import QuestionAdd from "../question/questionAdd";
+import QuestionEdit from "../question/questionEdit";
 import MockTest from "../mock/mockTest";
 import Template from "../template/template";
 import GrammerTemplate from "../grammertemplate/grammerTemplate";
@@ -69,7 +71,7 @@ import MockList from "../mock/mockList";
 import StudentAttendance from "../hrm/attendance/student-attendance";
 
 const routes = all_routes;
-
+const dummyOnAddQuestion = () => {};
 export const adminRoutes = [
   {
     path: routes.adminDashboard,
@@ -109,6 +111,7 @@ export const adminRoutes = [
     path: routes.editQuize,
     element: <EditQuize />,
     route: Route,
+    permission: "EDIT_QUIZ",
   },
   {
     path: routes.addStudents,
@@ -292,6 +295,18 @@ export const adminRoutes = [
     element: <Question />,
     route: Route,
     permission: "LIST_QUESTIONS",
+  },
+  {
+    path: routes.questionAdd,
+    element: <QuestionAdd onAddQuestion={dummyOnAddQuestion} />,
+    route: Route,
+    permission: "CREATE_QUESTIONS",
+  },
+  {
+    path: routes.questionEdit,
+    element: <QuestionEdit onAddQuestion={dummyOnAddQuestion} />,
+    route: Route,
+    permission: "EDIT_QUESTIONS",
   },
   {
     path: routes.userManage,

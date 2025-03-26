@@ -270,7 +270,7 @@ export const SidebarData = [
           },
           {
             label: "Quize Management",
-            link: routes.quize,
+            // link: routes.quize,
             submenu: true,
             submenuItems: [
               { label: "Add Quizzes", link: routes.quize },

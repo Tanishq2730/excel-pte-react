@@ -15,7 +15,7 @@ export const all_routes = {
   tablesBasic: "/tables-basic",
   notes: "/notes",
   comingSoon: "/coming-soon",
-  editQuize: "/edit-quize",
+  editQuize: "/edit-quize/:id",
   mockList: "/mock-list",
 
   // auth routes routes
@@ -273,6 +273,8 @@ export const all_routes = {
   manageVideo:'/manage-video',
   predictionFile:'/prediction-file',
   question:'/question',
+  questionAdd:'/question-add',
+  questionEdit:'/question-edit/:id',
   userManage:'/user-manage',
 
   //Academic module

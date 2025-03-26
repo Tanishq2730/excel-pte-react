@@ -347,3 +347,49 @@ export const fetchPermissionRoles = async (roleId: number) => {
 export const assignPermissionsToRole = async (roleId: number, permissionIds: number[]) => {
   return await apiHandler(`${api_url}roles/${roleId}/permissions`, "POST", { permissionIds });
 };
+
+export const createStudyPlans = async (formData: any) => {
+  return await apiHandler(`${api_url}study-plans`, "POST", formData);
+};
+
+
+export const createQuiz = async (formData: any) => {
+  return await apiHandler(`${api_url}quizzes`, "POST", formData);
+};
+
+export const fetchAllQuizes = async () => {
+  return await apiHandler(`${api_url}quizzes`, "GET");
+};
+
+export const updateQuiz = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}quizzes/${id}`, "PUT", formData);
+};
+
+// ✅ Delete USers
+export const deleteQuiz = async (id: number) => {
+  return await apiHandler(`${api_url}quizzes/${id}`, "DELETE");
+};
+export const fetchQuizById = async (id: number) => {
+  return await apiHandler(`${api_url}quizzes/${id}`, "GET");
+};
+
+//plans api url
+export const createPlans = async (formData: any) => {
+  return await apiHandler(`${api_url}plans`, "POST", formData);
+};
+
+export const fetchAllPlans = async () => {
+  return await apiHandler(`${api_url}plans`, "GET");
+};
+
+export const updatePlans = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}plans/${id}`, "PUT", formData);
+};
+
+// ✅ Delete USers
+export const deletePlans = async (id: number) => {
+  return await apiHandler(`${api_url}plans/${id}`, "DELETE");
+};
+export const fetcPlansById = async (id: number) => {
+  return await apiHandler(`${api_url}plans/${id}`, "GET");
+};
