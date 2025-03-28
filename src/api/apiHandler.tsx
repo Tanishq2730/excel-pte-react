@@ -34,17 +34,18 @@ export interface ApiResponse<T = any> {
       });
   
       const result = await response.json();
-  
+      
       if (result.status === false) {
-        if (result.errors && Array.isArray(result.errors)) {
+        if (result.errors || Array.isArray(result.errors)) {
           // ✅ Format validation errors into a single string
           return { success: false, errors: result.errors };
         }
         throw new Error(result.message || "Something went wrong");
       }
  
+  console.log("Result:", result);
   
-      return { success: true, data: result.data };
+      return { success: true, data: result.data, message: result.message };
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return { success: false, error: errorMessage };

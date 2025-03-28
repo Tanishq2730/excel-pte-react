@@ -393,3 +393,24 @@ export const deletePlans = async (id: number) => {
 export const fetcPlansById = async (id: number) => {
   return await apiHandler(`${api_url}plans/${id}`, "GET");
 };
+
+
+//Questions api url
+export const createQuestions = async (formData: any) => {
+  return await apiHandler(`${api_url}questions`, "POST", formData, true);
+};
+
+export const fetchAllQuestions = async () => {
+  return await apiHandler(`${api_url}questions`, "GET");
+};
+
+export const deleteQuestions = async (id: number) => {
+  return await apiHandler(`${api_url}questions/${id}`, "DELETE");
+};
+
+export const updateQuestions = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}questions/${id}`, "PUT", formData,true);
+};
+export const fetcQuestionsById = async (id: number) => {
+  return await apiHandler(`${api_url}questions/${id}`, "GET");
+};

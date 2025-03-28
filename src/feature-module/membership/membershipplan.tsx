@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { createPlans, fetchAllPlans } from "../../api/masterAPI";
 import { getCourseTypes } from "../../api/commonAPI";
 import AlertComponent from "../../core/common/AlertComponent";
-import { Modal } from "bootstrap";
 
 interface PlanData {
   id: number;
@@ -108,13 +107,6 @@ const MembershipPlan: React.FC = () => {
       const response = await createPlans(newPlan);
       if (response.success) {
         setAlert({ type: "success", message: "Plan created successfully!" });
-  
-        // ✅ Close Bootstrap Modal
-        const modalElement = document.getElementById("add_membership") as HTMLElement;
-        if (modalElement) {
-          const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
-          modalInstance.hide();
-        }
   
         // ✅ Reset all form fields
         setPlanName("");

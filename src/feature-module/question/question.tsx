@@ -1,72 +1,97 @@
-// src/feature-module/question/Question.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
 import { Link } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
+import { fetchAllQuestions, deleteQuestions } from "../../api/masterAPI";
+import Swal from "sweetalert2";
 
 interface QuestionData {
   id: number;
-  topic: string;
+  question_name: string;
   type: string;
-  name: string;
-  imageType: string;
-  questionType: string;
-  questionName: string;
+  sub_name: string;
+  weekly: string;
+  newQuestion: string;
+  difficulty: string;
 }
 
 const Question: React.FC = () => {
   const routes = all_routes;
-  const [questions, setQuestions] = useState<QuestionData[]>([
-    {
-      id: 1,
-      topic: "Practice",
-      type: "Writing",
-      name: "Write Essay",
-      imageType: "N.A.",
-      questionType: "Real Question",
-      questionName: "Do you agree that genetically modified foods are safe for consumption?",
-    },
-    {
-      id: 2,
-      topic: "Practice",
-      type: "Writing",
-      name: "Write Essay",
-      imageType: "N.A.",
-      questionType: "Real Question",
-      questionName: "Do you agree that social networks should regulate false news more strictly?",
-    },
-  ]);
+  const [questions, setQuestions] = useState<QuestionData[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  // ✅ Add Question
-  const handleAddQuestion = (newQuestion: QuestionData) => {
-    setQuestions((prev) => [...prev, newQuestion]);
-  };
+  // ✅ Fetch Questions from API
+  useEffect(() => {
+    const loadQuestions = async () => {
+      setLoading(true);
+      try {
+        const response = await fetchAllQuestions();
+        if (response.success && response.data) {
+         
+          const formattedQuestions = response.data.map((q: any) => ({
+            id: q.id,
+            question_name: q.question_name || "N/A",
+            type: q.Type?.name || "N/A",
+            sub_name: q.Subtype?.sub_name || "N/A",
+            weekly: q.weekly ? "Yes" : "No",
+            newQuestion: q.new_question ? "Yes" : "No",
+            difficulty: q.difficulties || "N/A",
+          }));
+          setQuestions(formattedQuestions);
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadQuestions();
+  }, []);
 
-  // ✅ Edit Function
-  const handleEdit = (id: number) => {
-    console.log(`Edit record with id: ${id}`);
-  };
-
-  // ✅ Delete Function
-  const handleDelete = (id: number) => {
-    setQuestions((prev) => prev.filter((rec) => rec.id !== id));
+  // ✅ Delete Question with SweetAlert
+  const handleDelete = async (id: number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await deleteQuestions(id);
+          if (response.success) {
+            setQuestions((prev) => prev.filter((q) => q.id !== id));
+            Swal.fire("Deleted!", "Your question has been deleted.", "success");
+          } else {
+            Swal.fire("Error!", "Failed to delete the question.", "error");
+          }
+        } catch (error) {
+          Swal.fire("Error!", "An error occurred while deleting.", "error");
+        }
+      }
+    });
   };
 
   // ✅ Table Headers
   const columns = [
     { title: "S.No.", dataIndex: "id", key: "id", render: (_: any, __: any, index: number) => index + 1 },
-    { title: "Topic", dataIndex: "topic", key: "topic" },
+    { title: "Question Name", dataIndex: "question_name", key: "question_name" },
     { title: "Type", dataIndex: "type", key: "type" },
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Image Type", dataIndex: "imageType", key: "imageType" },
-    { title: "Question Type", dataIndex: "questionType", key: "questionType" },
-    { title: "Question Name", dataIndex: "questionName", key: "questionName" },
+    { title: "Sub Type", dataIndex: "sub_name", key: "sub_name" },
+    { title: "Weekly", dataIndex: "weekly", key: "weekly" },
+    { title: "New Question", dataIndex: "newQuestion", key: "newQuestion" },
+    { title: "Difficulty", dataIndex: "difficulty", key: "difficulty" },
     {
       title: "Action",
       key: "action",
       render: (_: any, record: QuestionData) => (
         <div>
-          <button className="btn btn-primary btn-sm me-2" onClick={() => handleEdit(record.id)}>Edit</button>
+          <Link to={`/question-edit/${record.id}`} className="btn btn-primary btn-sm me-2">
+            Edit
+          </Link>
           <button className="btn btn-danger btn-sm" onClick={() => handleDelete(record.id)}>Delete</button>
         </div>
       ),
@@ -81,27 +106,16 @@ const Question: React.FC = () => {
             <h3 className="page-title mb-1">Questions</h3>
             <nav>
               <ol className="breadcrumb mb-0">
-                <li className="breadcrumb-item">
-                  <Link to={routes.adminDashboard}>Dashboard</Link>
-                </li>
-                <li className="breadcrumb-item">
-                  <Link to="#">Questions</Link>
-                </li>
-                <li className="breadcrumb-item active" aria-current="page">
-                  Questions List
-                </li>
+                <li className="breadcrumb-item"><Link to={routes.adminDashboard}>Dashboard</Link></li>
+                <li className="breadcrumb-item"><Link to="#">Questions</Link></li>
+                <li className="breadcrumb-item active" aria-current="page">Questions List</li>
               </ol>
             </nav>
           </div>
           <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-            {/* <TooltipOption /> */}
             <div className="mb-2">
-              <Link
-                to={routes.questionAdd}
-                className="btn btn-primary d-flex align-items-center"
-              >
-                <i className="ti ti-square-rounded-plus me-2" />
-                Add Question
+              <Link to={routes.questionAdd} className="btn btn-primary d-flex align-items-center">
+                <i className="ti ti-square-rounded-plus me-2" /> Add Question
               </Link>
             </div>
           </div>
@@ -110,7 +124,7 @@ const Question: React.FC = () => {
         {/* ✅ Question List */}
         <div className="card p-4 mt-4">
           <h2>Question List</h2>
-          <Table key={questions.length} dataSource={questions} columns={columns} />
+          {loading ? <p>Loading...</p> : <Table key={questions.length} dataSource={questions} columns={columns} />}
         </div>
       </div>
     </div>

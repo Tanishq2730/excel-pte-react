@@ -304,7 +304,7 @@ export const adminRoutes = [
   },
   {
     path: routes.questionEdit,
-    element: <QuestionEdit onAddQuestion={dummyOnAddQuestion} />,
+    element: <QuestionEdit />,
     route: Route,
     permission: "EDIT_QUESTIONS",
   },

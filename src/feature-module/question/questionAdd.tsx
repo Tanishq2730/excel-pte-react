@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-    fetchAllTopics,
-    fetchAllQuestionTypes,
+import {   
     fetchAllTypes,
     fetchSubtypesByType,
-    fetchAllImageTypes
+    fetchAllImageTypes,
 } from "../../api/commonAPI"; // ✅ Import APIs
+import { createQuestions } from "../../api/masterAPI";
 import { all_routes } from "../router/all_routes";
 import DefaultEditor from "react-simple-wysiwyg";
+import AlertComponent from "../../core/common/AlertComponent";
 
 interface AddQuestionProps {
     onAddQuestion: (newQuestion: QuestionData) => void;
@@ -17,11 +17,9 @@ interface AddQuestionProps {
 // ✅ Define the structure of a Question
 interface QuestionData {
     id: number;
-    topic: string;
     type: string;
     subType: string;
     name: string;
-    questionType: string;
     questionName: string;
     difficulty: string;
     weekly: string;
@@ -35,11 +33,9 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
     const [subtypes, setSubtypes] = useState<{ id: number; sub_name: string }[]>([]);
     const [imageTypes, setImageTypes] = useState<{ id: number; image_type: string }[]>([]);
 
-    const [topic, setTopic] = useState<string>("");
+    
     const [type, setType] = useState<string>("");
     const [subType, setSubType] = useState<string>("");
-    const [buttonName, setButtonName] = useState<string>("");
-    const [questionType, setQuestionType] = useState<string>("");
     const [imageType, setImageType] = useState<string>("");
     const [questionName, setQuestionName] = useState<string>("");
     const [difficulty, setDifficulty] = useState<string>("Easy");
@@ -47,20 +43,25 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
     const [isNewQuestion, setIsNewQuestion] = useState<string>("Yes");
     const [content, setContent] = useState<string>("");
     const [answer, setAnswer] = useState<string>("");
+    const [transcription, setTranscription] = useState<string>("");
+    const [dragAndDrop, setDragAndDrop] = useState<string>("");
+    const [britishAnswer, setBritishAnswer] = useState<string>("");
     const [speakingAudio, setSpeakingAudio] = useState<File | null>(null);
     const [describeImage, setDescribeImage] = useState<File | null>(null);
+    const [optionOne, setOptionOne] = useState<string>("");
+    const [optionTwo, setOptionTwo] = useState<string>("");
+    const [optionThree, setOptionThree] = useState<string>("");
+    const [optionFour, setOptionFour] = useState<string>("");
+    const [optionFive, setOptionFive] = useState<string>("");
+    const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+
     const routes = all_routes;
-    console.log(type);
+    console.log(subType);
 
     // ✅ Fetch topics, question types, and types when component loads
     useEffect(() => {
         const loadData = async () => {
-            try {
-                const topicsRes = await fetchAllTopics();
-                if (topicsRes.success) setTopics(topicsRes.data);
-
-                const questionTypesRes = await fetchAllQuestionTypes();
-                if (questionTypesRes.success) setQuestionTypes(questionTypesRes.data);
+            try { 
 
                 const typesRes = await fetchAllTypes();
                 if (typesRes.success) setTypes(typesRes.data);
@@ -104,38 +105,59 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
 
 
     // ✅ Handle Submit
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append("type_id", type);
+        formData.append("sub_type_id", subType);
+        formData.append("question_name", questionName);
+        formData.append("difficulties", difficulty.toLowerCase());
+        formData.append("weekly", (weekly === "Yes").toString());
+        formData.append("new_question", (isNewQuestion === "Yes").toString());
+        formData.append("question", content);
+        formData.append("image_type", imageType);
+        formData.append("answer_american", answer);
+        formData.append("answer_british", britishAnswer);
+        formData.append("transcription", transcription);
+        formData.append("drag_drop", dragAndDrop);
+        formData.append("option_one", optionOne);
+        formData.append("option_two", optionTwo);
+        formData.append("option_three", optionThree);
+        formData.append("option_four", optionFour);
+        formData.append("option_five", optionFive);
+        if (speakingAudio) formData.append("speak_audio_file", speakingAudio);
+        if (describeImage) formData.append("image_file", describeImage);
 
-        const newQuestionData = {
-            id: Math.floor(Math.random() * 1000),
-            topic,
-            type,
-            subType,
-            name: buttonName,
-            questionType,
-            questionName,
-            difficulty,
-            weekly,
-            newQuestion: isNewQuestion,
-            speakingAudio,  // ✅ Include Audio File
-            describeImage,  // ✅ Include Image File
-        };
+        try {
+            const response = await createQuestions(formData);
 
-        onAddQuestion(newQuestionData);
-
-        // ✅ Reset Fields
-        setTopic("");
-        setType("");
-        setSubType("");
-        setButtonName("");
-        setQuestionType("");
-        setQuestionName("");
-        setDifficulty("Easy");
-        setWeekly("Yes");
-        setIsNewQuestion("Yes");
-        setSpeakingAudio(null);
-        setDescribeImage(null);
+            if (response.success) {
+                setAlert({ type: "success", message: response.message ?? "Operation successful" });
+                setType("");
+                setSubType("");
+                setQuestionName("");
+                setDifficulty("Easy");
+                setWeekly("Yes");
+                setIsNewQuestion("Yes");
+                setSpeakingAudio(null);
+                setDescribeImage(null);
+                setOptionOne("");
+                setOptionTwo("");
+                setOptionThree("");
+                setOptionFour("");
+                setOptionFive("");
+                setContent("");
+                setAnswer("");
+                setTranscription("");
+                setDragAndDrop("");
+                setBritishAnswer("");
+                setImageType("");
+            } else {
+                setAlert({ type: "danger", message: response.message ?? "An error occurred" });
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
     };
 
     return (
@@ -170,22 +192,11 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                         </div>
                     </div>
                 </div>
+                {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
                 <div className="card p-4">
                     <h2>Add Question</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="row mb-3">
-                            {/* Topic Dropdown */}
-                            <div className="col-md-3">
-                                <label className="form-label">Topic</label>
-                                <select className="form-control" value={topic} onChange={(e) => setTopic(e.target.value)}>
-                                    <option value="">Select Topic</option>
-                                    {topics.map((t) => (
-                                        <option key={t.id} value={t.id}>
-                                            {t.topic_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
+                        <div className="row mb-3">                            
 
                             {/* Type Dropdown */}
                             <div className="col-md-3">
@@ -208,19 +219,6 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                                     {subtypes.map((st) => (
                                         <option key={st.id} value={st.id}>
                                             {st.sub_name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-
-                            {/* Question Type Dropdown */}
-                            <div className="col-md-3">
-                                <label className="form-label">Question Type</label>
-                                <select className="form-control" value={questionType} onChange={(e) => setQuestionType(e.target.value)}>
-                                    <option value="">Select Question Type</option>
-                                    {questionTypes.map((qt) => (
-                                        <option key={qt.id} value={qt.id}>
-                                            {qt.question_type_name}
                                         </option>
                                     ))}
                                 </select>
@@ -341,11 +339,59 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                             <label className="form-label">Question</label>
                             <DefaultEditor value={content} onChange={(e) => setContent(e.target.value)} />
                         </div>
-
+                        {subType !== "4" && 
                         <div className="row mb-3">
                             <label className="form-label">Answer</label>
                             <DefaultEditor value={answer} onChange={(e) => setAnswer(e.target.value)} />
                         </div>
+                        }
+                            {subType === "20" && 
+                            <div className="row mb-3">
+                                <label className="form-label">Answer (In British)</label>
+                                <textarea className="form-control" value={britishAnswer} onChange={(e) => setBritishAnswer(e.target.value)} />
+                            </div>
+                            }
+                        
+                        {(subType === "7" || subType === "22" || subType === "21" || subType === "15" || subType === "16" || subType === "18")  && 
+                        <div className="row mb-3">
+                            <label className="form-label">Transcription</label>
+                            <textarea className="form-control" value={transcription} onChange={(e) => setTranscription(e.target.value)} />                          
+                        </div>
+                        }
+
+                        {subType === "12"   && 
+                        <div className="row mb-3">
+                            <label className="form-label">Drag And Drop (Please Enter Value with ,)</label>
+                            <textarea className="form-control" value={dragAndDrop} onChange={(e) => setDragAndDrop(e.target.value)} />
+                            
+                        </div>
+                        }
+
+                        {(subType === "10" || subType === "14" || subType === "13" || subType === "15" || subType === "16" || subType === "18" || subType === "20" || subType === "21") &&
+                        <>
+                            <div className="mb-3">
+                            <label className="form-label">Option One</label>
+                            <textarea className="form-control" value={optionOne} onChange={(e) => setOptionOne(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Option Two</label>
+                            <textarea className="form-control" value={optionTwo} onChange={(e) => setOptionTwo(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Option Three</label>
+                            <textarea className="form-control" value={optionThree} onChange={(e) => setOptionThree(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Option Four</label>
+                            <textarea className="form-control" value={optionFour} onChange={(e) => setOptionFour(e.target.value)} />
+                        </div>
+                        <div className="mb-3">
+                            <label className="form-label">Option Five</label>
+                            <textarea className="form-control" value={optionFive} onChange={(e) => setOptionFive(e.target.value)} />
+                        </div>
+                        </>
+                        }
+                        
 
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </form>
