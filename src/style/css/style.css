@@ -30708,3 +30708,9 @@ table.table.dataTable > thead > tr th {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.fixedtime{
+  height: 10em !important;
+  overflow: hidden !important;
+  overflow-y: scroll !important;
+}
