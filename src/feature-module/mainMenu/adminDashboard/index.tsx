@@ -1057,91 +1057,92 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xxl-4 col-md-12 d-flex flex-column">
-                  {/* Quick Links */}
-                  <div className="card flex-fill">
-                    <div className="card-header d-flex align-items-center justify-content-between">
-                      <h4 className="card-title">Quick Links</h4>
-                    </div>
-                    <div className="card-body pb-1">
-                      <Slider
-                        {...settings}
-                        className="owl-carousel link-slider"
-                      >
-                        <div className="item">
-                          <Link
-                            to={routes.classTimetable}
-                            className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
-                                <i className="ti ti-calendar" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Calendar</p>
-                          </Link>
-                          <Link
-                            to={routes.feesGroup}
-                            className="d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
-                                <i className="ti ti-license" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Fees</p>
-                          </Link>
-                        </div>
-                        <div className="item">
-                          <Link
-                            to={routes.examResult}
-                            className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-primary rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
-                                <i className="ti ti-hexagonal-prism" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Exam Result</p>
-                          </Link>
-                          <Link
-                            to={routes.classHomeWork}
-                            className="d-block bg-danger-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-danger rounded-circle">
-                                <i className="ti ti-report-money" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Home Works</p>
-                          </Link>
-                        </div>
-                        <div className="item">
-                          <Link
-                            to={routes.studentAttendance}
-                            className="d-block bg-warning-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">
-                                <i className="ti ti-calendar-share" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Attendance</p>
-                          </Link>
-                          <Link
-                            to={routes.attendanceReport}
-                            className="d-block bg-skyblue-transparent ronded p-2 text-center mb-3 class-hover"
-                          >
-                            <div className="avatar avatar-lg border p-1 border-skyblue rounded-circle mb-2">
-                              <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-pending rounded-circle">
-                                <i className="ti ti-file-pencil" />
-                              </span>
-                            </div>
-                            <p className="text-dark">Reports</p>
-                          </Link>
-                        </div>
-                      </Slider>
-                    </div>
+
+              </div>
+              <div className="col-xxl-4 col-md-12 d-flex flex-column">
+                {/* Quick Links */}
+                <div className="card flex-fill">
+                  <div className="card-header d-flex align-items-center justify-content-between">
+                    <h4 className="card-title">Quick Links</h4>
+                  </div>
+                  <div className="card-body pb-1">
+                    <Slider
+                      {...settings}
+                      className="owl-carousel link-slider"
+                    >
+                      <div className="item">
+                        <Link
+                          to={routes.classTimetable}
+                          className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
+                              <i className="ti ti-calendar" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Calendar</p>
+                        </Link>
+                        <Link
+                          to={routes.feesGroup}
+                          className="d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
+                              <i className="ti ti-license" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Fees</p>
+                        </Link>
+                      </div>
+                      <div className="item">
+                        <Link
+                          to={routes.examResult}
+                          className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-primary rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
+                              <i className="ti ti-hexagonal-prism" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Exam Result</p>
+                        </Link>
+                        <Link
+                          to={routes.classHomeWork}
+                          className="d-block bg-danger-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-danger rounded-circle">
+                              <i className="ti ti-report-money" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Home Works</p>
+                        </Link>
+                      </div>
+                      <div className="item">
+                        <Link
+                          to={routes.studentAttendance}
+                          className="d-block bg-warning-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">
+                              <i className="ti ti-calendar-share" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Attendance</p>
+                        </Link>
+                        <Link
+                          to={routes.attendanceReport}
+                          className="d-block bg-skyblue-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-skyblue rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-pending rounded-circle">
+                              <i className="ti ti-file-pencil" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Reports</p>
+                        </Link>
+                      </div>
+                    </Slider>
                   </div>
                 </div>
               </div>
@@ -1635,7 +1636,7 @@ const AdminDashboard = () => {
                           </div>
                         </div>
                       </li>
-                      
+
                     </ul>
                   </div>
                 </div>
