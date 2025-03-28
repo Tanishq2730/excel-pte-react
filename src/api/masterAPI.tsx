@@ -414,3 +414,23 @@ export const updateQuestions = async (id: number,formData: any) => {
 export const fetcQuestionsById = async (id: number) => {
   return await apiHandler(`${api_url}questions/${id}`, "GET");
 };
+
+//Mock test api url
+export const createMockTests = async (formData: any) => {
+  return await apiHandler(`${api_url}mocktests`, "POST", formData);
+};
+
+export const fetchAllMockTests = async () => {
+  return await apiHandler(`${api_url}mocktests`, "GET");
+};
+
+export const deleteMockTests = async (id: number) => {
+  return await apiHandler(`${api_url}mocktests/${id}`, "DELETE");
+};
+
+export const updateMockTests = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}mocktests/${id}`, "PUT", formData);
+};
+export const fetcMockTestsById = async (id: number) => {
+  return await apiHandler(`${api_url}mocktests/${id}`, "GET");
+};

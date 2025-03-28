@@ -47,3 +47,7 @@ export const getStudentRoles = async () => {
 export const getCourseTypes = async () => {
   return await apiHandler(`${api_url}common/course-types`, "GET");
 };
+
+export const getQuestionsByTypeAndSubtype = async (typeId: number,subTypeId: number) => {
+  return await apiHandler(`${api_url}common/get-question/${typeId}/${subTypeId}`, "GET");
+};

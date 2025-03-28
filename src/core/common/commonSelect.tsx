@@ -8,6 +8,7 @@ export type Option = {
 
 export interface SelectProps {
   options: Option[];
+  value?: Option | null;
   defaultValue?: Option;
   className?: string;
   styles?: any; 
