@@ -86,7 +86,8 @@ const MockList: React.FC = () => {
       key: "actions",
       render: (_: any, record: MockTest) => (
         <>
-          <Link to={`/mocktest/edit/${record.id}`} className="btn btn-warning me-2">
+          {/* <Link to={`/mocktest-edit/${record.id}`} className="btn btn-warning me-2"> */}
+          <Link to={routes.mockEdit} className="btn btn-warning me-2">
             <i className="fa fa-pencil"></i>
           </Link>
           {/* <Link to={`/mocktest/view/${record.id}`} className="btn btn-info me-2">

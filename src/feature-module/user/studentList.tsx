@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
 // import { TableData } from "../../../../core/data/interface";
@@ -6,6 +6,7 @@ import ImageWithBasePath from "../../core/common/imageWithBasePath";
 import StudentModals from "./studentModel";
 import Table from "../../core/common/dataTable/index";
 import PredefinedDateRanges from "../../core/common/datePicker";
+
 import {
   allClass,
   allSection,
@@ -40,7 +41,7 @@ const dummyData: TableData[] = [
     state: "delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-01.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 2,
@@ -52,7 +53,7 @@ const dummyData: TableData[] = [
     state: "Rajasthan",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-02.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 3,
@@ -64,7 +65,7 @@ const dummyData: TableData[] = [
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-03.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 4,
@@ -76,7 +77,7 @@ const dummyData: TableData[] = [
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-03.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 5,
@@ -88,7 +89,7 @@ const dummyData: TableData[] = [
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-03.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 6,
@@ -100,7 +101,7 @@ const dummyData: TableData[] = [
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-03.jpg",
-    subscription:"free "
+    subscription: "free "
   },
   {
     key: 7,
@@ -112,13 +113,14 @@ const dummyData: TableData[] = [
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
     imgSrc: "assets/img/students/student-03.jpg",
-    subscription:"free "
+    subscription: "free "
   },
 ];
 
 const StudentList: React.FC = () => {
   const routes = all_routes;
   const data = dummyData;
+  const [showModal, setShowModal] = useState(false);
   const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
 
   const handleApplyClick = () => {
@@ -169,9 +171,8 @@ const StudentList: React.FC = () => {
       dataIndex: "status",
       render: (text: string) => (
         <span
-          className={`badge ${
-            text === "Active" ? "badge-soft-success" : "badge-soft-danger"
-          } d-inline-flex align-items-center`}
+          className={`badge ${text === "Active" ? "badge-soft-success" : "badge-soft-danger"
+            } d-inline-flex align-items-center`}
         >
           <i className="ti ti-circle-filled fs-5 me-1"></i>
           {text}
@@ -220,61 +221,62 @@ const StudentList: React.FC = () => {
             <i className="ti ti-mail" />
           </Link> */}
           <div className="dropdown">
-              <Link
-                to="#"
-                className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="ti ti-dots-vertical fs-14" />
-              </Link>
-              <ul className="dropdown-menu dropdown-menu-right p-3">
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="student-details"
-                  >
-                    <i className="ti ti-menu me-2" />
-                    Assign Course
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="student-details"
-                  >
-                    <i className="ti ti-menu me-2" />
-                    View Student
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="student-details"
-                  >
-                    <i className="ti ti-menu me-2" />
-                    Mock Activity
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="student-details"
-                  >
-                    <i className="ti ti-menu me-2" />
-                    Activity
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to={routes.editStudent}
-                  >
-                    <i className="ti ti-edit-circle me-2" />
-                    Edit
-                  </Link>
-                </li>
-                {/* <li>
+            <Link
+              to="#"
+              className="btn btn-white btn-icon btn-sm d-flex align-items-center justify-content-center rounded-circle p-0"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="ti ti-dots-vertical fs-14" />
+            </Link>
+            <ul className="dropdown-menu dropdown-menu-right p-3">
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to={routes.assignCourse}
+                >
+                  <i className="ti ti-menu me-2" />
+                  Assign Course
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to="student-details"
+                >
+                  <i className="ti ti-menu me-2" />
+                  View Student
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to={routes.mockActivity}
+                >
+                  <i className="ti ti-menu me-2" />
+                  Mock Activity
+                </Link>
+              </li>
+              <li>
+                <button
+                  className="dropdown-item rounded-1"
+                  // to="student-details"
+                  onClick={() => setShowModal(true)}
+                >
+                  <i className="ti ti-menu me-2" />
+                  Activity
+                </button>
+              </li>
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to={routes.studentEdit}
+                >
+                  <i className="ti ti-edit-circle me-2" />
+                  Edit
+                </Link>
+              </li>
+              {/* <li>
                   <Link
                     className="dropdown-item rounded-1"
                     to="#"
@@ -285,13 +287,13 @@ const StudentList: React.FC = () => {
                     Login Details
                   </Link>
                 </li> */}
-                {/* <li>
+              {/* <li>
                   <Link className="dropdown-item rounded-1" to="#">
                     <i className="ti ti-toggle-right me-2" />
                     Disable
                   </Link>
                 </li> */}
-                {/* <li>
+              {/* <li>
                   <Link
                     className="dropdown-item rounded-1"
                     to="student-promotion"
@@ -300,19 +302,19 @@ const StudentList: React.FC = () => {
                     Promote Student
                   </Link>
                 </li> */}
-                <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#delete-modal"
-                  >
-                    <i className="ti ti-trash-x me-2" />
-                    Delete
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              <li>
+                <Link
+                  className="dropdown-item rounded-1"
+                  to="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#delete-modal"
+                >
+                  <i className="ti ti-trash-x me-2" />
+                  Delete
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       ),
     },
@@ -473,6 +475,82 @@ const StudentList: React.FC = () => {
         </div>
       </div>
       <StudentModals />
+      <div
+      className={`modal fade ${showModal ? "show d-block" : ""}`}
+      tabIndex={-1}
+      role="dialog"
+      style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+    >
+      <div className="modal-dialog modal-lg" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Activity</h5>
+            <button
+              type="button"
+              className="close"
+              onClick={() => setShowModal(false)}
+            >
+              <span>&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="d-flex justify-content-around text-center p-3">
+              <div className="border rounded p-3">
+                <h4>0</h4>
+                <p>Today Practiced</p>
+              </div>
+              <div className="border rounded p-3">
+                <h4>38</h4>
+                <p>Total Practiced</p>
+              </div>
+              <div className="border rounded p-3">
+                <h4>3</h4>
+                <p>Practiced Days</p>
+              </div>
+            </div>
+            <div className="mt-4">
+              {[{
+                date: "2025-02-21",
+                activity: "Re-order paragraphs",
+                practiced: "1 Qs"
+              }, {
+                date: "2025-02-20",
+                activity: "Re-order paragraphs",
+                practiced: "2 Qs"
+              }, {
+                date: "2025-02-13",
+                activity: "Highlight incorrect words",
+                practiced: "1 Qs"
+              }, {
+                date: "2025-02-12",
+                activity: "Reading and writing–Fill in the blanks",
+                practiced: "1 Qs"
+              }].map((item, index) => (
+                <div key={index} className="border rounded mb-2 p-2 bg-light">
+                  <div className="d-flex justify-content-between p-2 bg-secondary text-white rounded">
+                    <strong>{item.date}</strong>
+                    <span>Total Practiced: {item.practiced}</span>
+                  </div>
+                  <div className="p-2 d-flex justify-content-between text-dark rounded">
+                    <p className="mb-0">{item.activity}</p>
+                    <span>Practiced: {item.practiced}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="modal-footer">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     </>
   );
 };

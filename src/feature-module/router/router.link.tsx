@@ -69,6 +69,11 @@ import QuizeList from "../quizecategory/quizeList";
 import EditQuize from "../quizecategory/editQuize";
 import MockList from "../mock/mockList";
 import StudentAttendance from "../hrm/attendance/student-attendance";
+import MockEdit from "../mock/mockEdit";
+import AssignCourse from "../user/assignCourse";
+import StudentEdit from "../user/studentEdit";
+import MockActivity from "../user/mockActivity";
+import MembershipHistory from "../membership/membershipHistory";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -105,6 +110,31 @@ export const adminRoutes = [
   {
     path: routes.studentAttendance,
     element: <StudentAttendance />,
+    route: Route,
+  },
+  {
+    path: routes.mockEdit,
+    element: <MockEdit />,
+    route: Route,
+  },
+  {
+    path: routes.membershipHistory,
+    element: <MembershipHistory />,
+    route: Route,
+  },
+  {
+    path: routes.studentEdit,
+    element: <StudentEdit />,
+    route: Route,
+  },
+  {
+    path: routes.mockActivity,
+    element: <MockActivity />,
+    route: Route,
+  },
+  {
+    path: routes.assignCourse,
+    element: <AssignCourse />,
     route: Route,
   },
   {

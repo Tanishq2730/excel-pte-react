@@ -104,13 +104,6 @@ const Question: React.FC = () => {
         <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
           <div className="my-auto mb-2">
             <h3 className="page-title mb-1">Questions</h3>
-            <nav>
-              <ol className="breadcrumb mb-0">
-                <li className="breadcrumb-item"><Link to={routes.adminDashboard}>Dashboard</Link></li>
-                <li className="breadcrumb-item"><Link to="#">Questions</Link></li>
-                <li className="breadcrumb-item active" aria-current="page">Questions List</li>
-              </ol>
-            </nav>
           </div>
           <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
             <div className="mb-2">
@@ -123,7 +116,6 @@ const Question: React.FC = () => {
 
         {/* ✅ Question List */}
         <div className="card p-4 mt-4">
-          <h2>Question List</h2>
           {loading ? <p>Loading...</p> : <Table key={questions.length} dataSource={questions} columns={columns} />}
         </div>
       </div>

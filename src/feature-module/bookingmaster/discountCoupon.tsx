@@ -226,6 +226,16 @@ const DiscountCoupon: React.FC = () => {
                 />
               </div>
               <div className="col-md-6">
+                <label>No. of Coupon *</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="amount"
+                  value={formData.amount}
+                  required
+                />
+              </div>
+              <div className="col-md-6 mt-3">
                 <label>Discount Type *</label>
                 <select
                   className="form-control"
@@ -239,10 +249,7 @@ const DiscountCoupon: React.FC = () => {
                   <option>Flat Amount</option>
                 </select>
               </div>
-            </div>
-
-            <div className="row mt-3">
-              <div className="col-md-6">
+              <div className="col-md-6 mt-3">
                 <label>Status *</label>
                 <select
                   className="form-control"
@@ -256,6 +263,7 @@ const DiscountCoupon: React.FC = () => {
                 </select>
               </div>
             </div>
+
 
             <button type="submit" className="btn btn-primary mt-3">
               CREATE

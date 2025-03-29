@@ -366,59 +366,11 @@ const AdminDashboard = () => {
                   </ol>
                 </nav>
               </div>
-              {/* <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-                  <div className="mb-2">
-                    <Link
-                      to={routes.addStudent}
-                      className="btn btn-primary d-flex align-items-center me-3"
-                    >
-                      <i className="ti ti-square-rounded-plus me-2" />
-                      Add New Student
-                    </Link>
-                  </div>
-                  <div className="mb-2">
-                    <Link
-                      to={routes.collectFees}
-                      className="btn btn-light d-flex align-items-center"
-                    >
-                      Fees Details
-                    </Link>
-                  </div>
-                </div> */}
+
             </div>
             {/* /Page Header */}
-            {/* <div className="row">
+            <div className="row">
               <div className="col-md-12">
-                <div className="alert-message">
-                  <div
-                    className="alert alert-success rounded-pill d-flex align-items-center justify-content-between border-success mb-4"
-                    role="alert"
-                  >
-                    <div className="d-flex align-items-center">
-                      <span className="me-1 avatar avatar-sm flex-shrink-0">
-                        <ImageWithBasePath
-                          src="assets/img/profiles/avatar-27.jpg"
-                          alt="Img"
-                          className="img-fluid rounded-circle"
-                        />
-                      </span>
-                      <p>
-                        Fahed III,C has paid Fees for the{" "}
-                        <strong className="mx-1">“Term1”</strong>
-                      </p>
-                    </div>
-                    <button
-                      type="button"
-                      className="btn-close p-0"
-                      data-bs-dismiss="alert"
-                      aria-label="Close"
-                    >
-                      <span>
-                        <i className="ti ti-x" />
-                      </span>
-                    </button>
-                  </div>
-                </div>
                 <div className="card bg-dark">
                   <div className="overlay-img">
                     <ImageWithBasePath
@@ -466,7 +418,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-            </div> */}
+            </div>
             <div className="row">
               {/* Total Students */}
               <div className="col-xxl-3 col-sm-3 d-flex">
@@ -687,28 +639,7 @@ const AdminDashboard = () => {
               {/* Schedules */}
               <div className="col-xxl-4 col-xl-6 col-md-12 d-flex">
                 <div className="card flex-fill">
-                  <div className="card-header d-flex align-items-center justify-content-between">
-                    <div>
-                      <h4 className="card-title">Study Plan</h4>
-                    </div>
-                    <Link
-                      to="#"
-                      className="link-primary fw-medium me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#add_event"
-                    >
-                      <i className="ti ti-square-plus me-1" />
-                      Add New
-                    </Link>
-                  </div>
                   <div className="card-body ">
-                    {/* <div className="datepic mb-4" /> */}
-                    <Calendar
-                      className="datepickers mb-4"
-                      value={date}
-                      onChange={(e) => setDate(e.value)}
-                      inline
-                    />
                     <h5 className="mb-3">Upcoming Classes</h5>
                     <div className="event-wrapper event-scroll">
                       {/* Event Item */}
@@ -731,27 +662,7 @@ const AdminDashboard = () => {
                             Friday 09:00 pm to 10:30 pm
                           </p>
                           <div className="avatar-list-stacked avatar-group-sm">
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-01.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-07.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-02.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
+                            <button className="btn btn-primary">Class Link</button>
                           </div>
                         </div>
                       </div>
@@ -776,27 +687,7 @@ const AdminDashboard = () => {
                             Friday 09:00 pm to 10:30 pm
                           </p>
                           <div className="avatar-list-stacked avatar-group-sm">
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-01.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-07.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-02.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
+                            <button className="btn btn-primary">Class Link</button>
                           </div>
                         </div>
                       </div>
@@ -821,27 +712,7 @@ const AdminDashboard = () => {
                             Friday 09:00 pm to 10:30 pm
                           </p>
                           <div className="avatar-list-stacked avatar-group-sm">
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-01.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-07.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
-                            <span className="avatar border-0">
-                              <ImageWithBasePath
-                                src="assets/img/parents/parent-02.jpg"
-                                className="rounded-circle"
-                                alt="img"
-                              />
-                            </span>
+                            <button className="btn btn-primary">Class Link</button>
                           </div>
                         </div>
                       </div>
@@ -855,70 +726,10 @@ const AdminDashboard = () => {
               <div className="col-xxl-4 col-xl-6 col-md-12 d-flex flex-column">
                 <div className="card">
                   <div className="card-header d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Attendance</h4>
-                    <div className="dropdown">
-                      <Link
-                        to="#"
-                        className="bg-white dropdown-toggle"
-                        data-bs-toggle="dropdown"
-                      >
-                        <i className="ti ti-calendar-due me-1" />
-                        Today
-                      </Link>
-                      <ul className="dropdown-menu mt-2 p-3">
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            This Week
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Last Week
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Last Week
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
+                    <h4 className="card-title">Student Attendance</h4>
                   </div>
                   <div className="card-body">
-                    <div className="list-tab mb-4">
-                      <ul className="nav">
-                        <li>
-                          <Link
-                            to="#"
-                            className="active"
-                            data-bs-toggle="tab"
-                            data-bs-target="#students"
-                          >
-                            Students
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="#"
-                            data-bs-toggle="tab"
-                            data-bs-target="#teachers"
-                          >
-                            Teachers
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            to="#"
-                            data-bs-toggle="tab"
-                            data-bs-target="#staff"
-                          >
-                            Staff
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="tab-content">
-                      <div className="tab-pane fade active show" id="students">
+                  <div className="tab-pane fade active show" id="students">
                         <div className="row gx-3">
                           <div className="col-sm-4">
                             <div className="card bg-light-300 shadow-none border-0">
@@ -963,187 +774,30 @@ const AdminDashboard = () => {
                           </Link>
                         </div>
                       </div>
-                      <div className="tab-pane fade" id="teachers">
-                        <div className="row gx-3">
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>30</h5>
-                                <p className="fs-12">Emergency</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>03</h5>
-                                <p className="fs-12">Absent</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>03</h5>
-                                <p className="fs-12">Late</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <ReactApexChart
-                            id="teacher-chart"
-                            className="mb-4"
-                            options={teacherDonutChart}
-                            series={teacherDonutChart.series}
-                            type="donut"
-                            height={210}
-                          />
-                          <Link
-                            to="teacher-attendance"
-                            className="btn btn-light"
-                          >
-                            <i className="ti ti-calendar-share me-1" />
-                            View All
-                          </Link>
-                        </div>
-                      </div>
-                      <div className="tab-pane fade" id="staff">
-                        <div className="row gx-3">
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>45</h5>
-                                <p className="fs-12">Emergency</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>01</h5>
-                                <p className="fs-12">Absent</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-sm-4">
-                            <div className="card bg-light-300 shadow-none border-0">
-                              <div className="card-body p-3 text-center">
-                                <h5>10</h5>
-                                <p className="fs-12">Late</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="text-center">
-                          <div id="staff-chart" className="mb-4" />
-                          <ReactApexChart
-                            id="staff-chart"
-                            className="mb-4"
-                            options={staffDonutChart}
-                            series={staffDonutChart.series}
-                            type="donut"
-                            height={210}
-                          />
-                          <Link
-                            to={routes.studentAttendance}
-                            className="btn btn-light"
-                          >
-                            <i className="ti ti-calendar-share me-1" />
-                            View All
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
-
               </div>
-              <div className="col-xxl-4 col-md-12 d-flex flex-column">
-                {/* Quick Links */}
+              <div className="col-xxl-4 col-xl-6 d-flex">
                 <div className="card flex-fill">
-                  <div className="card-header d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Quick Links</h4>
+                  <div className="card-body">
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div>
+                        <h6 className="mb-1">Total Earnings</h6>
+                        <h2>$64,522,24</h2>
+                      </div>
+                      <span className="avatar avatar-lg bg-primary">
+                        <i className="ti ti-user-dollar" />
+                      </span>
+                    </div>
                   </div>
-                  <div className="card-body pb-1">
-                    <Slider
-                      {...settings}
-                      className="owl-carousel link-slider"
-                    >
-                      <div className="item">
-                        <Link
-                          to={routes.classTimetable}
-                          className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
-                              <i className="ti ti-calendar" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Calendar</p>
-                        </Link>
-                        <Link
-                          to={routes.feesGroup}
-                          className="d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
-                              <i className="ti ti-license" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Fees</p>
-                        </Link>
-                      </div>
-                      <div className="item">
-                        <Link
-                          to={routes.examResult}
-                          className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-primary rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
-                              <i className="ti ti-hexagonal-prism" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Exam Result</p>
-                        </Link>
-                        <Link
-                          to={routes.classHomeWork}
-                          className="d-block bg-danger-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-danger rounded-circle">
-                              <i className="ti ti-report-money" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Home Works</p>
-                        </Link>
-                      </div>
-                      <div className="item">
-                        <Link
-                          to={routes.studentAttendance}
-                          className="d-block bg-warning-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">
-                              <i className="ti ti-calendar-share" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Attendance</p>
-                        </Link>
-                        <Link
-                          to={routes.attendanceReport}
-                          className="d-block bg-skyblue-transparent ronded p-2 text-center mb-3 class-hover"
-                        >
-                          <div className="avatar avatar-lg border p-1 border-skyblue rounded-circle mb-2">
-                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-pending rounded-circle">
-                              <i className="ti ti-file-pencil" />
-                            </span>
-                          </div>
-                          <p className="text-dark">Reports</p>
-                        </Link>
-                      </div>
-                    </Slider>
-                  </div>
+                  {/* <div id="total-earning" /> */}
+                  <ReactApexChart
+                    id="total-earning"
+                    options={totalEarningArea}
+                    series={totalEarningArea.series}
+                    type="area"
+                    height={90}
+                  />
                 </div>
               </div>
             </div>
@@ -1152,7 +806,7 @@ const AdminDashboard = () => {
               <div className="col-xxl-8 col-xl-6 d-flex">
                 <div className="card flex-fill">
                   <div className="card-header  d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Fees Collection</h4>
+                    <h4 className="card-title">Subscription</h4>
                     <div className="dropdown">
                       <Link
                         to="#"
@@ -1229,39 +883,8 @@ const AdminDashboard = () => {
               <div className="col-xxl-4 col-xl-6 d-flex">
                 <div className="card flex-fill">
                   <div className="card-header  d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Time Spent</h4>
-                    <div className="dropdown">
-                      <Link
-                        to="#"
-                        className="bg-white dropdown-toggle"
-                        data-bs-toggle="dropdown"
-                      >
-                        <i className="ti ti-school-bell  me-2" />
-                        Practice
-                      </Link>
-                      <ul className="dropdown-menu mt-2 p-3">
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Speaking
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Writing
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Reading
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Listening
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
+                    <h4 className="card-title">Total Time Spent</h4>
+                    
                   </div>
                   <div className="card-body fixedtime">
                     {/* <div
@@ -1642,184 +1265,6 @@ const AdminDashboard = () => {
                 </div>
               </div>
               {/* /Top Subjects */}
-              {/* Student Activity */}
-              <div className="col-xxl-4 col-xl-6 d-flex">
-                <div className="card flex-fill">
-                  <div className="card-header  d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Recent Activity</h4>
-                    <div className="dropdown">
-                      <Link
-                        to="#"
-                        className="bg-white dropdown-toggle"
-                        data-bs-toggle="dropdown"
-                      >
-                        <i className="ti ti-calendar me-2" />
-                        This Month
-                      </Link>
-                      <ul className="dropdown-menu mt-2 p-3">
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            This Month
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            This Year
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="#" className="dropdown-item rounded-1">
-                            Last Week
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="card-body">
-                    <div className="mb-3">
-                      <div
-                        className="d-flex align-items-center overflow-hidden p-2 border rounded"
-                        style={{ justifyContent: "space-between" }}
-                      >
-                        <div className="d-flex align-items-center overflow-hidden">
-                          <span className="avatar avatar-lg flex-shrink-0 rounded me-2">
-                            <ImageWithBasePath
-                              src="assets/img/students/student-09.jpg"
-                              alt="student"
-                            />
-                          </span>
-                          <div className="overflow-hidden">
-                            <h6 className="mb-1 text-truncate">Mock Test</h6>
-                            <p>Speaking Mock Test 40</p>
-                          </div>
-                        </div>
-                        <div className="btns">
-                          <span>04 Mar 2025</span>
-                          <button
-                            className="btn btn-info"
-                            style={{ marginLeft: "1em" }}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div
-                        className="d-flex align-items-center overflow-hidden p-2 border rounded"
-                        style={{ justifyContent: "space-between" }}
-                      >
-                        <div className="d-flex align-items-center overflow-hidden">
-                          <span className="avatar avatar-lg flex-shrink-0 rounded me-2">
-                            <ImageWithBasePath
-                              src="assets/img/students/student-09.jpg"
-                              alt="student"
-                            />
-                          </span>
-                          <div className="overflow-hidden">
-                            <h6 className="mb-1 text-truncate">Mock Test</h6>
-                            <p>Speaking Mock Test 40</p>
-                          </div>
-                        </div>
-                        <div className="btns">
-                          <span>04 Mar 2025</span>
-                          <button
-                            className="btn btn-info"
-                            style={{ marginLeft: "1em" }}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div
-                        className="d-flex align-items-center overflow-hidden p-2 border rounded"
-                        style={{ justifyContent: "space-between" }}
-                      >
-                        <div className="d-flex align-items-center overflow-hidden">
-                          <span className="avatar avatar-lg flex-shrink-0 rounded me-2">
-                            <ImageWithBasePath
-                              src="assets/img/students/student-09.jpg"
-                              alt="student"
-                            />
-                          </span>
-                          <div className="overflow-hidden">
-                            <h6 className="mb-1 text-truncate">Mock Test</h6>
-                            <p>Speaking Mock Test 40</p>
-                          </div>
-                        </div>
-                        <div className="btns">
-                          <span>04 Mar 2025</span>
-                          <button
-                            className="btn btn-info"
-                            style={{ marginLeft: "1em" }}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mb-3">
-                      <div
-                        className="d-flex align-items-center overflow-hidden p-2 border rounded"
-                        style={{ justifyContent: "space-between" }}
-                      >
-                        <div className="d-flex align-items-center overflow-hidden">
-                          <span className="avatar avatar-lg flex-shrink-0 rounded me-2">
-                            <ImageWithBasePath
-                              src="assets/img/students/student-09.jpg"
-                              alt="student"
-                            />
-                          </span>
-                          <div className="overflow-hidden">
-                            <h6 className="mb-1 text-truncate">Mock Test</h6>
-                            <p>Speaking Mock Test 40</p>
-                          </div>
-                        </div>
-                        <div className="btns">
-                          <span>04 Mar 2025</span>
-                          <button
-                            className="btn btn-info"
-                            style={{ marginLeft: "1em" }}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="">
-                      <div
-                        className="d-flex align-items-center overflow-hidden p-2 border rounded"
-                        style={{ justifyContent: "space-between" }}
-                      >
-                        <div className="d-flex align-items-center overflow-hidden">
-                          <span className="avatar avatar-lg flex-shrink-0 rounded me-2">
-                            <ImageWithBasePath
-                              src="assets/img/students/student-09.jpg"
-                              alt="student"
-                            />
-                          </span>
-                          <div className="overflow-hidden">
-                            <h6 className="mb-1 text-truncate">Mock Test</h6>
-                            <p>Speaking Mock Test 40</p>
-                          </div>
-                        </div>
-                        <div className="btns">
-                          <span>04 Mar 2025</span>
-                          <button
-                            className="btn btn-info"
-                            style={{ marginLeft: "1em" }}
-                          >
-                            Continue
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* /Student Activity */}
             </div>
           </>
         </div>
