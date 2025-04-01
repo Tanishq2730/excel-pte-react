@@ -15,6 +15,7 @@ import TeacherDashboard from "../mainMenu/teacherDashboard";
 import StudentDasboard from "../mainMenu/studentDashboard";
 import ParentDashboard from "../mainMenu/parentDashboard";
 import StudentGrid from "../peoples/students/student-grid";
+import StudentDetails from "../peoples/students/student-details/studentDetails";
 import AddStudents from "../user/addStudent";
 // import AddStudent from "../peoples/students/add-student";
 import AddStudent from "../user/addStudent";
@@ -349,6 +350,11 @@ export const adminRoutes = [
     element: <StudentList />,
     permission: "LIST_USERS",
   },
+  {
+    path: routes.studentDetail,
+    element: <StudentDetails />,
+  },
+  
   {
     path: routes.addStudent,
     element: <AddStudent />,
