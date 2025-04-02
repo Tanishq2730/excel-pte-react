@@ -29,7 +29,8 @@ export const SidebarData = [
         icon: "ti ti-text-direction-rtl",
         submenu: false,
         showSubRoute: false,
-        link: routes.studentDashboard,
+        link: routes.studentListDashboard,
+        // link: routes.studentDashboard,
         themeSetting: true,
       },
       {
@@ -136,14 +137,14 @@ export const SidebarData = [
     showSubRoute: false,
     submenuHdr: "LAYOUT",
     submenuItems: [
-      {
-        label: "Income",
-        icon: "ti ti-layout-sidebar",
-        submenu: false,
-        showSubRoute: false,
-        link: routes.accountsIncome,
-        themeSetting: true,
-      },
+      // {
+      //   label: "Income",
+      //   icon: "ti ti-layout-sidebar",
+      //   submenu: false,
+      //   showSubRoute: false,
+      //   link: routes.accountsIncome,
+      //   themeSetting: true,
+      // },
       {
         label: "Invoices",
         icon: "ti ti-layout-sidebar",
@@ -152,14 +153,14 @@ export const SidebarData = [
         link: routes.accountsInvoices,
         themeSetting: true,
       },
-      {
-        label: "Invoice View",
-        icon: "ti ti-layout-sidebar",
-        submenu: false,
-        showSubRoute: false,
-        link: routes.invoice,
-        themeSetting: true,
-      },
+      // {
+      //   label: "Invoice View",
+      //   icon: "ti ti-layout-sidebar",
+      //   submenu: false,
+      //   showSubRoute: false,
+      //   link: routes.invoice,
+      //   themeSetting: true,
+      // },
       {
         label: "Transactions",
         icon: "ti ti-layout-sidebar",

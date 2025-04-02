@@ -75,6 +75,8 @@ import AssignCourse from "../user/assignCourse";
 import StudentEdit from "../user/studentEdit";
 import MockActivity from "../user/mockActivity";
 import MembershipHistory from "../membership/membershipHistory";
+import Score from "../user/score/index"
+import StudentListDashboard from "../mainMenu/studentDashboard/studentListDashboard";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -136,6 +138,11 @@ export const adminRoutes = [
   {
     path: routes.assignCourse,
     element: <AssignCourse />,
+    route: Route,
+  },
+  {
+    path: routes.score,
+    element: <Score />,
     route: Route,
   },
   {
@@ -277,20 +284,24 @@ export const adminRoutes = [
   {
     path: routes.teacherDashboard,
     element: <TeacherDashboard />,
-    route: Route,
-    permission: "TEACHER_DASHBOARD",
+    // route: Route,
+    // permission: "TEACHER_DASHBOARD",
   },
   {
     path: routes.studentDashboard,
     element: <StudentDasboard />,
-    route: Route,
-    permission: "STUDENT_DASHBOARD",
+    // route: Route,
+    // permission: "STUDENT_DASHBOARD",
   },
   {
     path: routes.parentDashboard,
     element: <ParentDashboard />,
     route: Route,
     permission: "PARENT_DASHBOARD",
+  },
+  {
+    path: routes.studentListDashboard,
+    element: <StudentListDashboard />,
   },
 
   {
