@@ -39,8 +39,8 @@ const ScoreCard: React.FC = () => {
   const loadScorecards = async () => {
     try {
       const response = await fetchAllScorecards();
-      console.log(response,'response');
-      
+      console.log(response, 'response');
+
       if (response.success) {
         setScorecards(response.data);
       } else {
@@ -193,14 +193,17 @@ const ScoreCard: React.FC = () => {
 
               {/* ✅ Status */}
               <div className="col-md-6 mb-3">
-                <label>Status</label>
-                <input type="checkbox" checked={status} onChange={() => setStatus(!status)} />
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" checked={status} onChange={() => setStatus(!status)} />
+                  <label className="form-check-label">Status</label>
+                </div>
               </div>
 
-              {/* ✅ Home Show */}
               <div className="col-md-6 mb-3">
-                <label>Home Show</label>
-                <input type="checkbox" checked={homeShow} onChange={() => setHomeShow(!homeShow)} />
+                <div className="form-check">
+                  <input type="checkbox" className="form-check-input" checked={homeShow} onChange={() => setHomeShow(!homeShow)} />
+                  <label className="form-check-label">Home Show</label>
+                </div>
               </div>
             </div>
 
@@ -210,39 +213,39 @@ const ScoreCard: React.FC = () => {
           </form>
 
           <div className="mt-4">
-          <Table
-            key={scorecards.length}
-            dataSource={scorecards}
-            columns={[
-              { title: "Name", dataIndex: "name" },
-              {
-                title: "Status",
-                dataIndex: "status",
-                render: (status: boolean) => (status ? "Active" : "Disabled"), // ✅ Explicit Type
-              },
-              {
-                title: "Home Show",
-                dataIndex: "home_show",
-                render: (home_show: boolean) => (home_show ? "Enabled" : "Disabled"), // ✅ Explicit Type
-              },
-              {
-                title: "Action",
-                render: (row: ScorecardData) => (
-                  <>
-                    {/* ✅ Edit Button */}
-                    <button className="btn btn-info btn-sm me-2" onClick={() => handleEdit(row.id)}>
-                      <i className="fa fa-pencil"></i>
-                    </button>
-              
-                    {/* ✅ Delete Button - Removed Bootstrap Modal Trigger */}
-                    <button className="btn btn-danger btn-sm" onClick={() => handleDelete(row.id)}>
-                      <i className="fa fa-trash"></i>
-                    </button>
-                  </>
-                ),
-              }
-            ]}
-          />
+            <Table
+              key={scorecards.length}
+              dataSource={scorecards}
+              columns={[
+                { title: "Name", dataIndex: "name" },
+                {
+                  title: "Status",
+                  dataIndex: "status",
+                  render: (status: boolean) => (status ? "Active" : "Disabled"), // ✅ Explicit Type
+                },
+                {
+                  title: "Home Show",
+                  dataIndex: "home_show",
+                  render: (home_show: boolean) => (home_show ? "Enabled" : "Disabled"), // ✅ Explicit Type
+                },
+                {
+                  title: "Action",
+                  render: (row: ScorecardData) => (
+                    <>
+                      {/* ✅ Edit Button */}
+                      <button className="btn btn-info btn-sm me-2" onClick={() => handleEdit(row.id)}>
+                        <i className="fa fa-pencil"></i>
+                      </button>
+
+                      {/* ✅ Delete Button - Removed Bootstrap Modal Trigger */}
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(row.id)}>
+                        <i className="fa fa-trash"></i>
+                      </button>
+                    </>
+                  ),
+                }
+              ]}
+            />
 
           </div>
         </div>

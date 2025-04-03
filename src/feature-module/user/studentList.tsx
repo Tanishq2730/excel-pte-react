@@ -166,6 +166,19 @@ const StudentList: React.FC = () => {
       dataIndex: "countryName",
       sorter: (a: TableData, b: TableData) => a.countryName.localeCompare(b.countryName),
     },
+    
+    {
+      title: "State",
+      dataIndex: "state",
+      sorter: (a: TableData, b: TableData) =>
+        a.state.localeCompare(b.state),
+    },
+    {
+      title: "Subscription",
+      dataIndex: "subscription",
+      sorter: (a: TableData, b: TableData) =>
+        a.subscription.localeCompare(b.subscription),
+    },
     {
       title: "Status",
       dataIndex: "status",
@@ -179,18 +192,6 @@ const StudentList: React.FC = () => {
         </span>
       ),
       sorter: (a: TableData, b: TableData) => a.status.localeCompare(b.status),
-    },
-    {
-      title: "State",
-      dataIndex: "state",
-      sorter: (a: TableData, b: TableData) =>
-        a.state.localeCompare(b.state),
-    },
-    {
-      title: "Subscription",
-      dataIndex: "subscription",
-      sorter: (a: TableData, b: TableData) =>
-        a.subscription.localeCompare(b.subscription),
     },
     {
       title: "Last Login",
@@ -242,7 +243,7 @@ const StudentList: React.FC = () => {
               <li>
                 <Link
                   className="dropdown-item rounded-1"
-                  to="student-details"
+                  to={routes.studentDashboard}
                 >
                   <i className="ti ti-menu me-2" />
                   View Student

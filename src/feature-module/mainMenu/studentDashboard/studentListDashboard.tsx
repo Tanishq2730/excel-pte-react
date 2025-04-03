@@ -134,7 +134,7 @@ const StudentListDashboard: React.FC = () => {
       dataIndex: "name",
       render: (text: string, record: TableData) => (
         <div className="d-flex align-items-center">
-          <Link to="#" className="avatar avatar-md">
+          <Link to={routes.studentDashboard} className="avatar avatar-md">
             <ImageWithBasePath
               src={record.imgSrc}
               className="img-fluid rounded-circle"
@@ -143,7 +143,7 @@ const StudentListDashboard: React.FC = () => {
           </Link>
           <div className="ms-2">
             <p className="text-dark mb-0">
-              <Link to="#">{text}</Link>
+              <Link to={routes.studentDashboard}>{text}</Link>
             </p>
           </div>
         </div>
@@ -254,17 +254,6 @@ const StudentListDashboard: React.FC = () => {
           <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
             <div className="my-auto mb-2">
               <h3 className="page-title mb-1">Students List</h3>
-              <nav>
-                <ol className="breadcrumb mb-0">
-                  <li className="breadcrumb-item">
-                    <Link to={routes.adminDashboard}>Dashboard</Link>
-                  </li>
-                  <li className="breadcrumb-item">Students</li>
-                  <li className="breadcrumb-item active" aria-current="page">
-                    All Students
-                  </li>
-                </ol>
-              </nav>
             </div>
           </div>
           <div className="card">

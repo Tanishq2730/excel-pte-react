@@ -50,43 +50,6 @@ const AddInvoice = () => {
               <form>
                 <div className="card">
                   <div className="card-body pb-0">
-                    {/* Customer Logo */}
-                    <div className="card">
-                      <div className="card-header bg-light">
-                        <div className="d-flex align-items-center">
-                          <span className="bg-white avatar avatar-sm me-2 text-gray-7 flex-shrink-0">
-                            <i className="ti ti-user-check fs-16" />
-                          </span>
-                          <h4 className="text-dark">Company Logo</h4>
-                        </div>
-                      </div>
-                      <div className="card-body pb-1">
-                        <div className="profile-wrap mb-3">
-                          <div className="frames bg-white">
-                            <i className="ti ti-photo-plus" />
-                          </div>
-                          <div className="profile-upload">
-                            <div className="profile-uploader d-flex align-items-center">
-                              <div className="drag-upload-btn mb-3">
-                                Upload
-                                <input
-                                  type="file"
-                                  className="form-control image-sign"
-                                  multiple
-                                />
-                              </div>
-                              <Link to="#" className="btn btn-primary mb-3">
-                                Remove
-                              </Link>
-                            </div>
-                            <p className="fs-12">
-                              Upload image size 4MB, Format JPG, PNG, SVG
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* /Customer Logo */}
                     {/* Customer Information */}
                     <div className="card">
                       <div className="card-header bg-light">
@@ -138,40 +101,8 @@ const AddInvoice = () => {
                             </div>
                             <div className="col-lg-3 col-md-6">
                               <div className="mb-3">
-                                <label className="form-label">Due Date</label>
-                                <div className="input-icon position-relative">
-                                  <span className="input-icon-addon">
-                                    <i className="ti ti-calendar" />
-                                  </span>
-                                  <DatePicker
-                                    className="form-control datetimepicker"
-                                    placeholder="Select Date"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* /Customer Information */}
-                    {/* Product Information */}
-                    <div className="card">
-                      <div className="card-header bg-light">
-                        <div className="d-flex align-items-center">
-                          <span className="bg-white avatar avatar-sm me-2 text-gray-7 flex-shrink-0">
-                            <i className="ti ti-shopping-cart-copy fs-16" />
-                          </span>
-                          <h4 className="text-dark">Product Information</h4>
-                        </div>
-                      </div>
-                      <div className="card-body pb-0">
-                        <div className="info-section">
-                          <div className="row align-items-end">
-                            <div className="col-lg-3 col-md-6">
-                              <div className="mb-3">
                                 <label className="form-label">
-                                  Product Name
+                                  Plan Info
                                 </label>
                                 <CommonSelect
                                   className="select"
@@ -190,124 +121,34 @@ const AddInvoice = () => {
                                 />
                               </div>
                             </div>
-                            <div className="col-lg-2">
+                            <div className="col-lg-3 col-md-6">
                               <div className="mb-3">
-                                <Link to="#" className="btn btn-primary">
-                                  <i className="ti ti-plus me-2" />
-                                  Add to Bill
-                                </Link>
+                                <label className="form-label">Discount%</label>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  placeholder="Discount Amount"
+                                />
                               </div>
                             </div>
-                            <div className="col-md-12">
-                              <div className="invoice-product-table">
-                                <div className="table-responsive invoice-table">
-                                  <table className="table">
-                                    <thead>
-                                      <tr>
-                                        <th>Product Name</th>
-                                        <th>Quantity</th>
-                                        <th>Unit Price</th>
-                                        <th>Discount</th>
-                                        <th>Net Amount</th>
-                                        <th>Action</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr>
-                                        <td>Uniform</td>
-                                        <td>
-                                          <input
-                                            type="number"
-                                            className="form-control"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            className="form-control"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="%"
-                                          />
-                                        </td>
-                                        <td>$0</td>
-                                        <td>
-                                          <Link
-                                            to="#"
-                                            className="delete-invoive-list"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#delete-modal"
-                                          >
-                                            <i className="ti ti-trash" />
-                                          </Link>
-                                        </td>
-                                      </tr>
-                                      <tr>
-                                        <td>Description</td>
-                                        <td>
-                                          <input
-                                            type="number"
-                                            className="form-control"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            className="form-control"
-                                          />
-                                        </td>
-                                        <td>
-                                          <input
-                                            type="text"
-                                            className="form-control"
-                                            placeholder="%"
-                                          />
-                                        </td>
-                                        <td>$0</td>
-                                        <td>
-                                          <Link
-                                            to="#"
-                                            className="delete-invoive-list"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#delete-modal"
-                                          >
-                                            <i className="ti ti-trash" />
-                                          </Link>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-                                </div>
+                            <div className="col-lg-3 col-md-6">
+                              <div className="mb-3">
+                                <label className="form-label">Net Amount</label>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  placeholder="Discount Amount"
+                                />
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    {/* /Product Information */}
                     <div className="invoice-info">
                       <div className="row">
-                        <div className="col-xxl-9 col-lg-8">
-                          <div className="row">
-                            <div className="col-md-12">
-                              <div className="mb-3">
-                                <label className="form-label">Notes</label>
-                                <Editor value={text1} onTextChange={(e) => setText1(e.htmlValue ?? '')} style={{ height: '130px' }} />
-                              </div>
-                              <div className="mb-3">
-                                <label className="form-label">
-                                  Terms &amp; Conditions
-                                </label>
-                                <Editor value={text2} onTextChange={(e) => setText2(e.htmlValue ?? '')} style={{ height: '130px' }} />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col-xxl-3 col-lg-4">
+                        
+                        <div className="col-xxl-4 col-lg-4">
                           <div className="card invoice-amount-details">
                             <ul>
                               <li>
@@ -327,20 +168,6 @@ const AddInvoice = () => {
                                 <h5>$00.00</h5>
                               </li>
                             </ul>
-                            <div className="mb-3">
-                              <label className="form-label">
-                                Signature Name
-                              </label>
-                              <input type="text" className="form-control" />
-                            </div>
-                            <div className="input-block service-upload service-upload-info mb-0">
-                              <span>
-                                <i className="ti ti-upload me-2" />
-                                Upload Signature
-                              </span>
-                              <input type="file" multiple id="image_sign" />
-                              <div id="frames" />
-                            </div>
                           </div>
                         </div>
                       </div>

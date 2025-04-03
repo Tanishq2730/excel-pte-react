@@ -21,7 +21,8 @@ export const SidebarData = [
         icon: "ti ti-layout-align-left",
         submenu: false,
         showSubRoute: false,
-        link: routes.teacherDashboard,
+        link: routes.teacherListDashboard,
+        // link: routes.teacherDashboard,
         themeSetting: true,
       },
       {
@@ -38,7 +39,7 @@ export const SidebarData = [
         icon: "ti ti-layout-distribute-vertical",
         submenu: false,
         showSubRoute: false,
-        link: routes.parentDashboard,
+        link: routes.whiteListDashboard,
         themeSetting: true,
       },
     ],

@@ -77,6 +77,9 @@ import MockActivity from "../user/mockActivity";
 import MembershipHistory from "../membership/membershipHistory";
 import Score from "../user/score/index"
 import StudentListDashboard from "../mainMenu/studentDashboard/studentListDashboard";
+import TeacherListDashboard from "../mainMenu/teacherDashboard/teacherListDashboard";
+import WhiteListDashboard from "../mainMenu/whiteLabelDashboard/whiteListDashboard";
+import WhiteLabelDashboard from "../mainMenu/whiteLabelDashboard";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -116,6 +119,16 @@ export const adminRoutes = [
     route: Route,
   },
   {
+    path: routes.whiteListDashboard,
+    element: <WhiteListDashboard />,
+    route: Route,
+  },
+  {
+    path: routes.whiteLabelDashboard,
+    element: <WhiteLabelDashboard />,
+    route: Route,
+  },
+  {
     path: routes.mockEdit,
     element: <MockEdit />,
     route: Route,
@@ -128,6 +141,11 @@ export const adminRoutes = [
   {
     path: routes.studentEdit,
     element: <StudentEdit />,
+    route: Route,
+  },
+  {
+    path: routes.teacherListDashboard,
+    element: <TeacherListDashboard />,
     route: Route,
   },
   {

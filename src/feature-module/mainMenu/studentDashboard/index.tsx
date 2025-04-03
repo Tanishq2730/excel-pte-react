@@ -308,30 +308,24 @@ const StudentDasboard = () => {
                           </div>
                           <div className="d-block">
                             <span className="badge bg-transparent-primary text-primary mb-1">
-                              #ST1234546
+                              Active
                             </span>
                             <h3 className="text-truncate text-white mb-1">
-                              Angelo Riana
+                              Ankit Jain
                             </h3>
                             <div className="d-flex align-items-center flex-wrap row-gap-2 text-gray-2">
                               <span className="border-end me-2 pe-2">
-                                Class : III, C
+                                ankit@gmail.com
                               </span>
-                              <span>Roll No : 36545</span>
+                              <span>9743573728</span>
                             </div>
                           </div>
                         </div>
                         <div className="d-flex align-items-center justify-content-between profile-footer flex-wrap row-gap-3 pt-4">
-                          <div className="d-flex align-items-center">
-                            <h6 className="text-white">1st Quarterly</h6>
-                            <span className="badge bg-success d-inline-flex align-items-center ms-2">
-                              <i className="ti ti-circle-filled fs-5 me-1" />
-                              Pass
-                            </span>
+                          <div className="innerdata">
+                            <p className="text-white mb-0"><b>Date of Joining :- 9/2/2025</b></p>
+                            <p className="text-white"><b>Subscription :- Face to Face</b></p>
                           </div>
-                          <Link to={routes.editStudent} className="btn btn-primary">
-                            Edit Profile
-                          </Link>
                         </div>
                         <div className="student-card-bg">
                           <ImageWithBasePath
@@ -357,10 +351,7 @@ const StudentDasboard = () => {
                   <div className="">
                     <div className="card flex-fill">
                       <div className="card-header d-flex align-items-center justify-content-between">
-                        <h4 className="card-titile">Fees Reminder</h4>
-                        <Link to={routes.feesAssign} className="link-primary fw-medium">
-                          View All
-                        </Link>
+                        <h4 className="card-titile">Transaction History</h4>
                       </div>
                       <div className="card-body py-1">
                         <div className="d-flex align-items-center justify-content-between py-3">
@@ -369,12 +360,12 @@ const StudentDasboard = () => {
                               <i className="ti ti-bus-stop fs-16" />
                             </span>
                             <div className="overflow-hidden">
-                              <h6 className="text-truncate mb-1">Transport Fees</h6>
-                              <p>$2500</p>
+                              <h6 className="text-truncate mb-1">Face To Face Class</h6>
+                              <p>$200</p>
                             </div>
                           </div>
                           <div className="text-end">
-                            <h6 className="mb-1">Last Date</h6>
+                            <h6 className="mb-1">Expire Date</h6>
                             <p>25 May 2024</p>
                           </div>
                         </div>
@@ -384,66 +375,23 @@ const StudentDasboard = () => {
                               <i className="ti ti-books fs-16" />
                             </span>
                             <div className="overflow-hidden">
-                              <h6 className="text-truncate mb-1">Book Fees</h6>
-                              <p>$2500</p>
+                              <h6 className="text-truncate mb-1">Online Class</h6>
+                              <p>$500</p>
                             </div>
                           </div>
                           <div className="text-end">
-                            <h6 className="mb-1">Last Date</h6>
+                            <h6 className="mb-1">Expire Date</h6>
                             <p>25 May 2024</p>
                           </div>
                         </div>
-                        <div className="d-flex align-items-center justify-content-between py-3">
-                          <div className="d-flex align-items-center overflow-hidden me-2">
-                            <span className="bg-info-transparent avatar avatar-lg me-2 rounded-circle flex-shrink-0">
-                              <i className="ti ti-report-money fs-16" />
-                            </span>
-                            <div className="overflow-hidden">
-                              <h6 className="text-truncate mb-1">Exam Fees</h6>
-                              <p>$2500</p>
-                            </div>
-                          </div>
-                          <div className="text-end">
-                            <h6 className="mb-1">Last Date</h6>
-                            <p>25 May 2024</p>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between py-3">
-                          <div className="d-flex align-items-center overflow-hidden me-2">
-                            <span className="bg-skyblue-transparent avatar avatar-lg me-2 rounded-circle flex-shrink-0">
-                              <i className="ti ti-meat fs-16" />
-                            </span>
-                            <div className="overflow-hidden">
-                              <h6 className="text-truncate mb-1">
-                                Mess Fees{" "}
-                                <span className="d-inline-flex align-items-center badge badge-soft-danger">
-                                  <i className="ti ti-circle-filled me-1 fs-5" />
-                                  Due
-                                </span>
-                              </h6>
-                              <p className="text-danger">$2500 + $150</p>
-                            </div>
-                          </div>
-                          <div className="text-end">
-                            <h6 className="mb-1">Last Date</h6>
-                            <p>27 May 2024</p>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between py-3">
-                          <div className="d-flex align-items-center overflow-hidden me-2">
-                            <span className="bg-danger-transparent avatar avatar-lg me-2 rounded-circle flex-shrink-0">
-                              <i className="ti ti-report-money fs-16" />
-                            </span>
-                            <div className="overflow-hidden">
-                              <h6 className="text-truncate mb-1">Hostel</h6>
-                              <p>$2500</p>
-                            </div>
-                          </div>
-                          <div className="text-end">
-                            <h6 className="mb-1">Last Date</h6>
-                            <p>25 May 2024</p>
-                          </div>
-                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="">
+                    <div className="card flex-fill">
+                      <div className="card-header d-flex align-items-center justify-content-between">
+                        <h4 className="card-titile">Mock Test History</h4>
+                        <Link to={routes.mockActivity}>View</Link>
                       </div>
                     </div>
                   </div>
@@ -572,34 +520,7 @@ const StudentDasboard = () => {
                 <div className="col-xxl-4 d-flex">
                   <div className="card flex-fill">
                     <div className="card-header d-flex align-items-center justify-content-between">
-                      <h4 className="card-titile">Home Works</h4>
-                      <div className="dropdown">
-                        <Link
-                          to="#"
-                          className="bg-white dropdown-toggle"
-                          data-bs-toggle="dropdown"
-                        >
-                          <i className="ti ti-book-2 me-2" />
-                          All Subject
-                        </Link>
-                        <ul className="dropdown-menu mt-2 p-3">
-                          <li>
-                            <Link to="#" className="dropdown-item rounded-1">
-                              Physics
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="#" className="dropdown-item rounded-1">
-                              Chemistry
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="#" className="dropdown-item rounded-1">
-                              Maths
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
+                      <h4 className="card-titile">Activity History</h4>
                     </div>
                     <div className="card-body py-1">
                       <ul className="list-group list-group-flush">
@@ -617,77 +538,19 @@ const StudentDasboard = () => {
                               </Link>
                               <div className="overflow-hidden">
                                 <p className="d-flex align-items-center text-info mb-1">
-                                  <i className="ti ti-tag me-2" />
-                                  Physics
+                                  Mock Test
                                 </p>
                                 <h6 className="text-truncate mb-1">
-                                  <Link to={routes.classHomeWork}>
-                                    Write about Theory of Pendulum
-                                  </Link>
+                                  {/* <Link to={routes.classHomeWork}> */}
+                                  Speaking Mock Test 40. #812
+                                  {/* </Link> */}
                                 </h6>
                                 <div className="d-flex align-items-center flex-wrap">
-                                  <div className="d-flex align-items-center border-end me-1 pe-1">
-                                    <Link
-                                      to={routes.teacherDetails}
-                                      className="avatar avatar-xs flex-shrink-0 me-2"
-                                    >
-                                      <ImageWithBasePath
-                                        src="assets/img/teachers/teacher-01.jpg"
-                                        className="rounded-circle"
-                                        alt="teacher"
-                                      />
-                                    </Link>
-                                    <p className="text-dark">Aaron</p>
-                                  </div>
-                                  <p>Due by : 16 Jun 2024</p>
-                                </div>
-                              </div>
-                            </div>
-                            <CircleProgress value={80} />
-                          </div>
-                        </li>
-                        <li className="list-group-item py-3 px-0 pb-0">
-                          <div className="d-flex align-items-center justify-content-between flex-wrap">
-                            <div className="d-flex align-items-center overflow-hidden mb-3">
-                              <Link
-                                to="#"
-                                className="avatar avatar-xl flex-shrink-0 me-2"
-                              >
-                                <ImageWithBasePath
-                                  src="assets/img/home-work/home-work-02.jpg"
-                                  alt="img"
-                                />
-                              </Link>
-                              <div className="overflow-hidden">
-                                <p className="d-flex align-items-center text-success mb-1">
-                                  <i className="ti ti-tag me-2" />
-                                  Chemistry
-                                </p>
-                                <h6 className="text-truncate mb-1">
-                                  <Link to={routes.classHomeWork}>
-                                    Chemistry - Change of Elements
-                                  </Link>
-                                </h6>
-                                <div className="d-flex align-items-center flex-wrap">
-                                  <div className="d-flex align-items-center border-end me-1 pe-1">
-                                    <Link
-                                      to={routes.teacherDetails}
-                                      className="avatar avatar-xs flex-shrink-0 me-2"
-                                    >
-                                      <ImageWithBasePath
-                                        src="assets/img/teachers/teacher-01.jpg"
-                                        className="rounded-circle"
-                                        alt="teacher"
-                                      />
-                                    </Link>
-                                    <p className="text-dark">Hellana</p>
-                                  </div>
-                                  <p>Due by : 16 Jun 2024</p>
-                                </div>
-                              </div>
-                            </div>
 
-                            <CircleProgress value={65} />
+                                  <p>16 Jun 2024</p>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </li>
                         <li className="list-group-item py-3 px-0 pb-0">
@@ -698,39 +561,25 @@ const StudentDasboard = () => {
                                 className="avatar avatar-xl flex-shrink-0 me-2"
                               >
                                 <ImageWithBasePath
-                                  src="assets/img/home-work/home-work-03.jpg"
+                                  src="assets/img/home-work/home-work-01.jpg"
                                   alt="img"
                                 />
                               </Link>
                               <div className="overflow-hidden">
-                                <p className="d-flex align-items-center text-danger mb-1">
-                                  <i className="ti ti-tag me-2" />
-                                  Maths
+                                <p className="d-flex align-items-center text-info mb-1">
+                                  Mock Test
                                 </p>
                                 <h6 className="text-truncate mb-1">
-                                  <Link to={routes.classHomeWork}>
-                                    Maths - Problems to Solve Page 21
-                                  </Link>
+                                  {/* <Link to={routes.classHomeWork}> */}
+                                  Speaking Mock Test 40. #812
+                                  {/* </Link> */}
                                 </h6>
                                 <div className="d-flex align-items-center flex-wrap">
-                                  <div className="d-flex align-items-center border-end me-1 pe-1">
-                                    <Link
-                                      to={routes.teacherDetails}
-                                      className="avatar avatar-xs flex-shrink-0 me-2"
-                                    >
-                                      <ImageWithBasePath
-                                        src="assets/img/teachers/teacher-01.jpg"
-                                        className="rounded-circle"
-                                        alt="teacher"
-                                      />
-                                    </Link>
-                                    <p className="text-dark">Morgan</p>
-                                  </div>
-                                  <p>Due by : 21 Jun 2024</p>
+
+                                  <p>16 Jun 2024</p>
                                 </div>
                               </div>
                             </div>
-                            <CircleProgress value={30} />
                           </div>
                         </li>
                         <li className="list-group-item py-3 px-0 pb-0">
@@ -741,52 +590,34 @@ const StudentDasboard = () => {
                                 className="avatar avatar-xl flex-shrink-0 me-2"
                               >
                                 <ImageWithBasePath
-                                  src="assets/img/home-work/home-work-04.jpg"
+                                  src="assets/img/home-work/home-work-01.jpg"
                                   alt="img"
                                 />
                               </Link>
                               <div className="overflow-hidden">
-                                <p className="d-flex align-items-center text-skyblue mb-1">
-                                  <i className="ti ti-tag me-2" />
-                                  Engish
+                                <p className="d-flex align-items-center text-info mb-1">
+                                  Mock Test
                                 </p>
                                 <h6 className="text-truncate mb-1">
-                                  <Link to={routes.classHomeWork}>
-                                    English - Vocabulary Introduction
-                                  </Link>
+                                  {/* <Link to={routes.classHomeWork}> */}
+                                  Speaking Mock Test 40. #812
+                                  {/* </Link> */}
                                 </h6>
                                 <div className="d-flex align-items-center flex-wrap">
-                                  <div className="d-flex align-items-center border-end me-1 pe-1">
-                                    <Link
-                                      to={routes.teacherDetails}
-                                      className="avatar avatar-xs flex-shrink-0 me-2"
-                                    >
-                                      <ImageWithBasePath
-                                        src="assets/img/teachers/teacher-01.jpg"
-                                        className="rounded-circle"
-                                        alt="teacher"
-                                      />
-                                    </Link>
-                                    <p className="text-dark">Daniel Josua</p>
-                                  </div>
-                                  <p>Due by : 21 Jun 2024</p>
+
+                                  <p>16 Jun 2024</p>
                                 </div>
                               </div>
                             </div>
-                            <CircleProgress value={10} />
                           </div>
                         </li>
+
                       </ul>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row">
-            {/* Home Works */}
-
-            {/* /Home Works */}
           </div>
         </div>
       </div>
