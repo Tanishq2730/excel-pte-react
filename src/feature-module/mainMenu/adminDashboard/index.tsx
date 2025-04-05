@@ -401,12 +401,6 @@ const AdminDashboard = () => {
                           <h1 className="text-white me-2">
                             Welcome Back, Mr. Herald
                           </h1>
-                          <Link
-                            to="profile"
-                            className="avatar avatar-sm img-rounded bg-gray-800 dark-hover"
-                          >
-                            <i className="ti ti-edit text-white" />
-                          </Link>
                         </div>
                         <p className="text-white">Have a Good day at work</p>
                       </div>
@@ -427,7 +421,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/student.svg"
+                          src="assets/img/icons/icon4.png"
                           alt="img"
                         />
                       </div>
@@ -450,7 +444,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-secondary-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/teacher.svg"
+                          src="assets/img/icons/icon1.png"
                           alt="img"
                         />
                       </div>
@@ -475,7 +469,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-warning-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/staff.svg"
+                          src="assets/img/icons/icon5.png"
                           alt="img"
                         />
                       </div>
@@ -500,7 +494,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/subject.svg"
+                          src="assets/img/icons/icon2.png"
                           alt="img"
                         />
                       </div>
@@ -523,7 +517,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/subject.svg"
+                          src="assets/img/icons/icon3.png"
                           alt="img"
                         />
                       </div>
@@ -569,7 +563,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/subject.svg"
+                          src="assets/img/icons/icon4.png"
                           alt="img"
                         />
                       </div>
@@ -592,7 +586,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/subject.svg"
+                          src="assets/img/icons/icon4.png"
                           alt="img"
                         />
                       </div>
@@ -615,7 +609,7 @@ const AdminDashboard = () => {
                     <div className="d-flex align-items-center">
                       <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
                         <ImageWithBasePath
-                          src="assets/img/icons/subject.svg"
+                          src="assets/img/icons/icon4.png"
                           alt="img"
                         />
                       </div>

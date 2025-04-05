@@ -211,6 +211,7 @@ export const all_routes = {
   rolesPermissions: "/user-management/roles-permissions",
   manageusers: "/user-management/manage-users",
   permissions: "/user-management/permissions",
+  requestDelete: "/delete-request",
 
   //support routes
   contactMessages: "/support/contact-messages",

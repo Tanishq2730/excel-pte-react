@@ -80,6 +80,7 @@ import StudentListDashboard from "../mainMenu/studentDashboard/studentListDashbo
 import TeacherListDashboard from "../mainMenu/teacherDashboard/teacherListDashboard";
 import WhiteListDashboard from "../mainMenu/whiteLabelDashboard/whiteListDashboard";
 import WhiteLabelDashboard from "../mainMenu/whiteLabelDashboard";
+import RequestDelete from "../user/requestDelete";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -116,6 +117,11 @@ export const adminRoutes = [
   {
     path: routes.studentAttendance,
     element: <StudentAttendance />,
+    route: Route,
+  },
+  {
+    path: routes.requestDelete,
+    element: <RequestDelete />,
     route: Route,
   },
   {
