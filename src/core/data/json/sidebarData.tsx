@@ -1,4 +1,8 @@
 import { all_routes } from "../../../feature-module/router/all_routes";
+
+import {
+  InfoCircleFilled,
+} from "@ant-design/icons";
 const routes = all_routes;
 
 export const SidebarData = [
@@ -10,7 +14,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Admin Dashboard",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-outlet",
         submenu: false,
         showSubRoute: false,
         link: routes.adminDashboard,
@@ -18,7 +22,7 @@ export const SidebarData = [
       },
       {
         label: "Teacher Dashboard",
-        icon: "ti ti-layout-align-left",
+        icon: "fa fa-dashboard",
         submenu: false,
         showSubRoute: false,
         link: routes.teacherListDashboard,
@@ -27,7 +31,7 @@ export const SidebarData = [
       },
       {
         label: "Student Dashboard",
-        icon: "ti ti-text-direction-rtl",
+        icon: "ion-aperture",
         submenu: false,
         showSubRoute: false,
         link: routes.studentListDashboard,
@@ -36,7 +40,7 @@ export const SidebarData = [
       },
       {
         label: "White Label Dashboard",
-        icon: "ti ti-layout-distribute-vertical",
+        icon: "ion-gear-b",
         submenu: false,
         showSubRoute: false,
         link: routes.whiteListDashboard,
@@ -52,7 +56,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Visitor",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-jet",
         submenu: false,
         showSubRoute: false,
         link: routes.visitor,
@@ -60,7 +64,7 @@ export const SidebarData = [
       },
       {
         label: "Dashboard popup",
-        icon: "ti ti-layout-align-left",
+        icon: "ion-images",
         submenu: false,
         showSubRoute: false,
         link: routes.dashBoardPop,
@@ -68,7 +72,7 @@ export const SidebarData = [
       },
       {
         label: "Login Banner",
-        icon: "ti ti-text-direction-rtl",
+        icon: "fa fa-clone",
         submenu: false,
         showSubRoute: false,
         link: routes.loginBanner,
@@ -76,7 +80,7 @@ export const SidebarData = [
       },
       {
         label: "Review",
-        icon: "ti ti-layout-distribute-vertical",
+        icon: "fa fa-eye",
         submenu: false,
         showSubRoute: false,
         link: routes.review,
@@ -84,7 +88,7 @@ export const SidebarData = [
       },
       {
         label: "Manage Video",
-        icon: "ti ti-layout-distribute-vertical",
+        icon: "fa fa-backward",
         submenu: false,
         showSubRoute: false,
         link: routes.manageVideo,
@@ -92,7 +96,7 @@ export const SidebarData = [
       },
       {
         label: "Scorecard",
-        icon: "ti ti-layout-distribute-vertical",
+        icon: "fa fa-clipboard",
         submenu: false,
         showSubRoute: false,
         link: routes.scoreCard,
@@ -108,7 +112,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Users",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-male",
         submenu: false,
         showSubRoute: false,
         link: routes.userManage,
@@ -116,7 +120,7 @@ export const SidebarData = [
       },
       {
         label: "Student List",
-        icon: "ti ti-layout-align-left",
+        icon: "fa fa-th",
         submenu: false,
         showSubRoute: false,
         link: routes.studentList,
@@ -124,7 +128,7 @@ export const SidebarData = [
       },
       {
         label: "Roles & Permissions",
-        icon: "ti ti-text-direction-rtl",
+        icon: "fa fa-user-plus",
         submenu: false,
         showSubRoute: false,
         link: routes.rolesPermissions,
@@ -132,7 +136,7 @@ export const SidebarData = [
       },
       {
         label: "Delete List",
-        icon: "ti ti-text-direction-rtl",
+        icon: "fa fa-trash",
         submenu: false,
         showSubRoute: false,
         link: routes.requestDelete,
@@ -156,7 +160,7 @@ export const SidebarData = [
       // },
       {
         label: "Invoices",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-file",
         submenu: false,
         showSubRoute: false,
         link: routes.accountsInvoices,
@@ -172,7 +176,7 @@ export const SidebarData = [
       // },
       {
         label: "Transactions",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-card",
         submenu: false,
         showSubRoute: false,
         link: routes.accountsTransactions,
@@ -188,7 +192,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Timetable",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-podium",
         submenu: false,
         showSubRoute: false,
         link: routes.timeTable,
@@ -196,7 +200,7 @@ export const SidebarData = [
       },
       {
         label: "Class Recordings",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-videocamera",
         submenu: false,
         showSubRoute: false,
         link: routes.classRecording,
@@ -204,7 +208,7 @@ export const SidebarData = [
       },
       {
         label: "Study Plan",
-        icon: "ti ti-layout-sidebar",
+        icon: "ion-ios7-bookmarks",
         submenu: false,
         showSubRoute: false,
         link: routes.studyPlan,
@@ -212,7 +216,7 @@ export const SidebarData = [
       },
       {
         label: "Upcoming Classes",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-tv",
         submenu: false,
         showSubRoute: false,
         link: routes.upComingClass,
@@ -228,7 +232,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Prediction file",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-file",
         submenu: false,
         showSubRoute: false,
         link: routes.predictionFile,
@@ -236,7 +240,7 @@ export const SidebarData = [
       },
       {
         label: "Question",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-exclamation-circle",
         submenu: false,
         showSubRoute: false,
         link: routes.question,
@@ -244,7 +248,7 @@ export const SidebarData = [
       },
       {
         label: "Mock test",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-tasks",
         submenu: false,
         showSubRoute: false,
         link: routes.mockTest,
@@ -252,7 +256,7 @@ export const SidebarData = [
       },
       {
         label: "Grammar templates",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-server",
         submenu: false,
         showSubRoute: false,
         link: routes.grammerTemplate,
@@ -260,7 +264,7 @@ export const SidebarData = [
       },
       {
         label: "Templates",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-stop",
         submenu: false,
         showSubRoute: false,
         link: routes.template,
@@ -268,7 +272,7 @@ export const SidebarData = [
       },
       {
         label: "Grammar Quiz",
-        icon: "ti ti-layout-align-left",
+        icon: "fa fa-users",
         submenu: true,
         showSubRoute: false,
         // link: routes.dashBoardPop,
@@ -279,7 +283,7 @@ export const SidebarData = [
             link: routes.quizeCategory,
           },
           {
-            label: "Quize Management",
+            label: "Quiz Management",
             // link: routes.quize,
             submenu: true,
             submenuItems: [
@@ -291,7 +295,7 @@ export const SidebarData = [
       },
       {
         label: "Exceptional words",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-bold",
         submenu: false,
         showSubRoute: false,
         link: routes.exceptionalWords,
@@ -307,7 +311,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Membership Plan",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-clipboard",
         submenu: false,
         showSubRoute: false,
         link: routes.membershipplan,  
@@ -315,7 +319,7 @@ export const SidebarData = [
       },
       {
         label: "Membership Transaction",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-credit-card",
         submenu: false,
         showSubRoute: false,
         link: routes.membershipHistory,  
@@ -396,7 +400,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Discount Coupon",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-tags",
         submenu: false,
         showSubRoute: false,
         link: routes.discountCoupon,
@@ -412,7 +416,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Institute",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-home",
         submenu: false,
         showSubRoute: false,
         link: routes.institute,
@@ -420,7 +424,7 @@ export const SidebarData = [
       },
       {
         label: "Institute Plan",
-        icon: "ti ti-layout-sidebar",
+        icon: "fa fa-building",
         submenu: false,
         showSubRoute: false,
         link: routes.institutePlan,

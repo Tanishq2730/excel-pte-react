@@ -15,21 +15,25 @@ const StudyPlan: React.FC = () => {
   const [data, setData] = useState<StudyData[]>([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [alert, setAlert] = useState<{ type: "primary" | "secondary" | "warning" | "danger" | "success"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "primary" | "secondary" | "warning" | "danger" | "success";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const response = await fetchAllTypes();
         if (response.success) {
-          const transformedData: StudyData[] = response.data.flatMap((category: any) =>
-            category.Subtypes.map((sub: any) => ({
-              id: sub.id,
-              typeId: category.id, // Required for submission
-              category: category.name,
-              subCategory: sub.sub_name,
-              questionNumbers: 10, // Default value
-            }))
+          const transformedData: StudyData[] = response.data.flatMap(
+            (category: any) =>
+              category.Subtypes.map((sub: any) => ({
+                id: sub.id,
+                typeId: category.id, // Required for submission
+                category: category.name,
+                subCategory: sub.sub_name,
+                questionNumbers: 10, // Default value
+              }))
           );
           setData(transformedData);
         }
@@ -52,7 +56,11 @@ const StudyPlan: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!fromDate || !toDate) {
-      setAlert({ type: "warning", message: "Please select a valid From Date and To Date before submitting." });
+      setAlert({
+        type: "warning",
+        message:
+          "Please select a valid From Date and To Date before submitting.",
+      });
       return;
     }
 
@@ -63,12 +71,19 @@ const StudyPlan: React.FC = () => {
       question_numbers: item.questionNumbers,
     }));
 
-    const payload = { global_date_from: fromDate, global_date_to: toDate, study_plans: studyPlans }
+    const payload = {
+      global_date_from: fromDate,
+      global_date_to: toDate,
+      study_plans: studyPlans,
+    };
     try {
       const response = await createStudyPlans(payload);
 
       if (response.success) {
-        setAlert({ type: "success", message: "Study plans saved successfully!" });
+        setAlert({
+          type: "success",
+          message: "Study plans saved successfully!",
+        });
       } else {
         setAlert({ type: "danger", message: "Failed to save study plan." });
       }
@@ -86,7 +101,13 @@ const StudyPlan: React.FC = () => {
         </div>
 
         {/* Alert Component */}
-        {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+        {alert && (
+          <AlertComponent
+            type={alert.type}
+            message={alert.message}
+            onClose={() => setAlert(null)}
+          />
+        )}
 
         <div className="card p-4">
           <div className="row mb-3">
@@ -114,7 +135,7 @@ const StudyPlan: React.FC = () => {
             <button className="btn btn-dark mt-3">FILTER</button>
             <button
               type="button"
-              className="btn btn-primary mt-3"
+              className="btn btn-primary mt-3 mx-3"
               onClick={handleSubmit}
             >
               Save Changes
@@ -159,14 +180,17 @@ const StudyPlan: React.FC = () => {
                         className="form-control"
                         value={item.questionNumbers}
                         onChange={(e) =>
-                          handleQuestionNumberChange(item.id ?? 0, Number(e.target.value))
+                          handleQuestionNumberChange(
+                            item.id ?? 0,
+                            Number(e.target.value)
+                          )
                         }
                       />
                     </td>
                   </tr>
                 ))}
               </tbody>
-            </table>           
+            </table>
           </div>
         </div>
       </div>

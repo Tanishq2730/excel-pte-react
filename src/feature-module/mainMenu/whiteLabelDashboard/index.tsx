@@ -356,7 +356,7 @@ const WhiteLabelDashboard = () => {
                                                         </div>
                                                     </div>
                                                     <div className="text-end">
-                                                        <h6 className="mb-1">Expire Date</h6>
+                                                        <h6 className="mb-1">Expiry</h6>
                                                         <p>25 May 2024</p>
                                                     </div>
                                                 </div>
@@ -371,7 +371,7 @@ const WhiteLabelDashboard = () => {
                                                         </div>
                                                     </div>
                                                     <div className="text-end">
-                                                        <h6 className="mb-1">Expire Date</h6>
+                                                        <h6 className="mb-1">Expiry</h6>
                                                         <p>25 May 2024</p>
                                                     </div>
                                                 </div>

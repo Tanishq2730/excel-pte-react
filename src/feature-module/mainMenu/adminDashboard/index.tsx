@@ -849,33 +849,6 @@ const AdminDashboard = () => {
               {/* Leave Requests */}
               <div className="col-xxl-4 col-xl-6 d-flex">
                 <div className="card flex-fill">
-                  <div className="card-body">
-                    <div className="d-flex align-items-center justify-content-between">
-                      <div>
-                        <h6 className="mb-1">Total Earnings</h6>
-                        <h2>$64,522,24</h2>
-                      </div>
-                      <span className="avatar avatar-lg bg-primary">
-                        <i className="ti ti-user-dollar" />
-                      </span>
-                    </div>
-                  </div>
-                  {/* <div id="total-earning" /> */}
-                  <ReactApexChart
-                    id="total-earning"
-                    options={totalEarningArea}
-                    series={totalEarningArea.series}
-                    type="area"
-                    height={90}
-                  />
-                </div>
-              </div>
-              {/* /Leave Requests */}
-            </div>
-            <div className="row">
-              {/* Top Subjects */}
-              <div className="col-xxl-4 col-xl-6 d-flex">
-                <div className="card flex-fill">
                   <div className="card-header  d-flex align-items-center justify-content-between">
                     <h4 className="card-title">Total Time Spent</h4>
                     
@@ -1258,7 +1231,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              {/* /Top Subjects */}
+              {/* /Leave Requests */}
             </div>
           </>
         </div>

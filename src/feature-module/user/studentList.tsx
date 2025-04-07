@@ -26,6 +26,7 @@ interface TableData {
   status: string;
   state: string;
   lastLogin: string;
+  coupon:string;
   imgSrc: string;
   subscription: string;
 }
@@ -40,6 +41,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-01.jpg",
     subscription: "free "
   },
@@ -52,6 +54,7 @@ const dummyData: TableData[] = [
     status: "Inactive",
     state: "Rajasthan",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-02.jpg",
     subscription: "free "
   },
@@ -64,6 +67,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-03.jpg",
     subscription: "free "
   },
@@ -76,6 +80,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-03.jpg",
     subscription: "free "
   },
@@ -88,6 +93,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-03.jpg",
     subscription: "free "
   },
@@ -100,6 +106,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-03.jpg",
     subscription: "free "
   },
@@ -112,6 +119,7 @@ const dummyData: TableData[] = [
     status: "Active",
     state: "Delhi",
     lastLogin: "2005-06-10 , 4:40",
+    coupon:"FLAT50",
     imgSrc: "assets/img/students/student-03.jpg",
     subscription: "free "
   },
@@ -178,6 +186,12 @@ const StudentList: React.FC = () => {
       dataIndex: "subscription",
       sorter: (a: TableData, b: TableData) =>
         a.subscription.localeCompare(b.subscription),
+    },
+    {
+      title: "Coupon",
+      dataIndex: "coupon",
+      sorter: (a: TableData, b: TableData) =>
+        a.coupon.localeCompare(b.coupon),
     },
     {
       title: "Status",

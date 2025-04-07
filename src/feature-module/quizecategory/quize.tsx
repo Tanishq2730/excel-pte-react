@@ -25,10 +25,21 @@ const Quize: React.FC = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [duration, setDuration] = useState<string>("");
   const [categories, setCategories] = useState<QuizCategory[]>([]);
- const [alert, setAlert] = useState<{ type: "primary" | "secondary" | "warning" | "danger" | "success"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "primary" | "secondary" | "warning" | "danger" | "success";
+    message: string;
+  } | null>(null);
   // ✅ State for Questions
   const [questions, setQuestions] = useState<QuestionData[]>([
-    { id: 1, question_name: "", option_1: "", option_2: "", option_3: "", option_4: "", correct_option: "" },
+    {
+      id: 1,
+      question_name: "",
+      option_1: "",
+      option_2: "",
+      option_3: "",
+      option_4: "",
+      correct_option: "",
+    },
   ]);
 
   // ✅ Fetch Quiz Categories
@@ -36,7 +47,7 @@ const Quize: React.FC = () => {
     const loadCategories = async () => {
       try {
         const response = await fetchAllQuizCategories();
-        
+
         if (response.success) {
           setCategories(response.data);
         } else {
@@ -53,7 +64,15 @@ const Quize: React.FC = () => {
   const handleAddQuestion = () => {
     setQuestions((prev) => [
       ...prev,
-      { id: prev.length + 1, question_name: "", option_1: "", option_2: "", option_3: "", option_4: "", correct_option: "" },
+      {
+        id: prev.length + 1,
+        question_name: "",
+        option_1: "",
+        option_2: "",
+        option_3: "",
+        option_4: "",
+        correct_option: "",
+      },
     ]);
   };
 
@@ -63,7 +82,11 @@ const Quize: React.FC = () => {
   };
 
   // ✅ Handle Question Input Change
-  const handleQuestionChange = (id: number, field: keyof QuestionData, value: string) => {
+  const handleQuestionChange = (
+    id: number,
+    field: keyof QuestionData,
+    value: string
+  ) => {
     setQuestions((prev) =>
       prev.map((q) => (q.id === id ? { ...q, [field]: value } : q))
     );
@@ -74,8 +97,18 @@ const Quize: React.FC = () => {
     e.preventDefault();
 
     // ✅ Validation
-    if (!quizName || !definition || !categoryId || !startDate || !endDate || !duration) {
-      setAlert({ type: "warning", message: "Please fill all required fields." });
+    if (
+      !quizName ||
+      !definition ||
+      !categoryId ||
+      !startDate ||
+      !endDate ||
+      !duration
+    ) {
+      setAlert({
+        type: "warning",
+        message: "Please fill all required fields.",
+      });
       return;
     }
 
@@ -102,7 +135,17 @@ const Quize: React.FC = () => {
         setStartDate("");
         setEndDate("");
         setDuration("");
-        setQuestions([{ id: 1, question_name: "", option_1: "", option_2: "", option_3: "", option_4: "", correct_option: "" }]);
+        setQuestions([
+          {
+            id: 1,
+            question_name: "",
+            option_1: "",
+            option_2: "",
+            option_3: "",
+            option_4: "",
+            correct_option: "",
+          },
+        ]);
       } else {
         setAlert({ type: "danger", message: "Failed to create quiz." });
       }
@@ -119,24 +162,47 @@ const Quize: React.FC = () => {
         </div>
 
         {/* ✅ Alert Messages */}
-        {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+        {alert && (
+          <AlertComponent
+            type={alert.type}
+            message={alert.message}
+            onClose={() => setAlert(null)}
+          />
+        )}
 
         <div className="card p-4">
           <form onSubmit={handleSubmit}>
             <div className="row mb-3">
               <div className="col-md-4 mb-3">
                 <label className="form-label">Quiz Name</label>
-                <input type="text" className="form-control" value={quizName} onChange={(e) => setQuizName(e.target.value)} required />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={quizName}
+                  onChange={(e) => setQuizName(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="col-md-4 mb-3">
                 <label className="form-label">Definition</label>
-                <input type="text" className="form-control" value={definition} onChange={(e) => setDefinition(e.target.value)} required />
+                <input
+                  type="text"
+                  className="form-control"
+                  value={definition}
+                  onChange={(e) => setDefinition(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="col-md-4 mb-3">
                 <label className="form-label">Category</label>
-                <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(Number(e.target.value))} required>
+                <select
+                  className="form-select"
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(Number(e.target.value))}
+                  required
+                >
                   <option value="">Select Category</option>
                   {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
@@ -148,15 +214,33 @@ const Quize: React.FC = () => {
 
               <div className="col-md-4 mb-3">
                 <label className="form-label">Start Date</label>
-                <input type="date" className="form-control" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+                <input
+                  type="date"
+                  className="form-control"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                />
               </div>
               <div className="col-md-4 mb-3">
                 <label className="form-label">End Date</label>
-                <input type="date" className="form-control" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+                <input
+                  type="date"
+                  className="form-control"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
               </div>
               <div className="col-md-4 mb-3">
                 <label className="form-label">Duration (minutes)</label>
-                <input type="number" className="form-control" value={duration} onChange={(e) => setDuration(e.target.value)} required />
+                <input
+                  type="number"
+                  className="form-control"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  required
+                />
               </div>
             </div>
 
@@ -167,38 +251,86 @@ const Quize: React.FC = () => {
                 <div className="row">
                   <div className="col-md-12 mb-3">
                     <label className="form-label">Question {index + 1}</label>
-                    <input type="text" className="form-control" value={q.question_name} onChange={(e) => handleQuestionChange(q.id, "question_name", e.target.value)} required />
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={q.question_name}
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          q.id,
+                          "question_name",
+                          e.target.value
+                        )
+                      }
+                      required
+                    />
                   </div>
 
                   {[1, 2, 3, 4].map((num) => (
-                      <div key={num} className="col-md-3 mb-3">
-                        <label className="form-label">Option {num}</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={q[`option_${num}` as keyof QuestionData]} // ✅ Fix here
-                          onChange={(e) => handleQuestionChange(q.id, `option_${num}` as keyof QuestionData, e.target.value)} // ✅ Fix here
-                          required
-                        />
-                      </div>
-                    ))}
+                    <div key={num} className="col-md-3 mb-3">
+                      <label className="form-label">Option {num}</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        value={q[`option_${num}` as keyof QuestionData]} // ✅ Fix here
+                        onChange={(e) =>
+                          handleQuestionChange(
+                            q.id,
+                            `option_${num}` as keyof QuestionData,
+                            e.target.value
+                          )
+                        } // ✅ Fix here
+                        required
+                      />
+                    </div>
+                  ))}
 
                   <div className="col-md-3 mb-3">
                     <label className="form-label">Correct Option</label>
-                    <input type="text" className="form-control" value={q.correct_option} onChange={(e) => handleQuestionChange(q.id, "correct_option", e.target.value)} required />
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={q.correct_option}
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          q.id,
+                          "correct_option",
+                          e.target.value
+                        )
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="col-md-3 mb-3">
+                    <label className="form-label">Explanation</label>
+                    <textarea name="hello" className="form-control" id=""></textarea>
                   </div>
 
                   {questions.length > 1 && (
-                    <div className="col-md-3 d-flex align-items-end">
-                      <button type="button" className="btn btn-danger" onClick={() => handleRemoveQuestion(q.id)}>Remove Question</button>
+                    <div className="col-md-3 d-flex align-items-center">
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => handleRemoveQuestion(q.id)}
+                      >
+                        Remove Question
+                      </button>
                     </div>
                   )}
                 </div>
               </div>
             ))}
 
-            <button type="submit" className="btn btn-success me-2">Save Quiz</button>
-            <button type="button" className="btn btn-info" onClick={handleAddQuestion}>Add Another Question</button>
+            <button type="submit" className="btn btn-success me-2">
+              Save Quiz
+            </button>
+            <button
+              type="button"
+              className="btn btn-info"
+              onClick={handleAddQuestion}
+            >
+              Add Another Question
+            </button>
           </form>
         </div>
       </div>
