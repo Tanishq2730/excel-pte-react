@@ -9,33 +9,51 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../core/data/redux/store";
 import { getUserPermissions } from "../../api/commonAPI";
 import ProtectedRoute from "./ProtectedRoute";
+import { useNavigate } from "react-router-dom";
+
 
 const ALLRoutes: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
   const [userPermissions, setUserPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       loadUserPermissions();
+    }else{
+      navigate("/", { replace: true });
     }
   }, [token]);
 
   const loadUserPermissions = async () => {
-    try {
-      const response = await getUserPermissions();
-      if (response.success) {
-        setUserPermissions(response.data); // Store user permissions
-      } else {
-        setUserPermissions([]); // No permissions → Block access
-      }
-    } catch (error) {
-      console.error("Error fetching user permissions:", error);
-      setUserPermissions([]); // Error → Block access
-    } finally {
-      setLoading(false);
+  try {
+    const response = await getUserPermissions();
+console.log("User Permissions Response:", response); // Debugging line
+
+    // Check for invalid token based on your API response
+    if (response.message === "Invalid token" || (response.success && Array.isArray(response.data) && response.data.length === 0)) {
+      // Clear auth state or token if stored locally
+      // dispatch(logout()); // if you use Redux
+      console.log("Invalid token or no permissions found. Redirecting to login.");
+      localStorage.removeItem("token"); // Clear token from localStorage
+      localStorage.removeItem("user");
+      navigate("/", { replace: true }); // redirect to login
+      return;
     }
-  };
+
+    if (response.success) {
+      setUserPermissions(response.data); // Set permissions normally
+    } else {
+      setUserPermissions([]);
+    }
+  } catch (error) {
+    console.error("Error fetching user permissions:", error);
+    navigate("/", { replace: true }); // Fallback for any fetch error
+  } finally {
+    setLoading(false);
+  }
+};
 
   // ✅ Function to check if user has permission
   const hasPermission = (routePermission: string) => userPermissions.includes(routePermission);

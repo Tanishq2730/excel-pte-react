@@ -349,7 +349,7 @@ export const assignPermissionsToRole = async (roleId: number, permissionIds: num
 };
 
 export const createStudyPlans = async (formData: any) => {
-  return await apiHandler(`${api_url}study-plans`, "POST", formData);
+  return await apiHandler(`${api_url}study-plans`, "POST", formData,true);
 };
 
 
@@ -375,7 +375,7 @@ export const fetchQuizById = async (id: number) => {
 
 //plans api url
 export const createPlans = async (formData: any) => {
-  return await apiHandler(`${api_url}plans`, "POST", formData);
+  return await apiHandler(`${api_url}plans`, "POST", formData, true);
 };
 
 export const fetchAllPlans = async () => {
@@ -383,7 +383,7 @@ export const fetchAllPlans = async () => {
 };
 
 export const updatePlans = async (id: number,formData: any) => {
-  return await apiHandler(`${api_url}plans/${id}`, "PUT", formData);
+  return await apiHandler(`${api_url}plans/${id}`, "PUT", formData, true);
 };
 
 // ✅ Delete USers

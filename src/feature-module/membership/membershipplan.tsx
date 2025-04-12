@@ -33,6 +33,8 @@ const MembershipPlan: React.FC = () => {
   const [planName, setPlanName] = useState("");
   const [courseType, setCourseType] = useState("");
   const [durationType, setDurationType] = useState("");
+  const [days, setDays] = useState("");
+  const [subscription_days, setSubscriptionDays] = useState("");
   const [students, setStudents] = useState("");
   const [mockCount, setMockCount] = useState("");
   const [duration, setDuration] = useState("");
@@ -41,6 +43,7 @@ const MembershipPlan: React.FC = () => {
   const [offer, setOffer] = useState("");
   const [freeTrial, setFreeTrial] = useState("Yes");
   const [extraDetails, setExtraDetails] = useState<string[]>([""]);
+  const [image, setImage] = useState<File | null>(null);
   const [alert, setAlert] = useState<{ type: "primary" | "secondary" | "warning" | "danger" | "success"; message: string } | null>(null);
 
 
@@ -89,39 +92,51 @@ const MembershipPlan: React.FC = () => {
       return;
     }
   
-    const newPlan = {
-      name: planName,
-      coursetypeId: Number(courseType),
-      duration_type: durationType,
-      students: Number(students),
-      mockcount: Number(mockCount),
-      class_duration_type: duration,
-      price: Number(price),
-      status: status === "Yes",
-      offer: Number(offer),
-      free_trial: freeTrial === "Yes",
-      planRows: extraDetails.map((detail) => ({ details: detail })),
-    };
+    const formData = new FormData();
+  
+    formData.append("name", planName);
+    formData.append("coursetypeId", courseType);
+    formData.append("duration_type", durationType);
+    formData.append("students", students);
+    formData.append("mockcount", mockCount);
+    formData.append("days", days);
+    formData.append("subscription_days", subscription_days);
+    formData.append("class_duration_type", duration);
+    formData.append("price", price);
+    formData.append("status", status === "Yes" ? "true" : "false");
+    formData.append("offer", offer);
+    formData.append("free_trial", freeTrial === "Yes" ? "true" : "false");
+    if (image) {
+      formData.append("image", image);
+    }
+  
+    extraDetails.forEach((detail, index) => {
+      formData.append(`planRows[${index}][details]`, detail);
+    });
   
     try {
-      const response = await createPlans(newPlan);
+      const response = await createPlans(formData); // This should be configured to send FormData
+      console.log("Response:", response);
+  
       if (response.success) {
         setAlert({ type: "success", message: "Plan created successfully!" });
   
-        // ✅ Reset all form fields
+        // Reset
         setPlanName("");
         setCourseType("");
         setDurationType("");
         setStudents("");
         setMockCount("");
         setDuration("");
+        setDays("");
+        setSubscriptionDays("");
         setPrice("");
         setStatus("Yes");
         setOffer("");
         setFreeTrial("Yes");
         setExtraDetails([""]);
+        setImage(null);
   
-        // ✅ Refresh the plans list
         setPlans([...plans, response.data]);
       } else {
         setAlert({ type: "danger", message: "Failed to create plan." });
@@ -134,6 +149,7 @@ const MembershipPlan: React.FC = () => {
   // ✅ Handle Extra Details
   const addExtraDetail = () => setExtraDetails([...extraDetails, ""]);
   const removeExtraDetail = (index: number) => setExtraDetails(extraDetails.filter((_, i) => i !== index));
+console.log(plans,'plans');
 
   return (
     <div className="page-wrapper">
@@ -167,7 +183,7 @@ const MembershipPlan: React.FC = () => {
                       </h2>
                     </div>
                     <ul className="list-unstyled gap-3">
-                      {plan.PlanRows.map((row) => (
+                      {plan?.PlanRows?.map((row) => (
                         <li key={row.id} className="mb-3">
                           <div className="d-flex align-items-center">
                             <span className="text-success me-2">
@@ -258,6 +274,28 @@ const MembershipPlan: React.FC = () => {
                       />
                     </div>
 
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Days*</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={days}
+                        onChange={(e) => setDays(e.target.value)}
+                        required
+                      />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Subscription Days*</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={subscription_days}
+                        onChange={(e) => setSubscriptionDays(e.target.value)}
+                        required
+                      />
+                    </div>
+
                     {/* Mock Count & Duration */}
                     <div className="col-md-6 mb-3">
                       <label className="form-label">Total Mock</label>
@@ -329,7 +367,16 @@ const MembershipPlan: React.FC = () => {
                     {/* Image Upload */}
                     <div className="col-md-12 mb-3">
                       <label className="form-label">Upload Image</label>
-                      <input type="file" className="form-control" />
+                      <input
+                        type="file"
+                        className="form-control"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setImage(e.target.files[0]);
+                          }
+                        }}
+                      />
                     </div>
 
                     {/* Extra Details */}
