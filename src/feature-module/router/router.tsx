@@ -29,7 +29,6 @@ const ALLRoutes: React.FC = () => {
   const loadUserPermissions = async () => {
   try {
     const response = await getUserPermissions();
-console.log("User Permissions Response:", response); // Debugging line
 
     // Check for invalid token based on your API response
     if (response.message === "Invalid token" || (response.success && Array.isArray(response.data) && response.data.length === 0)) {
