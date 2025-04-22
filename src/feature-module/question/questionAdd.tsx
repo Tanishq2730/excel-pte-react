@@ -309,7 +309,7 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                                     </select>
                                 </div>}
                             {/* ✅ Speaking Audio Upload */}
-                            {(type === "1" || type === "2") &&
+                            {(type === "1" || type === "2" || type === "4") &&
                                 <div className="col-md-4">
                                     <label className="form-label">Speaking Audio File</label>
                                     <input
