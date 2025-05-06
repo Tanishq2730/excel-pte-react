@@ -367,7 +367,7 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                         </div>
                         }
 
-                        {(subType === "10" || subType === "14" || subType === "13" || subType === "15" || subType === "16" || subType === "18" || subType === "20" || subType === "21") &&
+                        {(subType === "10" || subType === "14" || subType === "13" || subType === "15" || subType === "16" || subType === "18" || subType === "21") &&
                         <>
                             <div className="mb-3">
                             <label className="form-label">Option One</label>
