@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { createPlans, fetchAllPlans } from "../../api/masterAPI";
-import { getCourseTypes } from "../../api/commonAPI";
+import { createPlans, fetchAllPlans,deletePlans,updatePlans,fetcPlansById } from "../../api/masterAPI";
+import { getCourseTypes,saveAIclicks,getAIclicks } from "../../api/commonAPI";
 import AlertComponent from "../../core/common/AlertComponent";
+import Table from "../../core/common/dataTable/index";
+import Swal from "sweetalert2";
 
 interface PlanData {
   id: number;
@@ -20,6 +22,7 @@ interface PlanData {
   offer: number;
   free_trial: boolean;
   PlanRows: { id: number; planId: number; details: string }[];
+  CourseType: { id: number; name: string }; 
 }
 
 interface CourseType {
@@ -31,6 +34,7 @@ const MembershipPlan: React.FC = () => {
   const [plans, setPlans] = useState<PlanData[]>([]);
   const [courseTypes, setCourseTypes] = useState<CourseType[]>([]);
   const [planName, setPlanName] = useState("");
+  const [AIclicks, setAIclicks] = useState("");
   const [courseType, setCourseType] = useState("");
   const [durationType, setDurationType] = useState("");
   const [days, setDays] = useState("");
@@ -45,23 +49,37 @@ const MembershipPlan: React.FC = () => {
   const [extraDetails, setExtraDetails] = useState<string[]>([""]);
   const [image, setImage] = useState<File | null>(null);
   const [alert, setAlert] = useState<{ type: "primary" | "secondary" | "warning" | "danger" | "success"; message: string } | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
+  const loadPlans = async () => {
+    try {
+      const response = await fetchAllPlans();
+      if (response.success) {
+        setPlans(response.data);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch membership plans." });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching plans." });
+    }
+  };
 
+  const fetchClicks = async () => {
+    try {
+      const response = await getAIclicks();
+      if (response.success) {
+        setAIclicks(response.data.clicks);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch membership plans." });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error fetching plans." });
+    }
+  };
   // ✅ Fetch plans from API
   useEffect(() => {
-    const loadPlans = async () => {
-      try {
-        const response = await fetchAllPlans();
-        if (response.success) {
-          setPlans(response.data);
-        } else {
-          setAlert({ type: "danger", message: "Failed to fetch membership plans." });
-        }
-      } catch (error) {
-        setAlert({ type: "danger", message: "Error fetching plans." });
-      }
-    };
-
+    
+    fetchClicks();
     loadPlans();
   }, []);
 
@@ -83,7 +101,6 @@ const MembershipPlan: React.FC = () => {
     loadCourseTypes();
   }, []);
 
-  // ✅ Handle Adding a New Plan
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
   
@@ -93,7 +110,6 @@ const MembershipPlan: React.FC = () => {
     }
   
     const formData = new FormData();
-  
     formData.append("name", planName);
     formData.append("coursetypeId", courseType);
     formData.append("duration_type", durationType);
@@ -106,6 +122,7 @@ const MembershipPlan: React.FC = () => {
     formData.append("status", status === "Yes" ? "true" : "false");
     formData.append("offer", offer);
     formData.append("free_trial", freeTrial === "Yes" ? "true" : "false");
+  
     if (image) {
       formData.append("image", image);
     }
@@ -115,41 +132,153 @@ const MembershipPlan: React.FC = () => {
     });
   
     try {
-      const response = await createPlans(formData); // This should be configured to send FormData
-      console.log("Response:", response);
+      let response;
+      if (editingId) {
+        response = await updatePlans(editingId, formData);
+      } else {
+        response = await createPlans(formData);
+      }
   
       if (response.success) {
-        setAlert({ type: "success", message: "Plan created successfully!" });
-  
-        // Reset
-        setPlanName("");
-        setCourseType("");
-        setDurationType("");
-        setStudents("");
-        setMockCount("");
-        setDuration("");
-        setDays("");
-        setSubscriptionDays("");
-        setPrice("");
-        setStatus("Yes");
-        setOffer("");
-        setFreeTrial("Yes");
-        setExtraDetails([""]);
-        setImage(null);
-  
-        setPlans([...plans, response.data]);
+        setAlert({ type: "success", message: editingId ? "Plan updated successfully!" : "Plan created successfully!" });
+        resetForm();
+        loadPlans();
       } else {
-        setAlert({ type: "danger", message: "Failed to create plan." });
+        setAlert({ type: "danger", message: "Failed to save plan." });
       }
     } catch (error) {
-      setAlert({ type: "danger", message: "Error creating plan." });
+      setAlert({ type: "danger", message: "Error saving plan." });
     }
+  };
+
+  const resetForm = () => {
+    setSelectedPlan(null);
+    setPlanName("");
+    setCourseType("");
+    setDurationType("");
+    setStudents("");
+    setMockCount("");
+    setDuration("");
+    setDays("");
+    setSubscriptionDays("");
+    setPrice("");
+    setStatus("Yes");
+    setOffer("");
+    setFreeTrial("Yes");
+    setExtraDetails([""]);
+    setImage(null);
+    setEditingId(null);
   };
 
   // ✅ Handle Extra Details
   const addExtraDetail = () => setExtraDetails([...extraDetails, ""]);
   const removeExtraDetail = (index: number) => setExtraDetails(extraDetails.filter((_, i) => i !== index));
-console.log(plans,'plans');
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+
+  // ✅ Handle Edit
+  const handleEdit = async (id: number) => {
+    try {
+      const response = await fetcPlansById(id);
+      if (response.success) {
+        const plan = response.data;
+        setSelectedPlan(plan);
+        setPlanName(plan.name);
+        setCourseType(plan.coursetypeId.toString());
+        setDurationType(plan.duration_type);
+        setStudents(plan.students.toString());
+        setMockCount(plan.mockcount.toString());
+        setDuration(plan.class_duration_type);
+        setDays(plan.days?.toString() || "");
+        setSubscriptionDays(plan.subscription_days?.toString() || "");
+        setPrice(plan.price.toString());
+        setStatus(plan.status ? "Yes" : "No");
+        setOffer(plan.offer?.toString() || "");
+        setFreeTrial(plan.free_trial ? "Yes" : "No");
+        setExtraDetails(plan.PlanRows?.map((row: any) => row.details) || []);
+        setImage(null); // Optional: clear image; editing image upload separately is safer
+        setEditingId(id); // Store the ID you're editing
+      } else {
+        setAlert({ type: "danger", message: "Failed to load plan details." });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "Error loading plan details." });
+    }
+  };
+
+  // ✅ Handle Delete
+  const handleDelete = (id: number) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Call delete API here
+        deleteMembershipPlan(id);
+      }
+    });
+  };
+  
+  const deleteMembershipPlan = async (id: number) => {
+    try {
+      const response = await deletePlans(id); 
+      setAlert({ type: "success", message: "Plan deleted successfully" });
+      loadPlans(); // Reload data
+    } catch (err) {
+      setAlert({ type: "danger", message: "Error Delete plan." });
+    }
+  };
+
+console.log("Plans:", plans);
+
+   const columns = [
+      { title: "Name", dataIndex: "name" }, 
+      {
+        title: "Course Type",
+        render: (row: PlanData) => row.CourseType?.name || "-"
+      },
+      { title: "Duration Type", dataIndex: "duration_type" }, 
+      { title: "Price(Amount in $)", dataIndex: "price" }, 
+      {
+        title: "Actions",
+        render: (row: PlanData) => (
+          <div>
+            <button className="btn btn-warning btn-sm me-2" data-bs-toggle="modal" data-bs-target="#add_membership" onClick={() => handleEdit(row.id)}>
+              <i className="fa fa-pencil"></i>
+            </button>
+            <button className="btn btn-danger btn-sm" onClick={() => handleDelete(row.id)}>
+              <i className="fa fa-trash"></i>
+            </button>
+          </div>
+        ),
+      },
+    ];
+
+     const handleAISubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        try {
+          if (!AIclicks) throw new Error("AI Click are required.");    
+          const payload = { clicks: AIclicks}
+          const response = await saveAIclicks(payload);         
+    
+          if (response.success) {
+            setAlert({ type: "success", message: "AI Click deleted successfully" });
+            setAIclicks("");
+            loadPlans(); // Reload data
+            fetchClicks(); // Reload AI clicks
+          } else {
+            throw new Error(response.error);
+          }
+        } catch (err) {
+          setAlert({ type: "danger", message: "Error Delete plan." });
+        }
+      };
 
   return (
     <div className="page-wrapper">
@@ -157,8 +286,11 @@ console.log(plans,'plans');
         <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
           <h3 className="page-title mb-1">Membership Plans</h3>
           <div className="d-flex">
-            <Link to="#" data-bs-toggle="modal" data-bs-target="#add_membership" className="btn btn-primary">
+            <Link to="#" data-bs-toggle="modal" data-bs-target="#add_membership" className="btn btn-primary mt-2 me-2">
               <i className="ti ti-square-rounded-plus me-2" /> Add Membership
+            </Link>
+            <Link to="#" data-bs-toggle="modal" data-bs-target="#add_ai_clicks" className="btn btn-primary mt-2 me-2">
+              <i className="ti ti-square-rounded-plus me-2" /> Add AI Clicks
             </Link>
           </div>
         </div>
@@ -167,47 +299,50 @@ console.log(plans,'plans');
         {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
 
         <div className="row">
-          {plans.map((plan) => (
-            <div key={plan.id} className="col-lg-4 col-md-6 d-flex">
-              <div className="card flex-fill">
-                <div className="card-body">
-                  <div className="border-bottom mb-3">
-                    <span className="badge bg-info mb-3">{plan.name}</span>
-                    <h3 className="mb-3">Plan for {plan.students} students</h3>
-                  </div>
-                  <div>
-                    <div className="bg-light-300 p-3 rounded-1 text-center mb-3">
-                      <h2>
-                        ${plan.price}
-                        <span className="text-gray-7 fs-14 fw-normal"> /{plan.duration_type}</span>
-                      </h2>
-                    </div>
-                    <ul className="list-unstyled gap-3">
-                      {plan?.PlanRows?.map((row) => (
-                        <li key={row.id} className="mb-3">
-                          <div className="d-flex align-items-center">
-                            <span className="text-success me-2">
-                              <i className="ti ti-circle-check-filled fs-15 align-middle" />
-                            </span>
-                            <div>{row.details}</div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link to="#" className="btn btn-primary w-100">Choose Plan</Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+          <Table key={plans.length} dataSource={plans} columns={columns} Selection={true} />
         </div>
 
+        <div className="modal fade" id="add_ai_clicks">
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+              <h4 className="modal-title">AI Clicks</h4>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              </div>
+              <form onSubmit={handleAISubmit}>
+                <div className="modal-body">
+                  <div className="row">
+                    {/* Plan Name */}
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">AI Clicks*</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={AIclicks}
+                        onChange={(e) => setAIclicks(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-light" data-bs-dismiss="modal">
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn btn-primary">
+                      Submit
+                    </button>
+                  </div>
+              </form>
+            </div>
+          </div>
+        </div>      
         {/* Add Plan Modal */}
         <div className="modal fade" id="add_membership">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header">
-                <h4 className="modal-title">Add Plan</h4>
+              <h4 className="modal-title">{selectedPlan ? "Edit Plan" : "Add Plan"}</h4>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
               </div>
               <form onSubmit={handleSubmit}>
@@ -258,6 +393,7 @@ console.log(plans,'plans');
                         required
                       >
                         <option value="">Select Duration Type</option>
+                        <option value="Weekly">Weekly</option>
                         <option value="Monthly">Monthly</option>
                         <option value="Yearly">Yearly</option>
                       </select>
@@ -411,7 +547,7 @@ console.log(plans,'plans');
                       Cancel
                     </button>
                     <button type="submit" className="btn btn-primary">
-                      Add Plan
+                      {selectedPlan ? "Update Plan" : "Add Plan"}
                     </button>
                   </div>
                 </div>

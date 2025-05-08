@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
 // import { TableData } from "../../../../core/data/interface";
@@ -6,7 +6,9 @@ import ImageWithBasePath from "../../core/common/imageWithBasePath";
 import StudentModals from "./studentModel";
 import Table from "../../core/common/dataTable/index";
 import PredefinedDateRanges from "../../core/common/datePicker";
-
+import { fetchAllStudents,assignPlan } from "../../api/masterAPI";
+import AlertComponent from "../../core/common/AlertComponent";
+import { image_url } from "../../environment";
 import {
   allClass,
   allSection,
@@ -18,124 +20,49 @@ import CommonSelect from "../../core/common/commonSelect";
 import TooltipOption from "../../core/common/tooltipOption";
 
 interface TableData {
-  key: number;
+  id: number;
   name: string;
   email: string;
-  mobile: string;
-  countryName: string;
+  mobileNo: string;
+  profile_image: string;
   status: string;
-  state: string;
-  lastLogin: string;
-  coupon:string;
-  imgSrc: string;
-  subscription: string;
+  State: { id: number; name: string }; 
+  Country: { id: number; name: string };
+  first_login:boolean
 }
-
-const dummyData: TableData[] = [
-  {
-    key: 1,
-    name: "John Doe",
-    email: "john.doe@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-01.jpg",
-    subscription: "free "
-  },
-  {
-    key: 2,
-    name: "Jane Smith",
-    email: "jane.smith@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Inactive",
-    state: "Rajasthan",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-02.jpg",
-    subscription: "free "
-  },
-  {
-    key: 3,
-    name: "Robert Brown",
-    email: "robert.brown@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "Delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-03.jpg",
-    subscription: "free "
-  },
-  {
-    key: 4,
-    name: "Robert Brown",
-    email: "robert.brown@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "Delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-03.jpg",
-    subscription: "free "
-  },
-  {
-    key: 5,
-    name: "Robert Brown",
-    email: "robert.brown@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "Delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-03.jpg",
-    subscription: "free "
-  },
-  {
-    key: 6,
-    name: "Robert Brown",
-    email: "robert.brown@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "Delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-03.jpg",
-    subscription: "free "
-  },
-  {
-    key: 7,
-    name: "Robert Brown",
-    email: "robert.brown@example.com",
-    mobile: "923583958923",
-    countryName: "India",
-    status: "Active",
-    state: "Delhi",
-    lastLogin: "2005-06-10 , 4:40",
-    coupon:"FLAT50",
-    imgSrc: "assets/img/students/student-03.jpg",
-    subscription: "free "
-  },
-];
 
 const StudentList: React.FC = () => {
   const routes = all_routes;
-  const data = dummyData;
   const [showModal, setShowModal] = useState(false);
-  const dropdownMenuRef = useRef<HTMLDivElement | null>(null);
+  const [students, setStudents] = useState<TableData[]>([]);
+  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const dropdownMenuRef = useRef<HTMLDivElement | null>(null); 
+  
+    const loadStudents = async () => {
+      try {
+        const response = await fetchAllStudents();
+        if (response.success) {
+          setStudents(response.data); // ✅ Set API data
+        } else {
+          setAlert({ type: "danger", message: "Failed to fetch students" });
+        }
+      } catch (error) {
+        setAlert({ type: "danger", message: "An error occurred while fetching students" });
+      }
+    };
+
+    useEffect(() => {
+      loadStudents();
+    }, []);
 
   const handleApplyClick = () => {
     if (dropdownMenuRef.current) {
       dropdownMenuRef.current.classList.remove("show");
     }
   };
+
+  console.log(students, "students");
+  
   const columns = [
     {
       title: "Name",
@@ -144,7 +71,7 @@ const StudentList: React.FC = () => {
         <div className="d-flex align-items-center">
           <Link to="#" className="avatar avatar-md">
             <ImageWithBasePath
-              src={record.imgSrc}
+              src={`${image_url}${record.profile_image}`}
               className="img-fluid rounded-circle"
               alt="img"
             />
@@ -155,86 +82,45 @@ const StudentList: React.FC = () => {
             </p>
           </div>
         </div>
-      ),
-      sorter: (a: TableData, b: TableData) => a.name.localeCompare(b.name),
+      )
     },
     {
       title: "Email",
-      dataIndex: "email",
-      sorter: (a: TableData, b: TableData) => a.email.localeCompare(b.email),
+      dataIndex: "email"
     },
     {
       title: "Mobile",
-      dataIndex: "mobile",
-      sorter: (a: TableData, b: TableData) =>
-        a.mobile.localeCompare(b.mobile),
+      dataIndex: "mobileNo"
     },
     {
       title: "Country Name",
-      dataIndex: "countryName",
-      sorter: (a: TableData, b: TableData) => a.countryName.localeCompare(b.countryName),
-    },
-    
+      render: (row: TableData) => row.Country?.name || "-"
+    },    
     {
       title: "State",
-      dataIndex: "state",
-      sorter: (a: TableData, b: TableData) =>
-        a.state.localeCompare(b.state),
-    },
-    {
-      title: "Subscription",
-      dataIndex: "subscription",
-      sorter: (a: TableData, b: TableData) =>
-        a.subscription.localeCompare(b.subscription),
-    },
-    {
-      title: "Coupon",
-      dataIndex: "coupon",
-      sorter: (a: TableData, b: TableData) =>
-        a.coupon.localeCompare(b.coupon),
+      render: (row: TableData) => row.State?.name || "-"
     },
     {
       title: "Status",
       dataIndex: "status",
       render: (text: string) => (
         <span
-          className={`badge ${text === "Active" ? "badge-soft-success" : "badge-soft-danger"
+          className={`badge ${text === "active" ? "badge-soft-success" : "badge-soft-danger"
             } d-inline-flex align-items-center`}
         >
           <i className="ti ti-circle-filled fs-5 me-1"></i>
           {text}
         </span>
-      ),
-      sorter: (a: TableData, b: TableData) => a.status.localeCompare(b.status),
+      )
     },
     {
       title: "Last Login",
-      dataIndex: "lastLogin",
-      sorter: (a: TableData, b: TableData) => a.lastLogin.localeCompare(b.lastLogin),
+      dataIndex: "first_login"
     },
     {
       title: "Action",
-      dataIndex: "action",
-      render: () => (
+      render: (row: TableData) => (
         <div className="d-flex align-items-center">
-          {/* <Link
-            to="#"
-            className="btn btn-outline-light bg-white btn-icon d-flex align-items-center justify-content-center rounded-circle  p-0 me-2"
-          >
-            <i className="ti ti-brand-hipchat" />
-          </Link>
-          <Link
-            to="#"
-            className="btn btn-outline-light bg-white btn-icon d-flex align-items-center justify-content-center rounded-circle  p-0 me-2"
-          >
-            <i className="ti ti-phone" />
-          </Link>
-          <Link
-            to="#"
-            className="btn btn-outline-light bg-white btn-icon d-flex align-items-center justify-content-center rounded-circle p-0 me-3"
-          >
-            <i className="ti ti-mail" />
-          </Link> */}
           <div className="dropdown">
             <Link
               to="#"
@@ -249,6 +135,7 @@ const StudentList: React.FC = () => {
                 <Link
                   className="dropdown-item rounded-1"
                   to={routes.assignCourse}
+                  state={{ studentData: row }}
                 >
                   <i className="ti ti-menu me-2" />
                   Assign Course
@@ -275,7 +162,6 @@ const StudentList: React.FC = () => {
               <li>
                 <button
                   className="dropdown-item rounded-1"
-                  // to="student-details"
                   onClick={() => setShowModal(true)}
                 >
                   <i className="ti ti-menu me-2" />
@@ -291,32 +177,6 @@ const StudentList: React.FC = () => {
                   Edit
                 </Link>
               </li>
-              {/* <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#login_detail"
-                  >
-                    <i className="ti ti-lock me-2" />
-                    Login Details
-                  </Link>
-                </li> */}
-              {/* <li>
-                  <Link className="dropdown-item rounded-1" to="#">
-                    <i className="ti ti-toggle-right me-2" />
-                    Disable
-                  </Link>
-                </li> */}
-              {/* <li>
-                  <Link
-                    className="dropdown-item rounded-1"
-                    to="student-promotion"
-                  >
-                    <i className="ti ti-arrow-ramp-right-2 me-2" />
-                    Promote Student
-                  </Link>
-                </li> */}
               <li>
                 <Link
                   className="dropdown-item rounded-1"
@@ -338,6 +198,7 @@ const StudentList: React.FC = () => {
     <>
       {/* Page Wrapper */}
       <div className="page-wrapper">
+      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
         <div className="content">
           {/* Page Header */}
           <div className="d-md-flex d-block align-items-center justify-content-between mb-3">
@@ -484,7 +345,7 @@ const StudentList: React.FC = () => {
               </div>
             </div>
             <div className="card-body p-0 py-3">
-              <Table dataSource={data} columns={columns} Selection={true} />
+              <Table  key={students.length} dataSource={students} columns={columns} Selection={true} />
             </div>
           </div>
         </div>

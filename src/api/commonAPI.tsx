@@ -51,3 +51,10 @@ export const getCourseTypes = async () => {
 export const getQuestionsByTypeAndSubtype = async (typeId: number,subTypeId: number) => {
   return await apiHandler(`${api_url}common/get-question/${typeId}/${subTypeId}`, "GET");
 };
+
+export const getAIclicks = async () => {
+  return await apiHandler(`${api_url}common/aiclicks`, "GET");
+};
+export const saveAIclicks = async (data:any) => {
+  return await apiHandler(`${api_url}common/aiclicks/save`, "POST",data);
+};

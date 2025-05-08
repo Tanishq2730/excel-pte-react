@@ -319,6 +319,16 @@ export const deleteUsers = async (id: number) => {
 };
 
 
+export const fetchAllStudents = async () => {
+  return await apiHandler(`${api_url}users/student_list`, "GET");
+};
+export const assignPlan = async (formData: any) => {
+  return await apiHandler(`${api_url}users/booking-create`, "POST", formData);
+};
+export const bookingHistory = async (userId:number) => {
+  return await apiHandler(`${api_url}users/history/${userId}`, "GET");
+};
+
 export const fetchAllRoles = async () => {
   return await apiHandler(`${api_url}roles`, "GET");
 };
