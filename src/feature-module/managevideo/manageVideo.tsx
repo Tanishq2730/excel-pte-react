@@ -88,7 +88,7 @@ const ManageVideo: React.FC = () => {
       formDataToSend.append("title", formData.title);
       formDataToSend.append("link", formData.link);
       if (formData.thumbnail) {
-        formDataToSend.append("image", formData.thumbnail);
+        formDataToSend.append("thumbnail", formData.thumbnail);
       }
 
       let response;

@@ -38,6 +38,9 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
     const [subType, setSubType] = useState<string>("");
     const [imageType, setImageType] = useState<string>("");
     const [questionName, setQuestionName] = useState<string>("");
+    const [questionNo, setQuestionNo] = useState<string>("");
+    const [tested, setTested] = useState<string>("yes");
+    const [testedCount, setTestedCount] = useState<string>("");
     const [difficulty, setDifficulty] = useState<string>("Easy");
     const [weekly, setWeekly] = useState<string>("Yes");
     const [isNewQuestion, setIsNewQuestion] = useState<string>("Yes");
@@ -102,7 +105,7 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
             }
         }
     };
-
+    
 
     // ✅ Handle Submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -125,6 +128,10 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
         formData.append("option_three", optionThree);
         formData.append("option_four", optionFour);
         formData.append("option_five", optionFive);
+        formData.append("questionNo", questionNo);
+        formData.append("tested", tested);
+        formData.append("tested_count", testedCount);
+
         if (speakingAudio) formData.append("speak_audio_file", speakingAudio);
         if (describeImage) formData.append("image_file", describeImage);
 
@@ -152,6 +159,9 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                 setDragAndDrop("");
                 setBritishAnswer("");
                 setImageType("");
+                setQuestionNo("");
+                setTested("yes");
+                setTestedCount("");
             } else {
                 setAlert({ type: "danger", message: response.message ?? "An error occurred" });
             }
@@ -222,6 +232,33 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
                                         </option>
                                     ))}
                                 </select>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="form-label">Tested</label>
+                               <select className="form-control" value={tested} onChange={(e) => setTested(e.target.value)}>
+                                    <option value="yes"> Yes</option>
+                                    <option value="no"> No</option>
+                                </select>
+                            </div>
+                            <div className="col-md-2">
+                                <label className="form-label">Tested Count</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={testedCount}
+                                    onChange={(e) => setTestedCount(e.target.value)}
+                                    placeholder="Tested Count"
+                                />
+                            </div>
+                            <div className="col-md-2">
+                                <label className="form-label">Question No.</label>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    value={questionNo}
+                                    onChange={(e) => setQuestionNo(e.target.value)}
+                                    placeholder="Question No."
+                                />
                             </div>
                         </div>
 
