@@ -81,6 +81,9 @@ import TeacherListDashboard from "../mainMenu/teacherDashboard/teacherListDashbo
 import WhiteListDashboard from "../mainMenu/whiteLabelDashboard/whiteListDashboard";
 import WhiteLabelDashboard from "../mainMenu/whiteLabelDashboard";
 import RequestDelete from "../user/requestDelete";
+import Branches from "../branches/branches";
+import Blog from "../blogs/blog";
+import EmailTemplate from "../emailTemplates/emailTemplate";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -231,7 +234,7 @@ export const adminRoutes = [
     path: routes.exceptionalWords,
     element: <ExceptionalWords />,
     route: Route,
-    permission: "LIST_EXCEPTIONAL_WORDS",
+    permission: "LIST_EXCEPTIONAL_WORD",
   },
   {
     path: routes.upComingClass,
@@ -244,6 +247,12 @@ export const adminRoutes = [
     element: <DiscountCoupon />,
     route: Route,
     permission: "LIST_COUPON",
+  },
+  {
+    path: routes.branches,
+    element: <Branches />,
+    route: Route,
+    permission: "LIST_BRANCH",
   },
   {
     path: routes.timeTable,
@@ -305,6 +314,13 @@ export const adminRoutes = [
     route: Route,
     permission: "LIST_USERS",
   },
+   {
+    path: routes.emailTemplate,
+    element: <EmailTemplate />,
+    route: Route,
+    permission: "LIST_EMAIL_TEMPLATE",
+  },
+  
   {
     path: routes.teacherDashboard,
     element: <TeacherDashboard />,
@@ -444,6 +460,11 @@ export const adminRoutes = [
     path: routes.manageusers,
     element: <Manageusers />,
     permission: "LIST_USERS",
+  },
+  {
+    path: routes.blogs,
+    element: <Blog />,
+    permission: "LIST_BLOG",
   },
   {
     path: routes.allBlogs,

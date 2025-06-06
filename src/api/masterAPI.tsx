@@ -444,3 +444,104 @@ export const updateMockTests = async (id: number,formData: any) => {
 export const fetcMockTestsById = async (id: number) => {
   return await apiHandler(`${api_url}mocktests/${id}`, "GET");
 };
+
+
+//Coupon api url
+export const createCoupon = async (formData: any) => {
+  return await apiHandler(`${api_url}coupons`, "POST", formData);
+};
+
+export const fetchAllCoupons = async () => {
+  return await apiHandler(`${api_url}coupons`, "GET");
+};
+
+export const deleteCoupons = async (id: number) => {
+  return await apiHandler(`${api_url}coupons/${id}`, "DELETE");
+};
+
+export const updateCoupons = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}coupons/${id}`, "PUT", formData);
+};
+export const fetcCouponsById = async (id: number) => {
+  return await apiHandler(`${api_url}coupons/${id}`, "GET");
+};
+
+//Branches api url
+export const createBranch = async (formData: any) => {
+  return await apiHandler(`${api_url}branches`, "POST", formData);
+};
+
+export const fetchAllBranchs = async () => {
+  return await apiHandler(`${api_url}branches`, "GET");
+};
+
+export const deleteBranchs = async (id: number) => {
+  return await apiHandler(`${api_url}branches/${id}`, "DELETE");
+};
+
+export const updateBranchs = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}branches/${id}`, "PUT", formData);
+};
+export const fetcBranchById = async (id: number) => {
+  return await apiHandler(`${api_url}branches/${id}`, "GET");
+};
+
+//Exceptional Words api url
+export const createExceptionalWords = async (formData: any) => {
+  return await apiHandler(`${api_url}exceptional-word`, "POST", formData);
+};
+
+export const fetchAllExceptionalWords = async () => {
+  return await apiHandler(`${api_url}exceptional-word`, "GET");
+};
+
+export const deleteExceptionalWords = async (id: number) => {
+  return await apiHandler(`${api_url}exceptional-word/${id}`, "DELETE");
+};
+
+export const updateExceptionalWords = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}exceptional-word/${id}`, "PUT", formData);
+};
+export const fetchExceptionalWordsById = async (id: number) => {
+  return await apiHandler(`${api_url}exceptional-word/${id}`, "GET");
+};
+
+//Blogs api url
+export const createBlogs = async (formData: any) => {
+  return await apiHandler(`${api_url}blogs`, "POST", formData,true);
+};
+
+export const fetchAllBlogs = async () => {
+  return await apiHandler(`${api_url}blogs`, "GET");
+};
+
+export const deleteBlogs = async (id: number) => {
+  return await apiHandler(`${api_url}blogs/${id}`, "DELETE");
+};
+
+export const updateBlogs = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}blogs/${id}`, "PUT", formData,true);
+};
+export const fetchBlogsById = async (id: number) => {
+  return await apiHandler(`${api_url}blogs/${id}`, "GET");
+};
+
+//Email Template api url
+export const createEmailTemplates = async (formData: any) => {
+  return await apiHandler(`${api_url}email-templates`, "POST", formData);
+};
+
+export const fetchAllEmailTemplates = async () => {
+  return await apiHandler(`${api_url}email-templates`, "GET");
+};
+
+export const deleteEmailTemplates = async (id: number) => {
+  return await apiHandler(`${api_url}email-templates/${id}`, "DELETE");
+};
+
+export const updateEmailTemplates = async (id: number,formData: any) => {
+  return await apiHandler(`${api_url}email-templates/${id}`, "PUT", formData);
+};
+export const fetchEmailTemplatesById = async (id: number) => {
+  return await apiHandler(`${api_url}email-templates/${id}`, "GET");
+};

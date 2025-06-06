@@ -34,7 +34,7 @@ export interface ApiResponse<T = any> {
       });
   
       const result = await response.json();
-      console.log("Result:", result);
+     
       if (result.status === false) {
         if (result.errors || Array.isArray(result.errors)) {
           // ✅ Format validation errors into a single string

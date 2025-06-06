@@ -63,6 +63,22 @@ export const SidebarData = [
         themeSetting: true,
       },
       {
+        label: "Blogs",
+        icon: "ion-jet",
+        submenu: false,
+        showSubRoute: false,
+        link: routes.blogs,
+        themeSetting: true,
+      },
+       {
+        label: "Email Template",
+        icon: "ion-jet",
+        submenu: false,
+        showSubRoute: false,
+        link: routes.emailTemplate,
+        themeSetting: true,
+      },
+      {
         label: "Dashboard popup",
         icon: "ion-images",
         submenu: false,
@@ -110,6 +126,14 @@ export const SidebarData = [
     showSubRoute: false,
     submenuHdr: "LAYOUT",
     submenuItems: [
+      {
+        label: "Branches",
+        icon: "fa fa-clone",
+        submenu: false,
+        showSubRoute: false,
+        link: routes.branches,
+        themeSetting: true,
+      },
       {
         label: "Users",
         icon: "fa fa-male",

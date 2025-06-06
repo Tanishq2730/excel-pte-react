@@ -9,6 +9,7 @@ import { createQuestions } from "../../api/masterAPI";
 import { all_routes } from "../router/all_routes";
 import DefaultEditor from "react-simple-wysiwyg";
 import AlertComponent from "../../core/common/AlertComponent";
+import { Editor, EditorTextChangeEvent } from 'primereact/editor';
 
 interface AddQuestionProps {
     onAddQuestion: (newQuestion: QuestionData) => void;
@@ -374,12 +375,12 @@ const QuestionAdd: React.FC<AddQuestionProps> = ({ onAddQuestion }) => {
 
                         <div className="row mb-3">
                             <label className="form-label">Question</label>
-                            <DefaultEditor value={content} onChange={(e) => setContent(e.target.value)} />
+                            <Editor value={content} onTextChange={(e) => setContent(e.htmlValue ?? "")} />
                         </div>
                         {subType !== "4" && 
                         <div className="row mb-3">
                             <label className="form-label">Answer</label>
-                            <DefaultEditor value={answer} onChange={(e) => setAnswer(e.target.value)} />
+                            <Editor value={answer} onTextChange={(e) => setAnswer(e.htmlValue ?? "")} />
                         </div>
                         }
                             {subType === "20" && 

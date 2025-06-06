@@ -8,6 +8,7 @@ import AlertComponent from "../../core/common/AlertComponent";
 import ImageShowGlobal from "../../core/common/ImageShowGlobal";
 import { image_url } from "../../environment";
 import AudioPlayer from "../../core/common/AudioPlayer";
+import { Editor, EditorTextChangeEvent } from 'primereact/editor';
 
 const QuestionEdit: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -328,16 +329,16 @@ const QuestionEdit: React.FC = () => {
                         </div>
 
 
-                        <div className="row mb-3">
-                            <label className="form-label">Question</label>
-                            <DefaultEditor value={content} onChange={(e) => setContent(e.target.value)} />
-                        </div>
-                        {subType !== "4" &&
-                            <div className="row mb-3">
-                                <label className="form-label">Answer</label>
-                                <DefaultEditor value={answer} onChange={(e) => setAnswer(e.target.value)} />
-                            </div>
-                        }
+                         <div className="row mb-3">
+                                                    <label className="form-label">Question</label>
+                                                    <Editor value={content} onTextChange={(e) => setContent(e.htmlValue ?? "")} />
+                                                </div>
+                                                {subType !== "4" && 
+                                                <div className="row mb-3">
+                                                    <label className="form-label">Answer</label>
+                                                    <Editor value={answer} onTextChange={(e) => setAnswer(e.htmlValue ?? "")} />
+                                                </div>
+                                                }
                         {subType === "20" &&
                             <div className="row mb-3">
                                 <label className="form-label">Answer (In British)</label>

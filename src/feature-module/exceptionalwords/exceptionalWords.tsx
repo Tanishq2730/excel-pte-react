@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Table from "../../core/common/dataTable/index";
 import AlertComponent from "../../core/common/AlertComponent";
-import {
-  fetchExceptionalWords,
-  addExceptionalWord,
-} from "../../api/textGearAPI"; // Import API functions
+
+import { createExceptionalWords,fetchAllExceptionalWords } from "../../api/masterAPI";
 
 interface WordData {
   id: number;
   word: string;
-  type: number;
-  language: string;
 }
 
 const ExceptionalWords: React.FC = () => {
@@ -24,17 +20,10 @@ const ExceptionalWords: React.FC = () => {
   // ✅ Fetch exceptional words from API
   const loadWords = async () => {
     try {
-      const response = await fetchExceptionalWords();
+      const response = await fetchAllExceptionalWords();
      
       if (response.success && response.data) {
-        setData(
-          response.data.map((wordData: { id: number; text: string; type: number; lang: string }) => ({
-            id: wordData.id,
-            word: wordData.text, // ✅ Use `text` correctly
-            type: wordData.type, // ✅ Use `type`
-            language: wordData.lang, // ✅ Use `lang`
-          }))
-        );
+        setData(response.data);
       } else {
         setAlert({ type: "danger", message: "Failed to fetch words from API" });
       }
@@ -58,7 +47,7 @@ console.log(data,'data');
     }
 
     try {
-      const response = await addExceptionalWord({ text: word, type: 2, lang: "en-GB" });
+      const response = await createExceptionalWords({ word: word });
       if (response.success) {
         setAlert({ type: "success", message: "Word added successfully!" });
         loadWords(); // Refresh list
@@ -75,8 +64,6 @@ console.log(data,'data');
   const columns = [
     { title: "#", dataIndex: "id" },
     { title: "Word", dataIndex: "word" },
-    { title: "Type", dataIndex: "type" },
-    { title: "Language", dataIndex: "language" },
   ];
 
   return (

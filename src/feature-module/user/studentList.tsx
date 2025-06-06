@@ -5,6 +5,7 @@ import { all_routes } from "../router/all_routes";
 import ImageWithBasePath from "../../core/common/imageWithBasePath";
 import StudentModals from "./studentModel";
 import Table from "../../core/common/dataTable/index";
+import StudentDatatable from "../../core/common/dataTable/studentDatatable";
 import PredefinedDateRanges from "../../core/common/datePicker";
 import { fetchAllStudents,assignPlan } from "../../api/masterAPI";
 import AlertComponent from "../../core/common/AlertComponent";
@@ -217,7 +218,7 @@ const StudentList: React.FC = () => {
               </nav>
             </div>
             <div className="d-flex my-xl-auto right-content align-items-center flex-wrap">
-              <TooltipOption />
+              {/* <TooltipOption /> */}
 
               <div className="mb-2">
                 <Link
@@ -345,7 +346,7 @@ const StudentList: React.FC = () => {
               </div>
             </div>
             <div className="card-body p-0 py-3">
-              <Table  key={students.length} dataSource={students} columns={columns} Selection={true} />
+              <StudentDatatable  key={students.length} dataSource={students} columns={columns} Selection={true} />
             </div>
           </div>
         </div>

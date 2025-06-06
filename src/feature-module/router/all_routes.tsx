@@ -364,5 +364,8 @@ export const all_routes = {
   staffDayWise: "/report/staff-day-wise",
   //page module
   profile:"/pages/profile",
-  activity:"/pages/activities"
+  activity:"/pages/activities",
+  branches:"/branches",
+  blogs:"/blogs",
+  emailTemplate:"/email-template"
 };
