@@ -150,6 +150,22 @@ export const SidebarData = [
         link: routes.studentList,
         themeSetting: true,
       },
+       {
+        label: "Attendance",
+        icon: "fa fa-clone",
+        submenu: false,
+        showSubRoute: false,
+        link: routes.studentAttendance,
+        themeSetting: true,
+      },
+       {
+        label: "Attendance Report",
+        icon: "fa fa-clone",
+        submenu: false,
+        showSubRoute: false,
+        link: routes.attendanceReport,
+        themeSetting: true,
+      },
       {
         label: "Roles & Permissions",
         icon: "fa fa-user-plus",

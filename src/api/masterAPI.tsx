@@ -545,3 +545,12 @@ export const updateEmailTemplates = async (id: number,formData: any) => {
 export const fetchEmailTemplatesById = async (id: number) => {
   return await apiHandler(`${api_url}email-templates/${id}`, "GET");
 };
+
+//Attedance api url
+export const createAttendance = async (formData: any) => {
+  return await apiHandler(`${api_url}attendances/bulk-upsert`, "POST", formData);
+};
+
+export const fetchAttendanceReport = async (month:number,year:number) => {
+  return await apiHandler(`${api_url}attendances/student-wise-daily?month=${month}&year=${year}`, "GET");
+};

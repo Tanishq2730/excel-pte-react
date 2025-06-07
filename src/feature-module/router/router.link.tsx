@@ -84,6 +84,7 @@ import RequestDelete from "../user/requestDelete";
 import Branches from "../branches/branches";
 import Blog from "../blogs/blog";
 import EmailTemplate from "../emailTemplates/emailTemplate";
+import AttendanceReport from "../report/attendance-report/attendanceReport";
 
 const routes = all_routes;
 const dummyOnAddQuestion = () => {};
@@ -121,6 +122,13 @@ export const adminRoutes = [
     path: routes.studentAttendance,
     element: <StudentAttendance />,
     route: Route,
+     permission: "ATTENDANCE_CREATE",
+  },
+  {
+    path: routes.attendanceReport,
+    element: <AttendanceReport />,
+    route: Route,
+     permission: "ATTENDANCE_DAILY",
   },
   {
     path: routes.requestDelete,
